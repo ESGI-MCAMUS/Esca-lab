@@ -45,12 +45,16 @@
 .custom-container {
   padding: 15px;
   background-color: white;
-  -webkit-box-shadow: 0px 0px 16px 0px rgba(0,0,0,0.15);
-  -moz-box-shadow: 0px 0px 16px 0px rgba(0,0,0,0.15);
-  box-shadow: 0px 0px 16px 0px rgba(0,0,0,0.15);
+  -webkit-box-shadow: 0px 0px 25px 0px rgba(0,0,0,0.15);
+  -moz-box-shadow: 0px 0px 25px 0px rgba(0,0,0,0.15);
+  box-shadow: 0px 0px 25px 0px rgba(0,0,0,0.15);
   border-radius: 20px;
 }
 
 button.rounded {
   border-radius: 50px !important;
+}
+
+.gradient-light-grey-light-blue {
+  background-image: linear-gradient(to right top, #f8f8f8, #eff0fa, #e0eafd, #cce5ff, #b3e1ff);
 }

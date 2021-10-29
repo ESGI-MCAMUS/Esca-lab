@@ -1,5 +1,8 @@
 # Esca'Lab
 
+## Specification
+The spec sheet can be found on this [Google Docs](https://docs.google.com/document/d/1JHE1V04u1KaTrA9mP1qEWvUhGMF9QsCDrCYC4eKbeVU/edit?usp=sharing)
+
 ## Start the project
 
 ```bash

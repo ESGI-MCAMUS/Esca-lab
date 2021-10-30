@@ -6,58 +6,75 @@ Connexion ◈ Esca'Lab
 
 {% block body %}
 <main class="gradient-light-grey-light-blue">
-    <div class="container min-vh-100">
-        <div class="row min-vh-100">
-            <div class="col-xl-3"></div>
-            <div class="col-xl-6 align-self-center">
-                <form class="custom-container"
-                  method="post"
-                  action="/connexion">
-                    <div class="text-center">
-                        <img src="{{ asset('images/logo.png') }}"
-                          width="50"
-                          height="50"
-                          class="rounded"
-                          alt="logo" />
-                    </div>
+  <div class="container min-vh-100">
+    <div class="row min-vh-100">
+      <div class="col-xl-3"></div>
+      <div class="col-xl-6 align-self-center">
+        <form class="custom-container"
+          method="post"
+          action="/connexion">
+          <div class="text-center">
+            <img src="{{ asset('images/logo.png') }}"
+              width="50"
+              height="50"
+              class="rounded"
+              alt="logo" />
+          </div>
 
-                    <h1 class="text-center lobster text-black mb-3">
-                        Connectez-vous
-                    </h1>
-                    <div class="mb-3">
-                        <label for="email"
-                          class="form-label poppins light">Adresse email</label>
-                        <input type="email"
-                          class="form-control poppins"
-                          name="email"
-                          required
-                          id="email"
-                          placeholder="john.doe@domaine.fr" />
-                    </div>
-                    <div class="mb-3">
-                        <label for="password"
-                          class="form-label poppins light">Mot de passe</label>
-                        <input type="password"
-                          class="form-control poppins"
-                          name="password"
-                          required
-                          id="password"
-                          placeholder="••••••••••" />
-                    </div>
-                    <div class="text-center">
-                        <button class="btn btn-primary poppins bold mb-3 rounded"
-                          type="submit">Connexion</button>
-                        <p class="fst-italic fs-6 text-muted poppins light">Pas encore de compte ? <a
-                              class="text-decoration-none"
-                              href="/inscription">Inscrivez-vous</a>
-                        </p>
-                    </div>
-                </form>
-            </div>
-            <div class="col-xl-3"></div>
-        </div>
-
-
+          <h1 class="text-center lobster text-black mb-3">
+            Connectez-vous
+          </h1>
+          <div class="mb-3">
+            <label for="email"
+              class="form-label poppins light">
+              Adresse email ou pseudo
+            </label>
+            <input type="emailOrUsername"
+              class="form-control poppins"
+              name="emailOrUsername"
+              required
+              value="{{emailOrUsername ?? ''}}"
+              id="emailOrUsername"
+              placeholder="john.doe@domaine.fr" />
+          </div>
+          <div class="mb-3">
+            <label for="password"
+              class="form-label poppins light">
+              Mot de passe
+            </label>
+            <input type="password"
+              class="form-control poppins"
+              name="password"
+              required
+              id="password"
+              placeholder="••••••••••" />
+          </div>
+          {% if error.missmatch is defined %}
+          <p class="fst-italic text-danger poppins bold tiny">Le mot de passe est incorrect.</p>
+          {% endif %}
+          {% if error.not_exist is defined %}
+          <p class="fst-italic text-danger poppins bold tiny">Cet utilisateur n'existe pas.</p>
+          {% endif %}
+          <p class="fst-italic fs-6 text-muted poppins light">
+            Mot de passe oublié ? <a class="text-decoration-none"
+              href="/connexion/mot-de-passe-oublie">Réinitialisez-le</a>
+          </p>
+          <div class="text-center">
+            <input type="hidden"
+              name="login">
+            <button class="btn btn-primary poppins bold mb-3 rounded"
+              type="submit">
+              Connexion
+            </button>
+            <p class="fst-italic fs-6 text-muted poppins light">
+              Pas encore de compte ? <a class="text-decoration-none"
+                href="/inscription">Inscrivez-vous</a>
+            </p>
+          </div>
+        </form>
+      </div>
+      <div class="col-xl-3"></div>
     </div>
+  </div>
 </main>
 {% endblock %}

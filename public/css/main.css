@@ -42,6 +42,10 @@
   font-weight: 900;
 }
 
+.poppins.tiny {
+  font-size: 0.75rem !important;
+}
+
 .custom-container {
   padding: 15px;
   background-color: white;

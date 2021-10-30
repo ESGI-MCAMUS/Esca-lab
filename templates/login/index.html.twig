@@ -11,7 +11,8 @@ Connexion ◈ Esca'Lab
             <div class="col-xl-3"></div>
             <div class="col-xl-6 align-self-center">
                 <form class="custom-container"
-                  style="width: 100%;">
+                  method="post"
+                  action="/login">
                     <div class="text-center">
                         <img src="{{ asset('images/logo.png') }}"
                           width="50"
@@ -29,6 +30,7 @@ Connexion ◈ Esca'Lab
                         <input type="email"
                           class="form-control poppins"
                           name="email"
+                          required
                           id="email"
                           placeholder="john.doe@domaine.fr" />
                     </div>
@@ -38,15 +40,16 @@ Connexion ◈ Esca'Lab
                         <input type="password"
                           class="form-control poppins"
                           name="password"
+                          required
                           id="password"
                           placeholder="••••••••••" />
                     </div>
                     <div class="text-center">
                         <button class="btn btn-primary poppins bold mb-3 rounded"
-                          type="button">Connexion</button>
+                          type="submit">Connexion</button>
                         <p class="fst-italic fs-6 text-muted poppins light">Pas encore de compte ? <a
                               class="text-decoration-none"
-                              href="/register">Incrivez-vous</a>
+                              href="/register">Inscrivez-vous</a>
                         </p>
                     </div>
                 </form>

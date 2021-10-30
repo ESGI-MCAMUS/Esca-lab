@@ -1,0 +1,169 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+Inscription ◈ Esca'Lab
+{% endblock %}
+
+{% block body %}
+<main class="gradient-light-grey-light-blue">
+    <div class="container min-vh-100">
+        <div class="row min-vh-100">
+            <div class="col-xl-3"></div>
+            <div class="col-xl-6 align-self-center">
+                <form class="custom-container"
+                  method="post"
+                  action="/inscription">
+                    <div class="text-center">
+                        <img src="{{ asset('images/logo.png') }}"
+                          width="50"
+                          height="50"
+                          class="rounded"
+                          alt="logo" />
+                    </div>
+
+                    <h1 class="text-center lobster text-black mb-4">
+                        Inscrivez-vous
+                    </h1>
+                    <div class="row">
+                        <div class="col">
+                            <div class="mb-3">
+                                <label for="firstname"
+                                  class="form-label poppins light">
+                                    Prénom
+                                </label>
+                                <input type="default"
+                                  class="form-control poppins"
+                                  name="firstname"
+                                  required
+                                  id="firstname"
+                                  value="{{userInfo.firstname ?? ''}}"
+                                  placeholder="John" />
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="mb-3">
+                                <label for="lastname"
+                                  class="form-label poppins light">
+                                    Nom
+                                </label>
+                                <input type="default"
+                                  class="form-control poppins"
+                                  name="lastname"
+                                  required
+                                  id="lastname"
+                                  value="{{userInfo.lastname ?? ''}}"
+                                  placeholder="Doe" />
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="mb-3">
+                                <label for="birthdate"
+                                  class="form-label poppins light">
+                                    Date de naissance
+                                </label>
+                                <input type="date"
+                                  class="form-control poppins"
+                                  name="birthdate"
+                                  required
+                                  value="{{userInfo.birthdate ?? ''}}"
+                                  id="birthdate" />
+                            </div>
+                        </div>
+                    </div>
+                    {% if errors.age is defined %}
+                    <p class="fst-italic text-red poppins bold tiny">Vous devez avoir au moins 13 ans pour créer un
+                        compte.</p>
+                    {% endif %}
+                    <div class="mb-3">
+                        <label for="username"
+                          class="form-label poppins light">
+                            Pseudo
+                        </label>
+                        <input type="default"
+                          class="form-control poppins"
+                          name="username"
+                          required
+                          id="username"
+                          value="{{userInfo.username ?? ''}}"
+                          placeholder="johndoe123" />
+                    </div>
+                    {% if errors.username is defined %}
+                    <p class="fst-italic text-red poppins bold tiny">Cette pseudo est déjà utilisé.</p>
+                    {% endif %}
+                    {% if errors.usernameLength is defined %}
+                    <p class="fst-italic text-red poppins bold tiny">Votre pseudo doit faire entre 3 et 15 caractères
+                        ({{errors.usernameLength}} caractères actuellement).
+                    </p>
+                    {% endif %}
+                    <div class="mb-3">
+                        <label for="email"
+                          class="form-label poppins light">
+                            Adresse email
+                        </label>
+                        <input type="email"
+                          class="form-control poppins"
+                          name="email"
+                          required
+                          id="email"
+                          value="{{userInfo.email ?? ''}}"
+                          placeholder="john.doe@domaine.fr" />
+                    </div>
+                    {% if errors.email is defined %}
+                    <p class="fst-italic text-red poppins bold tiny">Cette adresse mail est déjà utilisée.</p>
+                    {% endif %}
+                    <div class="row">
+                        <div class="col">
+                            <div class="mb-3">
+                                <label for="password"
+                                  class="form-label poppins light">
+                                    Mot de passe
+                                </label>
+                                <input type="password"
+                                  class="form-control poppins"
+                                  name="password"
+                                  required
+                                  id="password"
+                                  placeholder="••••••••••" />
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="mb-3">
+                                <label for="passwordConfirm"
+                                  class="form-label poppins light">
+                                    Confirmation de mot de passe
+                                </label>
+                                <input type="password"
+                                  class="form-control poppins"
+                                  name="passwordConfirm"
+                                  required
+                                  id="passwordConfirm"
+                                  placeholder="••••••••••" />
+                            </div>
+                        </div>
+                        {% if errors.password is defined %}
+                        <p class="fst-italic text-red poppins bold tiny">Votre mot de passe doit contenir au moins 8
+                            caractères dont une minuscle, une majuscule, un chiffre et un caractère spécial.</p>
+                        {% endif %}
+                        {% if errors.passwordMissmatch is defined %}
+                        <p class="fst-italic text-red poppins bold tiny">Vos mots de passe ne se correspondent pas.</p>
+                        {% endif %}
+                    </div>
+                    <div class="text-center">
+                        <input type="hidden"
+                          name="register">
+                        <button class="btn btn-primary poppins bold mb-3 rounded"
+                          type="submit">
+                            M'inscrire !
+                        </button>
+                        <p class="fst-italic fs-6 text-muted poppins light">
+                            Vous avez déjà un compte ? <a class="text-decoration-none"
+                              href="/connexion">Connectez-vous</a>
+                        </p>
+                    </div>
+                </form>
+            </div>
+            <div class="col-xl-3"></div>
+        </div>
+    </div>
+</main>
+{% endblock %}

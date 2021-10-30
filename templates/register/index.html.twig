@@ -71,7 +71,7 @@ Inscription ◈ Esca'Lab
                         </div>
                     </div>
                     {% if errors.age is defined %}
-                    <p class="fst-italic text-red poppins bold tiny">Vous devez avoir au moins 13 ans pour créer un
+                    <p class="fst-italic text-danger poppins bold tiny">Vous devez avoir au moins 13 ans pour créer un
                         compte.</p>
                     {% endif %}
                     <div class="mb-3">
@@ -88,10 +88,10 @@ Inscription ◈ Esca'Lab
                           placeholder="johndoe123" />
                     </div>
                     {% if errors.username is defined %}
-                    <p class="fst-italic text-red poppins bold tiny">Cette pseudo est déjà utilisé.</p>
+                    <p class="fst-italic text-danger poppins bold tiny">Cette pseudo est déjà utilisé.</p>
                     {% endif %}
                     {% if errors.usernameLength is defined %}
-                    <p class="fst-italic text-red poppins bold tiny">Votre pseudo doit faire entre 3 et 15 caractères
+                    <p class="fst-italic text-danger poppins bold tiny">Votre pseudo doit faire entre 3 et 15 caractères
                         ({{errors.usernameLength}} caractères actuellement).
                     </p>
                     {% endif %}
@@ -109,7 +109,7 @@ Inscription ◈ Esca'Lab
                           placeholder="john.doe@domaine.fr" />
                     </div>
                     {% if errors.email is defined %}
-                    <p class="fst-italic text-red poppins bold tiny">Cette adresse mail est déjà utilisée.</p>
+                    <p class="fst-italic text-danger poppins bold tiny">Cette adresse mail est déjà utilisée.</p>
                     {% endif %}
                     <div class="row">
                         <div class="col">
@@ -141,11 +141,12 @@ Inscription ◈ Esca'Lab
                             </div>
                         </div>
                         {% if errors.password is defined %}
-                        <p class="fst-italic text-red poppins bold tiny">Votre mot de passe doit contenir au moins 8
+                        <p class="fst-italic text-danger poppins bold tiny">Votre mot de passe doit contenir au moins 8
                             caractères dont une minuscle, une majuscule, un chiffre et un caractère spécial.</p>
                         {% endif %}
                         {% if errors.passwordMissmatch is defined %}
-                        <p class="fst-italic text-red poppins bold tiny">Vos mots de passe ne se correspondent pas.</p>
+                        <p class="fst-italic text-danger poppins bold tiny">Vos mots de passe ne se correspondent pas.
+                        </p>
                         {% endif %}
                     </div>
                     <div class="text-center">

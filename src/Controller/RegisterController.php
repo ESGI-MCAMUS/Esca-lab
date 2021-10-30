@@ -70,8 +70,8 @@ class RegisterController extends AbstractController
             $user_byEmail ? ($errors['email'] = true) : null; // Checking if email exists in database
 
             if (count($errors) !== 0) {
-                dump($errors);
-                dump($userInfo);
+                // dump($errors);
+                // dump($userInfo);
                 return $this->render('register/index.html.twig', [
                     'errors' => $errors,
                     'userInfo' => $userInfo,
@@ -92,12 +92,51 @@ class RegisterController extends AbstractController
                 $user->setOtp($this->generateOTP());
                 $manager->persist($user);
                 $manager->flush();
-                return $this->render('register/otp.html.twig');
+
+                $this->get('session')->set('email', $user->getEmail());
+
+                $mail = new MailerController();
+                $mail->sendEmailOTP(
+                    $user->getEmail(),
+                    $user->getOtp(),
+                    $user->getFirstname()
+                );
+
+                return $this->redirectToRoute('otpConfirm');
             }
         }
 
+        dump($this->get('session')->get('email'));
         return $this->render('register/index.html.twig', [
             'errors' => [],
+        ]);
+    }
+
+    #[Route('/inscription/otp', name: 'otpConfirm')]
+    public function otpConfirm(): Response
+    {
+        if (!$this->get('session')->get('email')) {
+            return $this->redirectToRoute('register');
+        }
+        if (isset($_POST['checkOTP'])) {
+            $otp = htmlspecialchars($_POST['otp']);
+
+            $user = $this->getDoctrine()
+                ->getRepository(User::class)
+                ->findBy(['email' => $this->get('session')->get('email')]);
+
+            if ($user[0]->getOtp() == $otp) {
+                return $this->redirectToRoute('login');
+            } else {
+                dump($user[0]->getOtp());
+                return $this->render('register/otp.html.twig', [
+                    'error' => 'otp',
+                    'email' => $this->get('session')->get('email'),
+                ]);
+            }
+        }
+        return $this->render('register/otp.html.twig', [
+            'email' => $this->get('session')->get('email'),
         ]);
     }
 

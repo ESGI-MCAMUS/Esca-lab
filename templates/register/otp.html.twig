@@ -12,7 +12,7 @@ Inscription ◈ Esca'Lab
       <div class="col-xl-6 align-self-center">
         <form class="custom-container"
           method="post"
-          action="/inscription">
+          action="/inscription/otp">
           <div class="text-center">
             <img src="{{ asset('images/logo.png') }}"
               width="50"
@@ -25,7 +25,8 @@ Inscription ◈ Esca'Lab
             Inscription enregistrée
           </h1>
           <p class=" fs-6 text-black poppins light">
-            Votre inscription a été enregistrée avec succès ! Pour activer votre compte, ouvrer votre boîte mail et
+            Votre inscription a été enregistrée avec succès ! Pour activer votre compte, ouvrer votre boîte mail
+            (<span class="fst-italic">{{email}}</span>) et
             récupérez le code à 6 chiffres vous permettant d'activer votre compte.</br>
             Si vous ne trouvez pas l'email, vérifiez vos messages indésirables.
           </p>
@@ -42,6 +43,9 @@ Inscription ◈ Esca'Lab
               style="-webkit-appearance: none; margin: 0; -moz-appearance: textfield;"
               placeholder="••••••" />
           </div>
+          {% if error is defined %}
+          <p class="fst-italic text-danger poppins bold tiny">Le code OTP fourni n'est pas valide.</p>
+          {% endif %}
           <div class="text-center">
             <input type="hidden"
               name="checkOTP" />

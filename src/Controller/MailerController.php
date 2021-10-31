@@ -23,7 +23,7 @@ class MailerController extends AbstractController
     <p style="font-size:1.1em">Hello ' .
             $firstname .
             '</p>
-    <p>Merci d\'avoir créé un compte sur Esca\'Lab ! Voici votre code vous permettant d\'activer votre compte</p>
+    <p>Voici votre code a usage unique valable sur le site Esca\'Lab !</p>
     <h2 style="background: #00466a;margin: 0 auto;width: max-content;padding: 0 10px;color: #fff;border-radius: 4px;">' .
             $otp .
             '</h2>

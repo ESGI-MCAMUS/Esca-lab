@@ -1,0 +1,105 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+Inscription ◈ Esca'Lab
+{% endblock %}
+
+{% block body %}
+<main class="gradient-light-grey-light-blue">
+  <div class="container min-vh-100">
+    <div class="row min-vh-100">
+      <div class="col-xl-3"></div>
+      <div class="col-xl-6 align-self-center">
+        <form class="custom-container"
+          method="post"
+          action="/connexion/mot-de-passe-oublie/otp">
+          <div class="text-center">
+            <img src="{{ asset('images/logo.png') }}"
+              width="50"
+              height="50"
+              class="rounded"
+              alt="logo" />
+          </div>
+
+          <h1 class="text-center lobster text-black mb-4">
+            Réinitialiser le mot de passe
+          </h1>
+          <p class=" fs-6 text-black poppins light">
+            Votre demande de réinitialisation de mot de passe a été prise en compte avec succès ! Ouvrer votre boîte
+            mail et récupérez le code à 6 chiffres vous permettant dz réinitialiser le mot de passe de votre
+            compte.</br>
+            Si vous ne trouvez pas l'email, vérifiez vos messages indésirables.
+          </p>
+          <div class="mb-3">
+            <label for="otpReset"
+              class="form-label poppins light">
+              Code OTP
+            </label>
+            <input type="number"
+              class="form-control poppins text-center"
+              name="otpReset"
+              required
+              id="otpReset"
+              value="{{otp ?? ''}}"
+              style="-webkit-appearance: none; margin: 0; -moz-appearance: textfield;"
+              placeholder="••••••" />
+          </div>
+          <div class="row">
+            <div class="col">
+              <div class="mb-3">
+                <label for="password"
+                  class="form-label poppins light">
+                  Mot de passe
+                </label>
+                <input type="password"
+                  class="form-control poppins"
+                  name="password"
+                  required
+                  id="password"
+                  style="-webkit-appearance: none; margin: 0; -moz-appearance: textfield;"
+                  placeholder="••••••••" />
+              </div>
+            </div>
+            <div class="col">
+              <div class="mb-3">
+                <label for="passwordConfirm"
+                  class="form-label poppins light">
+                  Confirmation mot de passe
+                </label>
+                <input type="password"
+                  class="form-control poppins"
+                  name="passwordConfirm"
+                  required
+                  id="passwordConfirm"
+                  style="-webkit-appearance: none; margin: 0; -moz-appearance: textfield;"
+                  placeholder="••••••••" />
+              </div>
+            </div>
+          </div>
+
+          {% if error is defined %}
+          <p class="fst-italic text-danger poppins bold tiny">Le code OTP fourni n'est pas valide.</p>
+          {% endif %}
+          {% if errors.password is defined %}
+          <p class="fst-italic text-danger poppins bold tiny">Votre mot de passe doit contenir au moins 8
+            caractères dont une minuscle, une majuscule, un chiffre et un caractère spécial.</p>
+          {% endif %}
+          {% if errors.passwordMissmatch is defined %}
+          <p class="fst-italic text-danger poppins bold tiny">Vos mots de passe ne se correspondent pas.
+          </p>
+          {% endif %}
+          <div class="text-center">
+            <input type="hidden"
+              name="checkOTP" />
+            <button class="btn btn-primary poppins bold mb-3 rounded"
+              type="submit">
+              Réinitialiser mon mot de passe
+            </button>
+          </div>
+        </form>
+      </div>
+      <div class="col-xl-3"></div>
+    </div>
+  </div>
+</main>
+{% endblock %}

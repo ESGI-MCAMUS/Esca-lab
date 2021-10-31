@@ -89,7 +89,8 @@ class RegisterController extends AbstractController
                 $user->setCreatedAt(date_create());
                 $user->setIsDeleted(false);
                 $user->setIsActivated(false);
-                $user->setOtp($this->generateOTP());
+                $utils = new UtilsController();
+                $user->setOtp($utils->generateOTP());
                 $manager->persist($user);
                 $manager->flush();
 
@@ -106,7 +107,7 @@ class RegisterController extends AbstractController
             }
         }
 
-        dump($this->get('session')->get('email'));
+        //dump($this->get('session')->get('email'));
         return $this->render('register/index.html.twig', [
             'errors' => [],
         ]);
@@ -121,11 +122,14 @@ class RegisterController extends AbstractController
         if (isset($_POST['checkOTP'])) {
             $otp = htmlspecialchars($_POST['otp']);
 
-            $user = $this->getDoctrine()
+            $entityManager = $this->getDoctrine()->getManager();
+            $user = $entityManager
                 ->getRepository(User::class)
                 ->findBy(['email' => $this->get('session')->get('email')]);
 
             if ($user[0]->getOtp() == $otp) {
+                $user[0]->setOtp(null);
+                $entityManager->flush();
                 return $this->redirectToRoute('login');
             } else {
                 dump($user[0]->getOtp());
@@ -138,17 +142,5 @@ class RegisterController extends AbstractController
         return $this->render('register/otp.html.twig', [
             'email' => $this->get('session')->get('email'),
         ]);
-    }
-
-    // Generate OTP code
-    private function generateOTP($n = 6)
-    {
-        $generator = '1357902468';
-        $result = '';
-
-        for ($i = 1; $i <= $n; $i++) {
-            $result .= substr($generator, rand() % strlen($generator), 1);
-        }
-        return $result;
     }
 }

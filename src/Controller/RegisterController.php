@@ -102,7 +102,7 @@ class RegisterController extends AbstractController
                     $user->getFirstname()
                 );
 
-                return $this->redirectToRoute('otpConfirm');
+                return $this->redirectToRoute('otpConfirmCreateAccount');
             }
         }
 
@@ -112,8 +112,8 @@ class RegisterController extends AbstractController
         ]);
     }
 
-    #[Route('/inscription/otp', name: 'otpConfirm')]
-    public function otpConfirm(): Response
+    #[Route('/inscription/otp', name: 'otpConfirmCreateAccount')]
+    public function otpConfirmCreateAccount(): Response
     {
         if (!$this->get('session')->get('email')) {
             return $this->redirectToRoute('register');

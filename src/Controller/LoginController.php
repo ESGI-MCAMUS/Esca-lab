@@ -39,6 +39,7 @@ class LoginController extends AbstractController
                 if (
                     password_verify($password, $user_byEmail[0]->getPassword())
                 ) {
+                    $this->get('session')->set('user', $user_byEmail[0]->getId());
                     return $this->redirectToRoute('accueil');
                 } else {
                     return $this->render('login/index.html.twig', [
@@ -48,7 +49,7 @@ class LoginController extends AbstractController
                 }
             } elseif ($user_byUsername) {
                 if (
-                    !$user_byEmail[0]->getIsActivated()
+                    !$user_byUsername[0]->getIsActivated()
                 ) {
                     $mail = new MailerController();
                     $mail->sendEmailOTP(
@@ -65,6 +66,7 @@ class LoginController extends AbstractController
                         $user_byUsername[0]->getPassword()
                     )
                 ) {
+                    $this->get('session')->set('user', $user_byUsername[0]->getId());
                     return $this->redirectToRoute('accueil');
                 } else {
                     return $this->render('login/index.html.twig', [

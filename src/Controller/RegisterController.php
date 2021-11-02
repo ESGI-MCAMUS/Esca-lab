@@ -129,6 +129,7 @@ class RegisterController extends AbstractController
 
             if ($user[0]->getOtp() == $otp) {
                 $user[0]->setOtp(null);
+                $user[0]->setIsActivated(true);
                 $entityManager->flush();
                 return $this->redirectToRoute('login');
             } else {

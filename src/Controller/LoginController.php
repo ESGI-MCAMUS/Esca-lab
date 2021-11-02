@@ -25,6 +25,18 @@ class LoginController extends AbstractController
                 ->findBy(['username' => $emailOrUsername]);
             if ($user_byEmail) {
                 if (
+                    !$user_byEmail[0]->getIsActivated()
+                ) {
+                    $mail = new MailerController();
+                    $mail->sendEmailOTP(
+                        $user_byEmail[0]->getEmail(),
+                        $user_byEmail[0]->getOtp(),
+                        $user_byEmail[0]->getFirstname()
+                    );
+
+                    return $this->redirectToRoute('otpConfirmCreateAccount');
+                }
+                if (
                     password_verify($password, $user_byEmail[0]->getPassword())
                 ) {
                     return $this->redirectToRoute('accueil');
@@ -35,6 +47,18 @@ class LoginController extends AbstractController
                     ]);
                 }
             } elseif ($user_byUsername) {
+                if (
+                    !$user_byEmail[0]->getIsActivated()
+                ) {
+                    $mail = new MailerController();
+                    $mail->sendEmailOTP(
+                        $user_byEmail[0]->getEmail(),
+                        $user_byEmail[0]->getOtp(),
+                        $user_byEmail[0]->getFirstname()
+                    );
+
+                    return $this->redirectToRoute('otpConfirmCreateAccount');
+                }
                 if (
                     password_verify(
                         $password,

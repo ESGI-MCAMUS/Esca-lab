@@ -19,3 +19,9 @@ http://127.0.0.1
 ```
 DATABASE_URL="postgresql://postgres:password@db:5432/db?serverVersion=13&charset=utf8"
 ```
+
+## Open Docker in terminal 
+
+```bash
+docker exec -it docker_php_1 bash
+```

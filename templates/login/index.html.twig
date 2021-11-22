@@ -49,6 +49,9 @@ Connexion ◈ Esca'Lab
               id="password"
               placeholder="••••••••••" />
           </div>
+          {% if error.not_activated is defined %}
+            <p class="fst-italic text-danger poppins bold tiny">Votre compte n'est pas encore activé, veuillez vérifier vos mails.</p>
+          {% endif %}
           {% if error.missmatch is defined %}
           <p class="fst-italic text-danger poppins bold tiny">Le mot de passe est incorrect.</p>
           {% endif %}

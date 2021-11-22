@@ -24,22 +24,26 @@ class LoginController extends AbstractController
                 ->getRepository(User::class)
                 ->findBy(['username' => $emailOrUsername]);
             if ($user_byEmail) {
-                if (
-                    !$user_byEmail[0]->getIsActivated()
-                ) {
+                if (!$user_byEmail[0]->getIsActivated()) {
                     $mail = new MailerController();
                     $mail->sendEmailOTP(
                         $user_byEmail[0]->getEmail(),
                         $user_byEmail[0]->getOtp(),
                         $user_byEmail[0]->getFirstname()
                     );
-
+                    $this->get('session')->set(
+                        'email',
+                        $user_byEmail[0]->getEmail()
+                    );
                     return $this->redirectToRoute('otpConfirmCreateAccount');
                 }
                 if (
                     password_verify($password, $user_byEmail[0]->getPassword())
                 ) {
-                    $this->get('session')->set('user', $user_byEmail[0]->getId());
+                    $this->get('session')->set(
+                        'user',
+                        $user_byEmail[0]->getId()
+                    );
                     return $this->redirectToRoute('accueil');
                 } else {
                     return $this->render('login/index.html.twig', [
@@ -48,16 +52,17 @@ class LoginController extends AbstractController
                     ]);
                 }
             } elseif ($user_byUsername) {
-                if (
-                    !$user_byUsername[0]->getIsActivated()
-                ) {
+                if (!$user_byUsername[0]->getIsActivated()) {
                     $mail = new MailerController();
                     $mail->sendEmailOTP(
-                        $user_byEmail[0]->getEmail(),
-                        $user_byEmail[0]->getOtp(),
-                        $user_byEmail[0]->getFirstname()
+                        $user_byUsername[0]->getEmail(),
+                        $user_byUsername[0]->getOtp(),
+                        $user_byUsername[0]->getFirstname()
                     );
-
+                    $this->get('session')->set(
+                        'email',
+                        $user_byUsername[0]->getEmail()
+                    );
                     return $this->redirectToRoute('otpConfirmCreateAccount');
                 }
                 if (
@@ -66,7 +71,10 @@ class LoginController extends AbstractController
                         $user_byUsername[0]->getPassword()
                     )
                 ) {
-                    $this->get('session')->set('user', $user_byUsername[0]->getId());
+                    $this->get('session')->set(
+                        'user',
+                        $user_byUsername[0]->getId()
+                    );
                     return $this->redirectToRoute('accueil');
                 } else {
                     return $this->render('login/index.html.twig', [

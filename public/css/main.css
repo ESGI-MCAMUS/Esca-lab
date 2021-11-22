@@ -62,3 +62,18 @@ button.rounded {
 .gradient-light-grey-light-blue {
   background-image: linear-gradient(to right top, #f8f8f8, #eff0fa, #e0eafd, #cce5ff, #b3e1ff);
 }
+
+.divider-admin {
+  flex-shrink: 0;
+  width: 0rem;
+  height: 100vh;
+}
+.main-admin {
+  display: flex;
+  flex-wrap: nowrap;
+  height: 100vh;
+  height: -webkit-fill-available;
+  max-height: 100vh;
+  overflow-x: auto;
+  overflow-y: hidden;
+}

@@ -1,0 +1,82 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+Inscription ◈ Esca'Lab
+{% endblock %}
+
+{% block body %}
+<main class="gradient-light-grey-light-blue">
+<div class="container min-vh-100">
+    <div class="row min-vh-100">
+        <div class="col-xl-3"></div>
+        <div class="col-xl-6 align-self-center">
+            <div class="custom-container">
+                {{ form_start(form) }}
+                    <div class="text-center">
+                        <img src="{{ asset('images/logo.png') }}"
+                            width="50"
+                            height="50"
+                            class="rounded"
+                            alt="logo" />
+                    </div>
+
+                    <h1 class="text-center lobster text-black mb-4">
+                        Inscrivez-vous
+                    </h1>
+                    <div class="row">
+                        <div class="col">
+                            <div class="mb-3">
+                                {{ form_row(form.firstname) }}
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="mb-3">
+                                {{ form_row(form.lastname) }}
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="mb-3">
+                                {{ form_row(form.birthdate) }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                      {{ form_row(form.username) }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form_row(form.email) }}
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <div class="mb-3">
+                                {{ form_row(form.password.first) }}
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="mb-3">
+                                {{ form_row(form.password.second) }}
+                            </div>
+                        </div>
+                        <p class="fst-italic text-danger poppins bold tiny">
+                            {{ form_errors(form) }}
+                        </p>
+                    </div>
+                    <div class="text-center">
+                        <button class="btn btn-primary poppins bold mb-3 rounded"
+                            type="submit">
+                            M'inscrire !
+                        </button>
+
+                {{ form_end(form) }}
+                        <p class="fst-italic fs-6 text-muted poppins light">
+                            Vous avez déjà un compte ? <a class="text-decoration-none"
+                                href="/connexion">Connectez-vous</a>
+                        </p>
+                    </div>
+            </div>
+        </div>
+        <div class="col-xl-3"></div>
+    </div>
+</div>
+</main>
+{% endblock %}

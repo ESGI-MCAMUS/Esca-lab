@@ -77,3 +77,6 @@ button.rounded {
   overflow-x: auto;
   overflow-y: hidden;
 }
+.blue-svg {
+  filter: invert(36%) sepia(83%) saturate(4295%) hue-rotate(207deg) brightness(98%) contrast(103%);
+}

@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 use App\Entity\User;
+use DateTime;
 
 class SuperAdminController extends AbstractController
 {
@@ -20,6 +21,7 @@ class SuperAdminController extends AbstractController
         if ($user[0]->getRole() === 5) {
             return $this->render('super_admin/index.html.twig', [
                 'user' => $user[0],
+                'month' => date_format(new DateTime(), 'n'),
             ]);
         } else {
             return $this->redirectToRoute('accueil');

@@ -198,7 +198,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->otp;
     }
 
-    public function setOtp(int $otp): self
+    public function setOtp(int|null $otp): self
     {
         $this->otp = $otp;
 

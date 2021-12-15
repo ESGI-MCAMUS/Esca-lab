@@ -25,7 +25,7 @@ class MailerController extends AbstractController
             '</p>
     <p>Voici votre code a usage unique valable sur le site Esca\'Lab !</p>
     <h2 style="background: #00466a;margin: 0 auto;width: max-content;padding: 0 10px;color: #fff;border-radius: 4px;">
-        <a href="'. stripos($_SERVER["SERVER_PROTOCOL"], 'https') === 0 ? 'https://' : 'http://' . $_SERVER["SERVER_NAME"] . ':' . $_SERVER["SERVER_PORT"] . '/inscription/otp?email=' . $user->getEmail() . '&otp=' . $user->getOtp() .'">' .
+        <a href="'. stripos($_SERVER["SERVER_PROTOCOL"], 'https') === 0 ? 'https://' : 'http://' . $_SERVER["SERVER_NAME"] . ':' . $_SERVER["SERVER_PORT"] . '/inscription/otp?email=' . $to . '&otp=' . $otp .'">' .
             $otp .
             '</a></h2>
     <p style="font-size:0.9em;">L\'Équipe Esca\'Lab</p>

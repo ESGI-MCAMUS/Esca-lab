@@ -10,7 +10,7 @@ use App\Entity\User;
 
 class LoginController extends AbstractController
 {
-    #[Route('/connexion', name: 'login')]
+    #[Route('/connexion-old', name: 'old_login')]
     public function index(): Response
     {
         if (isset($_POST['login'])) {

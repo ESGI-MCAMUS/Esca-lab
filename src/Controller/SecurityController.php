@@ -59,6 +59,7 @@ class SecurityController extends AbstractController
                 $user->setBirthdate($user->getBirthdate());
                 $user->setCreatedAt(new \DateTime());
                 $user->setOtp($utils->generateOTP());
+                $user->setPicture('default.png');
 
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($user);

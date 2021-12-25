@@ -20,6 +20,7 @@ class RegisterType extends AbstractType
     ): void {
         $builder
             ->add('firstname', TextType::class, [
+                'label' => 'Prénom',
                 'label_attr' => ['class' => 'form-label poppins light'],
                 'attr' => [
                     'class' => 'form-control poppins',
@@ -27,6 +28,7 @@ class RegisterType extends AbstractType
                 ],
             ])
             ->add('lastname', TextType::class, [
+                'label' => 'Nom',
                 'label_attr' => ['class' => 'form-label poppins light'],
                 'attr' => [
                     'class' => 'form-control poppins',
@@ -34,18 +36,21 @@ class RegisterType extends AbstractType
                 ],
             ])
             ->add('birthdate', DateType::class, [
+                'label' => 'Date de naissance',
                 'widget' => 'single_text',
                 'label_attr' => ['class' => 'form-label poppins light'],
                 'attr' => ['class' => 'form-control poppins'],
             ])
             ->add('username', TextType::class, [
+                'label' => 'Pseudo',
                 'label_attr' => ['class' => 'form-label poppins light'],
                 'attr' => [
                     'class' => 'form-control poppins',
-                    'placeholder' => 'johndeo123',
+                    'placeholder' => 'johndoe123',
                 ],
             ])
             ->add('email', EmailType::class, [
+                'label' => 'Adresse email',
                 'label_attr' => ['class' => 'form-label poppins light'],
                 'attr' => [
                     'class' => 'form-control poppins',
@@ -53,6 +58,8 @@ class RegisterType extends AbstractType
                 ],
             ])
             ->add('password', RepeatedType::class, [
+                'first_options' => ['label' => 'Mot de passe'],
+                'second_options' => ['label' => 'Répéter mot de passe'],
                 'type' => PasswordType::class,
                 'invalid_message' => 'The password fields must match.',
                 'options' => [

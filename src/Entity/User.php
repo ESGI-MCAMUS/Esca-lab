@@ -9,6 +9,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
+ * @ORM\Table(name="`user`", schema="public")
  */
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
@@ -197,7 +198,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->otp;
     }
 
-    public function setOtp(int $otp): self
+    public function setOtp(int|null $otp): self
     {
         $this->otp = $otp;
 

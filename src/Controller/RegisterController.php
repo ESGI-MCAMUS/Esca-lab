@@ -148,16 +148,17 @@ class RegisterController extends AbstractController
     #[Route('/inscription/otp', name: 'otpConfirmCreateAccount')]
     public function otpConfirmCreateAccountT(): Response
     {
-        if (!$this->get('session')->get('email')) {
+        if (!$this->get('session')->get('email') && !$_GET["email"]) {
             return $this->redirectToRoute('register');
         }
-        if (isset($_POST['checkOTP'])) {
-            $otp = htmlspecialchars($_POST['otp']);
+        if (isset($_POST['checkOTP']) || (isset($_GET["email"]) && isset($_GET["otp"]))) {
+            $otp = htmlspecialchars($_GET['otp']) ?? htmlspecialchars($_POST['otp']);
+            $email = $_GET["email"] ?? $this->get('session')->get('email');
 
             $entityManager = $this->getDoctrine()->getManager();
             $user = $entityManager
                 ->getRepository(User::class)
-                ->findBy(['email' => $this->get('session')->get('email')]);
+                ->findBy(['email' => $email]);
 
             if ($user[0]->getOtp() == $otp) {
                 $user[0]->setOtp(null);

@@ -152,7 +152,7 @@ class RegisterController extends AbstractController
             return $this->redirectToRoute('register');
         }
         if (isset($_POST['checkOTP']) || (isset($_GET["email"]) && isset($_GET["otp"]))) {
-            $otp = htmlspecialchars($_GET['otp']) ?? htmlspecialchars($_POST['otp']);
+            $otp = /**htmlspecialchars($_GET['otp']) ?? */ htmlspecialchars($_POST['otp']);
             $email = $_GET["email"] ?? $this->get('session')->get('email');
 
             $entityManager = $this->getDoctrine()->getManager();

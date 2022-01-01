@@ -1,0 +1,81 @@
+{% extends 'admin.html.twig' %}
+{% block title %}Admin ◈ Esca'Lab
+{% endblock %}
+
+
+{% block body %}
+
+<div class="container-fluid">
+	<h3 class="text-dark mb-4 poppins">Utilisateurs</h3>
+	<div class="card shadow">
+		<div class="card-header py-3">
+			<p class="text-primary m-0 fw-bold poppins">Gestion des utilisateurs</p>
+		</div>
+		<div class="card-body">
+			<div class="row">
+				<div class="col-md-6 text-nowrap">
+				</div>
+				<div class="col-md-6">
+					<div id="dataTable_filter" class="text-md-end dataTables_filter">
+						<label class="form-label"><input class="form-control form-control-sm" type="search" aria-controls="dataTable" placeholder="Search"/></label>
+					</div>
+				</div>
+			</div>
+			<div id="dataTable" class="table-responsive table mt-2" role="grid" aria-describedby="dataTable_info">
+				<table id="dataTable" class="table my-0">
+					<thead>
+						<tr class="poppins">
+							<th>Nom complet</th>
+							<th>Pseudo</th>
+							<th>Email</th>
+							<th>Date de naissance</th>
+							<th>Role(s)</th>
+							<th>Actions</th>
+						</tr>
+					</thead>
+					<tbody>
+					{% for user in users %}
+						<tr class="poppins">
+
+							<td><img class="rounded-circle me-2" width="30" height="30" src="{{asset('images/profiles/') ~ user.picture}}"/>{{user.firstname}} {{user.lastname}}</td>
+							<td>{{user.username}}</td>
+							<td>{{user.email}}</td>
+							<td>{{user.birthdate|date('d/m/Y')}}</td>
+							<td>
+								<div class="form-check"><input id="formCheck-1" class="form-check-input" {% if "ROLE_SUPER_ADMIN" in user.roles %}checked{% endif %} type="checkbox"/><label class="form-check-label" for="formCheck-1">Super admin</label>
+								</div>
+								<div class="form-check"><input id="formCheck-1" class="form-check-input" {% if "ROLE_ADMIN_FRANCHISE" in user.roles %} checked {% endif %} type="checkbox"/><label class="form-check-label" for="formCheck-1">Admin franchise</label>
+								</div>
+								<div class="form-check"><input id="formCheck-1" class="form-check-input" {% if "ROLE_ADMIN_SALLE" in user.roles %} checked {% endif %} type="checkbox"/><label class="form-check-label" for="formCheck-1">Admin salle</label>
+								</div>
+								<div class="form-check"><input id="formCheck-1" class="form-check-input" {% if "ROLE_OUVREUR" in user.roles %} checked {% endif %} type="checkbox"/><label class="form-check-label" for="formCheck-1">Ouvreur</label>
+								</div>
+							</td>
+							<td>
+								<button class="btn btn-danger" type="button">🗑</button>
+								<button class="btn btn-warning" type="button">🚧</button>
+							</td>
+
+						</tr>			
+					{% endfor %}
+					</tbody>
+				</table>
+			</div>
+			<div class="row">
+				<div class="col-md-6 align-self-center">
+<p id="dataTable_info" class="dataTables_info poppins" role="status" aria-live="polite">{{users|length}}
+	utilisateur
+	{% if users|length > 1 %}
+	s
+	{% endif %}
+	</p>
+</p>
+
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+{% endblock %}

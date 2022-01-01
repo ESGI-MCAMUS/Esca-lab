@@ -19,20 +19,24 @@ class AdminController extends AbstractController
         $this->user = $security->getUser();
     }
 
-    #[Route('/admin', name: 'super_admin')]
+    #[Route('/admin', name: 'admin')]
     public function index(): Response
     {
         dump($this->user ? $this->user->getRoles() : 'null_user');
-        if (
-            $this->user
-                ? in_array('ROLE_SUPER_ADMIN', $this->user->getRoles())
-                : false
-        ) {
-            return $this->render('admin/index.html.twig', [
-                'month' => date_format(new DateTime(), 'n'),
-            ]);
-        } else {
-            return $this->redirectToRoute('accueil');
-        }
+        return $this->render('admin/index.html.twig', [
+            'month' => date_format(new DateTime(), 'n'),
+        ]);
+    }
+
+    #[Route('/admin/utilisateurs', name: 'admin_users')]
+    public function admin_users(): Response
+    {
+        dump($this->user ? $this->user->getRoles() : 'null_user');
+        $entityManager = $this->getDoctrine()->getManager();
+        $users = $entityManager->getRepository(User::class)->findAll();
+        dump($users);
+        return $this->render('admin/users.html.twig', [
+            'users' => $users,
+        ]);
     }
 }

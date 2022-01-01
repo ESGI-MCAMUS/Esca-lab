@@ -59,14 +59,12 @@ class AppAuthentificatorAuthenticator extends AbstractLoginFormAuthenticator
             )
         ) {
             return new RedirectResponse(
-                $this->urlGenerator->generate('otpConfirmCreateAccount')
+                $this->urlGenerator->generate('accueil')
             );
         }
 
         // For example:
-        return new RedirectResponse(
-            $this->urlGenerator->generate('otpConfirmCreateAccount')
-        );
+        return new RedirectResponse($this->urlGenerator->generate('accueil'));
         throw new \Exception(
             'TODO: provide a valid redirect inside ' . __FILE__
         );

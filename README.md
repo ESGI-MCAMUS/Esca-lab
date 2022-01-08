@@ -23,5 +23,7 @@ DATABASE_URL="postgresql://postgres:password@db:5432/db?serverVersion=13&charset
 ## Open Docker in terminal 
 
 ```bash
-docker exec -it docker_php_1 bash
+docker exec -it esca-lab-php-1 bash
+bin/console make:controller # Créer un controleur 
+bin/console make:form # Créer un formulaire 
 ```

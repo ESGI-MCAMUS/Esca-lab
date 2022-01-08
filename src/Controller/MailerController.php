@@ -24,9 +24,11 @@ class MailerController extends AbstractController
             $firstname .
             '</p>
     <p>Voici votre code a usage unique valable sur le site Esca\'Lab !</p>
-    <h2 style="background: #00466a;margin: 0 auto;width: max-content;padding: 0 10px;color: #fff;border-radius: 4px;">' .
+    <h2 style="background: #00466a;margin: 0 auto;width: max-content;padding: 0 10px;color: #fff;border-radius: 4px;">
+        <a href="'. (stripos($_SERVER["SERVER_PROTOCOL"], 'https') === 0 ? 'https://' : 'http://') . $_SERVER["SERVER_NAME"] . ':' . $_SERVER["SERVER_PORT"] . '/inscription/otp?email=' . $to . '&otp=' . $otp .'"
+           style="text-decoration: none; color: white;">' .
             $otp .
-            '</h2>
+            '</a></h2>
     <p style="font-size:0.9em;">L\'Équipe Esca\'Lab</p>
     <hr style="border:none;border-top:1px solid #eee" />
     <div style="float:right;padding:8px 0;color:#aaa;font-size:0.8em;line-height:1;font-weight:300">

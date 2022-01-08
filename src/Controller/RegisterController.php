@@ -10,7 +10,7 @@ use App\Entity\User;
 
 class RegisterController extends AbstractController
 {
-    #[Route('/inscription', name: 'register')]
+    #[Route('/inscription-old', name: 'register-old')]
     public function index(): Response
     {
         // Register user to database
@@ -85,7 +85,7 @@ class RegisterController extends AbstractController
                 $user->setUsername($username);
                 $user->setEmail($email);
                 $user->setPassword(password_hash($password, PASSWORD_DEFAULT));
-                $user->setRole(1);
+                $user->setRoles(['ROLE_USER']);
                 $user->setCreatedAt(date_create());
                 $user->setIsDeleted(false);
                 $user->setIsActivated(false);
@@ -106,11 +106,6 @@ class RegisterController extends AbstractController
                 return $this->redirectToRoute('otpConfirmCreateAccount');
             }
         }
-
-        //dump($this->get('session')->get('email'));
-        return $this->render('register/index.html.twig', [
-            'errors' => [],
-        ]);
     }
 
     #[Route('/inscription/otp', name: 'otpConfirmCreateAccount')]
@@ -126,6 +121,44 @@ class RegisterController extends AbstractController
             $user = $entityManager
                 ->getRepository(User::class)
                 ->findBy(['email' => $this->get('session')->get('email')]);
+
+            if ($user[0]->getOtp() == $otp) {
+                $user[0]->setOtp(null);
+                $user[0]->setIsActivated(true);
+                $entityManager->flush();
+                return $this->redirectToRoute('login');
+            } else {
+                dump($user[0]->getOtp());
+                return $this->render('register/otp.html.twig', [
+                    'error' => 'otp',
+                    'email' => $this->get('session')->get('email'),
+                ]);
+            }
+        }
+        return $this->render('register/otp.html.twig', [
+            'email' => $this->get('session')->get('email'),
+        ]);
+
+        //dump($this->get('session')->get('email'));
+        return $this->render('register/index.html.twig', [
+            'errors' => [],
+        ]);
+    }
+
+    #[Route('/inscription/otp', name: 'otpConfirmCreateAccount')]
+    public function otpConfirmCreateAccountT(): Response
+    {
+        if (!$this->get('session')->get('email') && !$_GET["email"]) {
+            return $this->redirectToRoute('register');
+        }
+        if (isset($_POST['checkOTP']) || (isset($_GET["email"]) && isset($_GET["otp"]))) {
+            $otp = htmlspecialchars($_GET['otp']) ?? htmlspecialchars($_POST['otp']);
+            $email = $_GET["email"] ?? $this->get('session')->get('email');
+
+            $entityManager = $this->getDoctrine()->getManager();
+            $user = $entityManager
+                ->getRepository(User::class)
+                ->findBy(['email' => $email]);
 
             if ($user[0]->getOtp() == $otp) {
                 $user[0]->setOtp(null);

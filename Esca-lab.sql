@@ -71,7 +71,7 @@ CREATE TABLE "Bill" (
   "created_at" timestamp,
   "updated_at" timestamp,
   "file" varchar,
-  "price" double
+  "price" decimal(6,2)
 );
 
 CREATE TABLE "Franchise_Bill" (
@@ -88,40 +88,40 @@ CREATE TABLE "Gym_Bill" (
 
 CREATE TABLE "Route" (
   "id" SERIAL PRIMARY KEY,
-  "opened" tinyint,
+  "opened" smallint,
   "gym" int,
   "opener" int
 );
 
-ALTER TABLE "Role" ADD FOREIGN KEY ("id") REFERENCES "User" ("role");
+ALTER TABLE "User" ADD FOREIGN KEY ("role") REFERENCES "Role" ("id");
 
-ALTER TABLE "User" ADD FOREIGN KEY ("id") REFERENCES "Reaction" ("user");
+ALTER TABLE "Reaction" ADD FOREIGN KEY ("user") REFERENCES "User" ("id");
 
-ALTER TABLE "Comment" ADD FOREIGN KEY ("id") REFERENCES "Reaction" ("comment");
+ALTER TABLE "Reaction" ADD FOREIGN KEY ("comment") REFERENCES "Comment" ("id");
 
-ALTER TABLE "Comment" ADD FOREIGN KEY ("id") REFERENCES "Media" ("comment");
+ALTER TABLE "Media" ADD FOREIGN KEY ("comment") REFERENCES "Comment" ("id");
 
-ALTER TABLE "User" ADD FOREIGN KEY ("id") REFERENCES "Session" ("user");
+ALTER TABLE "Session" ADD FOREIGN KEY ("user") REFERENCES "User" ("id");
 
-ALTER TABLE "Gym" ADD FOREIGN KEY ("id") REFERENCES "Session" ("gym");
+ALTER TABLE "Session" ADD FOREIGN KEY ("gym") REFERENCES "Gym" ("id");
 
-ALTER TABLE "User" ADD FOREIGN KEY ("id") REFERENCES "Franchise" ("admin");
+ALTER TABLE "Franchise" ADD FOREIGN KEY ("admin") REFERENCES "User" ("id");
 
-ALTER TABLE "Gym" ADD FOREIGN KEY ("id") REFERENCES "Event" ("gym");
+ALTER TABLE "Event" ADD FOREIGN KEY ("gym") REFERENCES "Gym" ("id");
 
-ALTER TABLE "Gym" ADD FOREIGN KEY ("id") REFERENCES "Route" ("gym");
+ALTER TABLE "Route" ADD FOREIGN KEY ("gym") REFERENCES "Gym" ("id");
 
-ALTER TABLE "Bill" ADD FOREIGN KEY ("id") REFERENCES "Gym_Bill" ("bill");
+ALTER TABLE "Gym_Bill" ADD FOREIGN KEY ("bill") REFERENCES "Bill" ("id");
 
-ALTER TABLE "Gym" ADD FOREIGN KEY ("id") REFERENCES "Gym_Bill" ("gym");
+ALTER TABLE "Gym_Bill" ADD FOREIGN KEY ("gym") REFERENCES "Gym" ("id");
 
-ALTER TABLE "Franchise" ADD FOREIGN KEY ("id") REFERENCES "Franchise_Bill" ("franchise");
+ALTER TABLE "Franchise_Bill" ADD FOREIGN KEY ("franchise") REFERENCES "Franchise" ("id");
 
-ALTER TABLE "Bill" ADD FOREIGN KEY ("id") REFERENCES "Franchise_Bill" ("bill");
+ALTER TABLE "Franchise_Bill" ADD FOREIGN KEY ("bill") REFERENCES "Bill" ("id");
 
-ALTER TABLE "User" ADD FOREIGN KEY ("id") REFERENCES "Route" ("opener");
+ALTER TABLE "Route" ADD FOREIGN KEY ("opener") REFERENCES "User" ("id");
 
-ALTER TABLE "User" ADD FOREIGN KEY ("id") REFERENCES "Gym" ("admin");
+ALTER TABLE "Gym" ADD FOREIGN KEY ("admin") REFERENCES "User" ("id");
 
-ALTER TABLE "User" ADD FOREIGN KEY ("id") REFERENCES "Comment" ("user");
+ALTER TABLE "Comment" ADD FOREIGN KEY ("user") REFERENCES "User" ("id");
 

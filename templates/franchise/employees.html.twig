@@ -124,12 +124,12 @@
                                         <td>{{ employee.birthdate|date('d/m/Y') }}</td>
                                         <td>
                                             <div class="form-check">
-                                                <input id="roleCheckFranchise" onclick='window.location.assign("{{ path('edit_employee', {id: employee.id, check: 'admin_franchise'}) }}")' class="form-check-input" type="checkbox" {% if "ROLE_ADMIN_FRANCHISE" in employee.roles %}checked{% endif %}/>
-                                                <label for="roleCheckFranchise" class="form-check-label">Administrateur de franchise</label>
+                                                <input id="roleCheck" onclick='window.location.assign("{{ path('edit_employee', {id: employee.id, check: 'admin_franchise'}) }}")' class="form-check-input" type="checkbox" {% if "ROLE_ADMIN_FRANCHISE" in employee.roles %}checked{% endif %}/>
+                                                <label for="roleCheck" class="form-check-label">Administrateur de franchise</label>
                                             </div>
                                             <div class="form-check">
-                                                <input id="roleCheckSalle" onclick='window.location.assign("{{ path('edit_employee', {id: employee.id, check: 'admin_salle'}) }}")' class="form-check-input" type="checkbox" {% if "ROLE_ADMIN_SALLE" in employee.roles %}checked{% endif %}/>
-                                                <label for="roleCheckSalle" class="form-check-label">Administrateur de salle</label>
+                                                <input id="roleCheck" onclick='window.location.assign("{{ path('edit_employee', {id: employee.id, check: 'admin_salle'}) }}")' class="form-check-input" type="checkbox" {% if "ROLE_ADMIN_SALLE" in employee.roles %}checked{% endif %}/>
+                                                <label for="roleCheck" class="form-check-label">Administrateur de salle</label>
                                             </div>
                                             <div class="form-check">
                                                 <input  id="roleCheck" onclick='window.location.assign("{{ path('edit_employee', {id: employee.id, check: 'ouvreur'}) }}")' class="form-check-input" type="checkbox" {% if "ROLE_OUVREUR" in employee.roles %}checked{% endif %}/>
@@ -137,8 +137,9 @@
                                             </div>
                                         </td>
                                         <td>
-                                            <a href="{{ path('remove_employee', {id: employee.id}) }}" class="btn btn-danger">🗑</a>
-                                            <button href="{{ path('edit_employee', {id: employee.id}) }}" class="btn btn-warning">🚧</button>
+                                            <button type="button" class="btn btn-danger" data-href="{{ path('remove_employee', {id: employee.id}) }}" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                                🗑
+                                            </button>
                                         </td>
                                     </tr>
                                 {% endfor %}
@@ -155,6 +156,24 @@
                 </div>
             </footer>
         </div>
+
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Suppression</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        Êtes-vous sûr de vouloir supprimer cet|te employé|e ?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                        <a class="btn btn-outline-danger">Supprimer</a>
+                    </div>
+                </div>
+            </div>
+        </div>
         <a class="border rounded d-inline scroll-to-top" href="#page-top">
             <i class="fas fa-angle-up"></i>
         </a>
@@ -162,6 +181,15 @@
     <script src="{{asset('bootstrap/js/bootstrap.min.js')}}"></script>
     <script src="{{asset('js/bs-init.js')}}"></script>
     <script src="{{asset('js/theme.js')}}"></script>
+        <script>
+            var modal = document.getElementById('exampleModal');
+
+            modal.addEventListener('show.bs.modal', function (e) {
+                var btn = this.getElementsByClassName('btn-outline-danger')[0];
+                btn.href = e.relatedTarget.getAttribute('data-href');
+                return false;
+            });
+        </script>
     </body>
 
 

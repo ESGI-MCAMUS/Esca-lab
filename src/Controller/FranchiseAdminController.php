@@ -56,7 +56,7 @@ class FranchiseAdminController extends AbstractController
         }
     }
 
-    #[Route('/franchise/employees/edit/{id}/{check}', name: 'edit_employee')]
+    #[Route('/franchise/employees/edit/{id}/{check}', name: 'edit_franchise_employee')]
     public function editEmployee($id, $check = 'user') {
         if (
             $this->user
@@ -100,7 +100,7 @@ class FranchiseAdminController extends AbstractController
         }
     }
 
-    #[Route('/franchise/employees/remove/{id}', name: 'remove_employee')]
+    #[Route('/franchise/employees/remove/{id}', name: 'remove_franchise_employee')]
     public function removeEmployee($id) {
         if (
             $this->user

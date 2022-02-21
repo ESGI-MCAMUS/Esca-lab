@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -85,6 +87,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\ManyToOne(targetEntity=Franchise::class, inversedBy="users")
      */
     private $franchise;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Gym::class, mappedBy="admin")
+     */
+    private $gyms;
+
+    public function __construct()
+    {
+        $this->gyms = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -283,6 +295,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setFranchise(?Franchise $franchise): self
     {
         $this->franchise = $franchise;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Gym[]
+     */
+    public function getGyms(): Collection
+    {
+        return $this->gyms;
+    }
+
+    public function addGym(Gym $gym): self
+    {
+        if (!$this->gyms->contains($gym)) {
+            $this->gyms[] = $gym;
+            $gym->setAdmin($this);
+        }
+
+        return $this;
+    }
+
+    public function removeGym(Gym $gym): self
+    {
+        if ($this->gyms->removeElement($gym)) {
+            // set the owning side to null (unless already changed)
+            if ($gym->getAdmin() === $this) {
+                $gym->setAdmin(null);
+            }
+        }
 
         return $this;
     }

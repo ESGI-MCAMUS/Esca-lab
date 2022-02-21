@@ -39,9 +39,15 @@ class Franchise
      */
     private $name;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Gym::class, mappedBy="franchise")
+     */
+    private $gyms;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
+        $this->gyms = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -99,6 +105,36 @@ class Franchise
     public function setName(string $name): self
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Gym[]
+     */
+    public function getGyms(): Collection
+    {
+        return $this->gyms;
+    }
+
+    public function addGym(Gym $gym): self
+    {
+        if (!$this->gyms->contains($gym)) {
+            $this->gyms[] = $gym;
+            $gym->setFranchise($this);
+        }
+
+        return $this;
+    }
+
+    public function removeGym(Gym $gym): self
+    {
+        if ($this->gyms->removeElement($gym)) {
+            // set the owning side to null (unless already changed)
+            if ($gym->getFranchise() === $this) {
+                $gym->setFranchise(null);
+            }
+        }
 
         return $this;
     }

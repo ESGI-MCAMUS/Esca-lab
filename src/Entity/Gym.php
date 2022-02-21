@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\GymRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -52,6 +54,22 @@ class Gym
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="gyms")
      */
     private $admin;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Route::class, mappedBy="gym")
+     */
+    private $routes;
+
+    /**
+     * @ORM\OneToMany(targetEntity=User::class, mappedBy="gym")
+     */
+    private $openers;
+
+    public function __construct()
+    {
+        $this->routes = new ArrayCollection();
+        $this->openers = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -138,6 +156,66 @@ class Gym
     public function setAdmin(?User $admin): self
     {
         $this->admin = $admin;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Route[]
+     */
+    public function getRoutes(): Collection
+    {
+        return $this->routes;
+    }
+
+    public function addRoute(Route $route): self
+    {
+        if (!$this->routes->contains($route)) {
+            $this->routes[] = $route;
+            $route->setGym($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRoute(Route $route): self
+    {
+        if ($this->routes->removeElement($route)) {
+            // set the owning side to null (unless already changed)
+            if ($route->getGym() === $this) {
+                $route->setGym(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|User[]
+     */
+    public function getOpeners(): Collection
+    {
+        return $this->openers;
+    }
+
+    public function addOpener(User $opener): self
+    {
+        if (!$this->openers->contains($opener)) {
+            $this->openers[] = $opener;
+            $opener->setGym($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOpener(User $opener): self
+    {
+        if ($this->openers->removeElement($opener)) {
+            // set the owning side to null (unless already changed)
+            if ($opener->getGym() === $this) {
+                $opener->setGym(null);
+            }
+        }
 
         return $this;
     }

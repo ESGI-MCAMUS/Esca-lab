@@ -24,7 +24,12 @@ class GymAdminController extends AbstractController
     #[Route('/gym/kpi', name: 'gym_kpi')]
     public function index(): Response
     {
+        $openRoutes = $this->user->getGym()->getRoutes()->filter(function ($element) {
+            return $element->getOpened() > 0;
+        });
+
         return $this->render('gym/index.html.twig', [
+            'openRoutes' => $openRoutes,
             'month' => date_format(new DateTime(), 'n'),
         ]);
     }

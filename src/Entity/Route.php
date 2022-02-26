@@ -29,6 +29,16 @@ class Route
      */
     private $gym;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $name;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $difficulty;
+
     public function __construct()
     {
         $this->opener = new ArrayCollection();
@@ -59,6 +69,30 @@ class Route
     public function setGym(?Gym $gym): self
     {
         $this->gym = $gym;
+
+        return $this;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function setName(?string $name): self
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    public function getDifficulty(): ?int
+    {
+        return $this->difficulty;
+    }
+
+    public function setDifficulty(?int $difficulty): self
+    {
+        $this->difficulty = $difficulty;
 
         return $this;
     }

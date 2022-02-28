@@ -3,7 +3,6 @@
 {% block title %}Gym Admin ◈ Esca'Lab
 {% endblock %}
 
-
 {% block body %}
     <body id="page-top">
     <div id="wrapper">
@@ -100,56 +99,10 @@
                     </div>
                 </nav>
                 <div class="container-fluid">
-                    <div class="d-sm-flex justify-content-start align-items-center mb-4">
-                        <h3 class="text-dark mb-0 me-2 poppins bold text-black" style="color: rgb(33,37,41);">Routes</h3>
-                        <a href="{{ path('route_add') }}"><button type="button" class="btn btn-success ms-2">+ Add New</button></a>
-                    </div>
-                    <div class="row justify-content-around align-items-center">
-                        {% for route in routes %}
-                            <div class="col col-3">
-                                <div class="card">
-                                    <div class="card-header">
-                                        <div class="row align-items-center justify-content-between">
-                                            <h5 class="card-title col mb-0">Route {{ route.name|capitalize }}</h5>
-                                            <div class="col text-end">
-                                                <a href="{{ path('route_edit', {id: route.id}) }}">
-                                                    <button type="button" class="btn btn-warning">
-                                                        🚧
-                                                    </button>
-                                                </a>
-                                                <a href="{{ path('route_remove', {id: route.id}) }}">
-                                                    <button type="button" class="btn btn-danger"data-bs-toggle="modal" data-bs-target="#routeSuppModal">
-                                                        🗑
-                                                    </button>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="row justify-content-start align-items-center mb-2">
-                                            <h6 class="col-5 mb-0">Difficulté :</h6>
-                                            <div class="col-7 text-start">
-                                                {% for i in 1..route.difficulty %}
-                                                    <i class="bi bi-star-fill" style="color: gold;"></i>
-                                                {% endfor %}
-                                                {% for i in route.difficulty..4 %}
-                                                    <i class="bi bi-star" style="color: gold;"></i>
-                                                {% endfor %}
-                                            </div>
-                                        </div>
-                                        <div style="background-color: {% if route.opened > 0 %}green{% else %}darkred{% endif %}; width:60px; height:60px; border-radius: 30px;">
-                                            {% if route.opened > 0 %}
-                                                <p style="text-align:center; padding-top:calc(55px/3); color: white">Ouverte</p>
-                                            {% else %}
-                                                <p style="text-align:center; padding-top:calc(55px/3); color: white">Fermée</p>
-                                            {% endif %}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        {% else %}
-                        {% endfor %}
-                    </div>
+                    {{ form_start(form_edit) }}
+
+
+                    {{ form_end(form_edit) }}
                 </div>
             </div>
             <footer class="bg-white shadow sticky-footer" style="z-index: 2">
@@ -159,23 +112,6 @@
                     </div>
                 </div>
             </footer>
-        </div>
-        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Suppression</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        Êtes-vous sûr de vouloir supprimer cette route ?
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
-                        <a class="btn btn-outline-danger">Supprimer</a>
-                    </div>
-                </div>
-            </div>
         </div>
         <a class="border rounded d-inline scroll-to-top" href="#page-top">
             <i class="fas fa-angle-up"></i>

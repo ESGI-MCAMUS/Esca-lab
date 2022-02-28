@@ -9,6 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use \App\Entity\Route as RouteEntity;
 use Symfony\Component\Security\Core\Security;
 
 class RouteController extends AbstractController
@@ -44,8 +45,36 @@ class RouteController extends AbstractController
     }
 
     #[IsGranted('ROLE_ADMIN_SALLE')]
+    #[Route('/route/edit/{id}', name: 'route_edit')]
+    public function edit($id, EntityManagerInterface $em, Request $request): Response
+    {
+        $repo = $this->getDoctrine()->getRepository(RouteEntity::class);
+        $route = $repo->findOneBy(["id" => $id]);
+
+        $form = $this->createForm(RouteType::class)->setData($route);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $routeEdit = $form->getData();
+
+            $route->setName($routeEdit->getName());
+            $route->setDifficulty($routeEdit->getDifficulty());
+
+            $em->persist($route);
+            $em->flush();
+
+            return $this->redirectToRoute("gym_routes");
+        }
+
+        return $this->renderForm('route/edit.html.twig', [
+            'route' => $route,
+            'form_edit' => $form
+        ]);
+    }
+
+    #[IsGranted('ROLE_ADMIN_SALLE')]
     #[Route('/route/remove/{id}', name: 'route_remove')]
-    public function edit($id): Response
+    public function remove($id): Response
     {
         return $this->render('route/index.html.twig', [
             'controller_name' => 'RouteController',

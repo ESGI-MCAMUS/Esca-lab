@@ -74,20 +74,67 @@ class RouteController extends AbstractController
 
     #[IsGranted('ROLE_ADMIN_SALLE')]
     #[Route('/route/remove/{id}', name: 'route_remove')]
-    public function remove($id): Response
+    public function remove($id, EntityManagerInterface $em)
     {
-        return $this->render('route/index.html.twig', [
-            'controller_name' => 'RouteController',
-        ]);
+        $repo = $this->getDoctrine()->getRepository(RouteEntity::class);
+
+        $route = $repo->findOneBy(["id" => $id]);
+
+        $verifGym = $this->user->getGym() ?? null;
+
+        if ($verifGym !== null) {
+            if ($verifGym->getId() == $route->getGym()->getId()) {
+                $em->remove($route);
+                $em->flush();
+            } else {
+                $this->redirectToRoute('accueil');
+            }
+        } else {
+            if ($this->user->getFranchise()->getId() == $route->getGym()->getFranchise()->getId()) {
+                $em->remove($route);
+                $em->flush();
+            } else {
+                $this->redirectToRoute('accueil');
+            }
+        }
+
+        return $this->redirectToRoute("gym_routes");
     }
 
     #[IsGranted('ROLE_OUVREUR')]
-    #[Route('/route/open/{id}', name: 'route_open')]
-    public function open($id): Response
+    #[Route('/route/open/{id}/{state}', name: 'route_open')]
+    public function open($id, $state)
     {
-        return $this->render('route/index.html.twig', [
-            'controller_name' => 'RouteController',
-        ]);
+        $em = $this->getDoctrine()->getManager();
+        $repo = $this->getDoctrine()->getRepository(RouteEntity::class);
+
+        $route = $repo->findOneBy(["id" => $id]);
+
+        $verifGym = $this->user
+            ? in_array("ROLE_ADMIN_FRANCHISE", $this->user->getRoles())
+            : false;
+
+        if (!$verifGym) {
+            if ($this->user->getGym()->getId() == $route->getGym()->getId()) {
+                if ($state == "true") $route->setOpened(1);
+                else $route->setOpened(0);
+                $em->persist($route);
+                $em->flush();
+            } else {
+                $this->redirectToRoute('accueil');
+            }
+        } else {
+            if ($this->user->getFranchise()->getId() == $route->getGym()->getFranchise()->getId()) {
+                if ($state == "true") $route->setOpened(1);
+                else $route->setOpened(0);
+                $em->remove($route);
+                $em->flush();
+            } else {
+                $this->redirectToRoute('accueil');
+            }
+        }
+
+        return $this->redirectToRoute("gym_routes");
     }
 
 }

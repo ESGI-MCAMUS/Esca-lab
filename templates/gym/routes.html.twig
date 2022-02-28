@@ -110,18 +110,25 @@
                                 <div class="card">
                                     <div class="card-header">
                                         <div class="row align-items-center justify-content-between">
-                                            <h5 class="card-title col mb-0">Route {{ route.name|capitalize }}</h5>
-                                            <div class="col text-end">
+                                            <h5 class="card-title col-5 mb-0">Route {{ route.name|capitalize }}</h5>
+                                            <div class="col-7 text-end">
+                                                {% if route.opened > 0 %}
+                                                    <a href="{{ path('route_open', {id: route.id, state: "false"}) }}">
+                                                        <button type="button" class="btn btn-danger">Close</button>
+                                                    </a>
+                                                {% else %}
+                                                    <a href="{{ path('route_open', {id: route.id, state: "true"}) }}">
+                                                        <button type="button" class="btn btn-success">Open</button>
+                                                    </a>
+                                                {% endif %}
                                                 <a href="{{ path('route_edit', {id: route.id}) }}">
                                                     <button type="button" class="btn btn-warning">
                                                         🚧
                                                     </button>
                                                 </a>
-                                                <a href="{{ path('route_remove', {id: route.id}) }}">
-                                                    <button type="button" class="btn btn-danger"data-bs-toggle="modal" data-bs-target="#routeSuppModal">
-                                                        🗑
-                                                    </button>
-                                                </a>
+                                                <button class="btn btn-danger" data-href="{{ path('route_remove', {id: route.id}) }}" data-bs-toggle="modal" data-bs-target="#confirm-delete">
+                                                    🗑
+                                                </button>
                                             </div>
                                         </div>
                                     </div>
@@ -132,9 +139,11 @@
                                                 {% for i in 1..route.difficulty %}
                                                     <i class="bi bi-star-fill" style="color: gold;"></i>
                                                 {% endfor %}
-                                                {% for i in route.difficulty..4 %}
-                                                    <i class="bi bi-star" style="color: gold;"></i>
-                                                {% endfor %}
+                                                {% if route.difficulty < 5 %}
+                                                    {% for i in route.difficulty..4 %}
+                                                        <i class="bi bi-star" style="color: gold;"></i>
+                                                    {% endfor %}
+                                                {% endif %}
                                             </div>
                                         </div>
                                         <div style="background-color: {% if route.opened > 0 %}green{% else %}darkred{% endif %}; width:60px; height:60px; border-radius: 30px;">
@@ -160,18 +169,18 @@
                 </div>
             </footer>
         </div>
-        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
+        <div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Suppression</h5>
+                        <h5 class="modal-title" id="myModalLabel">Suppression</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         Êtes-vous sûr de vouloir supprimer cette route ?
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
                         <a class="btn btn-outline-danger">Supprimer</a>
                     </div>
                 </div>
@@ -185,6 +194,15 @@
     <script src="{{asset('js/chart.min.js')}}"></script>
     <script src="{{asset('js/bs-init.js')}}"></script>
     <script src="{{asset('js/theme.js')}}"></script>
+    <script>
+        var modal = document.getElementById('confirm-delete');
+
+        modal.addEventListener('show.bs.modal', function (e) {
+            var btn = this.getElementsByClassName('btn-outline-danger')[0];
+            btn.href = e.relatedTarget.getAttribute('data-href');
+            return false;
+        });
+    </script>
     </body>
 
 

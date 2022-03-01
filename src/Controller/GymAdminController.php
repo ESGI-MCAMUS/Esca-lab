@@ -44,6 +44,18 @@ class GymAdminController extends AbstractController
         ]);
     }
 
+    #[IsGranted('ROLE_ADMIN_FRANCHISE')]
+    #[Route('/gym/voies/{id}', name: 'gym_routes_franchise', defaults: ["id" => null])]
+    public function routesByFranchise($id): Response
+    {
+        $repo = $this->getDoctrine()->getManager()->getRepository(Gym::class);
+        $gym = $this->user->getGym() ?? $repo->findOneBy(["id" => $id, "franchise" => $this->user->getFranchise()->getId()]);
+        $routes = $gym->getRoutes();
+        return $this->render('gym/routes.html.twig', [
+            "routes" => $routes
+        ]);
+    }
+
     #[Route('/gym/employees', name: 'gym_employees')]
     public function employees() : Response {
         $repo = $this->getDoctrine()->getManager()->getRepository(User::class);

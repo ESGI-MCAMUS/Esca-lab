@@ -6,11 +6,7 @@
 {% block body %}
     <body id="page-top">
     <div id="wrapper">
-        {% if "ROLE_ADMIN_FRANCHISE" in app.user.roles %}
-            {% include 'franchise/nav.html.twig' %}
-        {% else %}
-            {% include 'gym/nav.html.twig' %}
-        {% endif %}
+        {% include 'franchise/nav.html.twig' %}
         <div class="d-flex flex-column" id="content-wrapper">
             <div id="content">
                 <nav class="navbar navbar-light navbar-expand bg-white shadow mb-4 topbar static-top">
@@ -103,10 +99,10 @@
                     </div>
                 </nav>
                 <div class="container-fluid">
-                    {{ form_start(form_add) }}
+                    {{ form_start(form_edit) }}
 
 
-                    {{ form_end(form_add) }}
+                    {{ form_end(form_edit) }}
                 </div>
             </div>
             <footer class="bg-white shadow sticky-footer" style="z-index: 2">

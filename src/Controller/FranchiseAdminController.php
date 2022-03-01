@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Gym;
 use App\Entity\User;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bridge\Doctrine\ManagerRegistry;
@@ -90,5 +91,14 @@ class FranchiseAdminController extends AbstractController
         }
 
         return $this->redirectToRoute('franchise_employees');
-}
+    }
+
+    #[Route('/franchise/salles', name: 'franchise_gyms')]
+    public function routes(): Response
+    {
+        $gyms = $this->user->getFranchise()->getGyms();
+        return $this->render('franchise/gyms.html.twig', [
+            "gyms" => $gyms
+        ]);
+    }
 }

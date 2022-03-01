@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Gym;
 use App\Form\RouteType;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -22,8 +23,8 @@ class RouteController extends AbstractController
     }
 
     #[IsGranted('ROLE_ADMIN_SALLE')]
-    #[Route('/route/add', name: 'route_add')]
-    public function add(EntityManagerInterface $em, Request $request): Response
+    #[Route('/route/add/{gymId}', name: 'route_add', defaults: ["gymId" => null])]
+    public function add($gymId, EntityManagerInterface $em, Request $request): Response
     {
         $form = $this->createForm(RouteType::class);
 
@@ -31,12 +32,18 @@ class RouteController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $route = $form->getData();
 
-            $route->setGym($this->user->getGym());
+            $route->setGym($this->user->getGym() ?? $this->getDoctrine()
+                    ->getRepository(Gym::class)
+                    ->findOneBy(["id" => $gymId, "franchise" => $this->user->getFranchise()->getId()]));
 
-            $em->persist($form->getData());
-            $em->flush();
+            if ($route->getGym()) {
+                $em->persist($form->getData());
+                $em->flush();
 
-            return $this->redirectToRoute("gym_routes");
+                if ($this->user ? in_array("ROLE_ADMIN_FRANCHISE", $this->user->getRoles()) : false)
+                    return $this->redirectToRoute("gym_routes_franchise", ["id" => $gymId]);
+                return $this->redirectToRoute("gym_routes");
+            }
         }
 
         return $this->renderForm('route/add.html.twig', [
@@ -45,31 +52,44 @@ class RouteController extends AbstractController
     }
 
     #[IsGranted('ROLE_ADMIN_SALLE')]
-    #[Route('/route/edit/{id}', name: 'route_edit')]
-    public function edit($id, EntityManagerInterface $em, Request $request): Response
+    #[Route('/route/edit/{id}/{gymId}', name: 'route_edit', defaults: ["gymId" => null])]
+    public function edit($id, $gymId, EntityManagerInterface $em, Request $request): Response
     {
         $repo = $this->getDoctrine()->getRepository(RouteEntity::class);
         $route = $repo->findOneBy(["id" => $id]);
 
-        $form = $this->createForm(RouteType::class)->setData($route);
+        $gym = $this->user->getGym() ?? $this->getDoctrine()
+                ->getRepository(Gym::class)
+                ->findOneBy(["id" => $gymId, "franchise" => $this->user->getFranchise()->getId()]);
 
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $routeEdit = $form->getData();
+        if ($gym && $gym->getId() == $route->getGym()->getId()) {
 
-            $route->setName($routeEdit->getName());
-            $route->setDifficulty($routeEdit->getDifficulty());
+            $form = $this->createForm(RouteType::class)->setData($route);
 
-            $em->persist($route);
-            $em->flush();
+            $form->handleRequest($request);
+            if ($form->isSubmitted() && $form->isValid()) {
+                $routeEdit = $form->getData();
 
-            return $this->redirectToRoute("gym_routes");
+                $route->setName($routeEdit->getName());
+                $route->setDifficulty($routeEdit->getDifficulty());
+
+                $em->persist($route);
+                $em->flush();
+
+                if ($this->user ? in_array("ROLE_ADMIN_FRANCHISE", $this->user->getRoles()) : false)
+                    return $this->redirectToRoute("gym_routes_franchise", ["id" => $gymId]);
+                return $this->redirectToRoute("gym_routes");
+            }
+
+            return $this->renderForm('route/edit.html.twig', [
+                'route' => $route,
+                'form_edit' => $form
+            ]);
         }
 
-        return $this->renderForm('route/edit.html.twig', [
-            'route' => $route,
-            'form_edit' => $form
-        ]);
+        if ($this->user ? in_array("ROLE_ADMIN_FRANCHISE", $this->user->getRoles()) : false)
+            return $this->redirectToRoute("gym_routes_franchise", ["id" => $gymId]);
+        return $this->redirectToRoute("gym_routes");
     }
 
     #[IsGranted('ROLE_ADMIN_SALLE')]
@@ -93,6 +113,8 @@ class RouteController extends AbstractController
             if ($this->user->getFranchise()->getId() == $route->getGym()->getFranchise()->getId()) {
                 $em->remove($route);
                 $em->flush();
+
+                return $this->redirectToRoute("gym_routes_franchise", ["id" => $route->getGym()->getId()]);
             } else {
                 $this->redirectToRoute('accueil');
             }
@@ -127,8 +149,10 @@ class RouteController extends AbstractController
             if ($this->user->getFranchise()->getId() == $route->getGym()->getFranchise()->getId()) {
                 if ($state == "true") $route->setOpened(1);
                 else $route->setOpened(0);
-                $em->remove($route);
+                $em->persist($route);
                 $em->flush();
+
+                return $this->redirectToRoute("gym_routes_franchise", ["id" => $route->getGym()->getId()]);
             } else {
                 $this->redirectToRoute('accueil');
             }

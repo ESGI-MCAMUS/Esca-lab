@@ -1,13 +1,13 @@
 {% extends 'admin.html.twig' %}
 
-{% block title %}Franchise Admin ◈ Esca'Lab
+{% block title %}Gym Admin ◈ Esca'Lab
 {% endblock %}
 
 
 {% block body %}
     <body id="page-top">
     <div id="wrapper">
-        {% include 'franchise/nav.html.twig' %}
+        {% include 'gym/nav.html.twig' %}
         <div class="d-flex flex-column" id="content-wrapper">
             <div id="content">
                 <nav class="navbar navbar-light navbar-expand bg-white shadow mb-4 topbar static-top">
@@ -100,53 +100,66 @@
                     </div>
                 </nav>
                 <div class="container-fluid">
-                    <div class="d-sm-flex justify-content-between align-items-center mb-4">
-                        <h3 class="text-dark mb-0 poppins bold text-black" style="color: rgb(33,37,41);">Employés de
-                            <i>{{ app.user.franchise.name }}</i></h3>
+                    <div class="d-sm-flex justify-content-start align-items-center mb-4">
+                        <h3 class="text-dark mb-0 me-2 poppins bold text-black" style="color: rgb(33,37,41);">Routes</h3>
+                        <a href="{{ path('route_add') }}"><button type="button" class="btn btn-success ms-2">+ Add New</button></a>
                     </div>
-                    <div class="row">
-                        <div class="table table-responsive mt-2">
-                            <table class="table my-0">
-                                <thead>
-                                    <tr>
-                                        <th>Nom complet</th>
-                                        <th>Email</th>
-                                        <th>Date de naissance</th>
-                                        <th>Role(s)</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                {% for employee in employees %}
-                                    <tr class="poppins">
-                                        <td><img class="rounded-circle me-2" width="30" height="30" src="{{ asset('images/profiles/') ~ employee.picture }}">{{ employee.firstname }} {{ employee.lastname }}</td>
-                                        <td>{{ employee.email }}</td>
-                                        <td>{{ employee.birthdate|date('d/m/Y') }}</td>
-                                        <td>
-                                            <div class="form-check">
-                                                <input id="roleCheck" onclick='window.location.assign("{{ path('edit_franchise_employee', {id: employee.id, check: 'admin_franchise'}) }}")' class="form-check-input" type="checkbox" {% if "ROLE_ADMIN_FRANCHISE" in employee.roles %}checked{% endif %}/>
-                                                <label for="roleCheck" class="form-check-label">Administrateur de franchise</label>
+                    <div class="row justify-content-around align-items-center">
+                        {% for route in routes %}
+                            <div class="col col-3">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <div class="row align-items-center justify-content-between">
+                                            <h5 class="card-title col-5 mb-0">Route {{ route.name|capitalize }}</h5>
+                                            <div class="col-7 text-end">
+                                                {% if route.opened > 0 %}
+                                                    <a href="{{ path('route_open', {id: route.id, state: "false"}) }}">
+                                                        <button type="button" class="btn btn-danger">Close</button>
+                                                    </a>
+                                                {% else %}
+                                                    <a href="{{ path('route_open', {id: route.id, state: "true"}) }}">
+                                                        <button type="button" class="btn btn-success">Open</button>
+                                                    </a>
+                                                {% endif %}
+                                                <a href="{{ path('route_edit', {id: route.id}) }}">
+                                                    <button type="button" class="btn btn-warning">
+                                                        🚧
+                                                    </button>
+                                                </a>
+                                                <button class="btn btn-danger" data-href="{{ path('route_remove', {id: route.id}) }}" data-bs-toggle="modal" data-bs-target="#confirm-delete">
+                                                    🗑
+                                                </button>
                                             </div>
-                                            <div class="form-check">
-                                                <input id="roleCheck" onclick='window.location.assign("{{ path('edit_franchise_employee', {id: employee.id, check: 'admin_salle'}) }}")' class="form-check-input" type="checkbox" {% if "ROLE_ADMIN_SALLE" in employee.roles %}checked{% endif %}/>
-                                                <label for="roleCheck" class="form-check-label">Administrateur de salle</label>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row justify-content-start align-items-center mb-2">
+                                            <h6 class="col-5 mb-0">Difficulté :</h6>
+                                            <div class="col-7 text-start">
+                                                {% for i in 1..route.difficulty %}
+                                                    <i class="bi bi-star-fill" style="color: gold;"></i>
+                                                {% endfor %}
+                                                {% if route.difficulty < 5 %}
+                                                    {% for i in route.difficulty..4 %}
+                                                        <i class="bi bi-star" style="color: gold;"></i>
+                                                    {% endfor %}
+                                                {% endif %}
                                             </div>
-                                            <div class="form-check">
-                                                <input  id="roleCheck" onclick='window.location.assign("{{ path('edit_franchise_employee', {id: employee.id, check: 'ouvreur'}) }}")' class="form-check-input" type="checkbox" {% if "ROLE_OUVREUR" in employee.roles %}checked{% endif %}/>
-                                                <label for="roleCheck" class="form-check-label">Ouvreur</label>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <button type="button" class="btn btn-danger" data-href="{{ path('remove_franchise_employee', {id: employee.id}) }}" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                                                🗑
-                                            </button>
-                                        </td>
-                                    </tr>
-                                {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
+                                        </div>
+                                        <div style="background-color: {% if route.opened > 0 %}green{% else %}darkred{% endif %}; width:60px; height:60px; border-radius: 30px;">
+                                            {% if route.opened > 0 %}
+                                                <p style="text-align:center; padding-top:calc(55px/3); color: white">Ouverte</p>
+                                            {% else %}
+                                                <p style="text-align:center; padding-top:calc(55px/3); color: white">Fermée</p>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% else %}
+                        {% endfor %}
                     </div>
+                </div>
             </div>
             <footer class="bg-white shadow sticky-footer" style="z-index: 2">
                 <div class="container my-auto">
@@ -156,19 +169,18 @@
                 </div>
             </footer>
         </div>
-
-        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
+        <div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Suppression</h5>
+                        <h5 class="modal-title" id="myModalLabel">Suppression</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        Êtes-vous sûr de vouloir supprimer cet|te employé|e ?
+                        Êtes-vous sûr de vouloir supprimer cette route ?
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
                         <a class="btn btn-outline-danger">Supprimer</a>
                     </div>
                 </div>
@@ -179,17 +191,18 @@
         </a>
     </div>
     <script src="{{asset('bootstrap/js/bootstrap.min.js')}}"></script>
+    <script src="{{asset('js/chart.min.js')}}"></script>
     <script src="{{asset('js/bs-init.js')}}"></script>
     <script src="{{asset('js/theme.js')}}"></script>
-        <script>
-            var modal = document.getElementById('exampleModal');
+    <script>
+        var modal = document.getElementById('confirm-delete');
 
-            modal.addEventListener('show.bs.modal', function (e) {
-                var btn = this.getElementsByClassName('btn-outline-danger')[0];
-                btn.href = e.relatedTarget.getAttribute('data-href');
-                return false;
-            });
-        </script>
+        modal.addEventListener('show.bs.modal', function (e) {
+            var btn = this.getElementsByClassName('btn-outline-danger')[0];
+            btn.href = e.relatedTarget.getAttribute('data-href');
+            return false;
+        });
+    </script>
     </body>
 
 

@@ -89,9 +89,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $franchise;
 
     /**
-     * @ORM\OneToMany(targetEntity=Gym::class, mappedBy="admin")
+     * @ORM\ManyToOne(targetEntity=Gym::class, inversedBy="openers")
      */
-    private $gyms;
+    private $gym;
 
     public function __construct()
     {
@@ -299,32 +299,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    /**
-     * @return Collection|Gym[]
-     */
-    public function getGyms(): Collection
+    public function getGym(): ?Gym
     {
-        return $this->gyms;
+        return $this->gym;
     }
 
-    public function addGym(Gym $gym): self
+    public function setGym(?Gym $gym): self
     {
-        if (!$this->gyms->contains($gym)) {
-            $this->gyms[] = $gym;
-            $gym->setAdmin($this);
-        }
-
-        return $this;
-    }
-
-    public function removeGym(Gym $gym): self
-    {
-        if ($this->gyms->removeElement($gym)) {
-            // set the owning side to null (unless already changed)
-            if ($gym->getAdmin() === $this) {
-                $gym->setAdmin(null);
-            }
-        }
+        $this->gym = $gym;
 
         return $this;
     }

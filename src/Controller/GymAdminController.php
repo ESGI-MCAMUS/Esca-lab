@@ -2,17 +2,17 @@
 
 namespace App\Controller;
 
+use App\Entity\Gym;
 use App\Entity\User;
+use DateTime;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-use Symfony\Bridge\Doctrine\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Security;
-use DateTime;
 
-#[IsGranted('ROLE_ADMIN_FRANCHISE')]
-class FranchiseAdminController extends AbstractController
+#[IsGranted('ROLE_ADMIN_SALLE')]
+class GymAdminController extends AbstractController
 {
     private $user;
 
@@ -21,30 +21,46 @@ class FranchiseAdminController extends AbstractController
         $this->user = $security->getUser();
     }
 
-    #[Route('/franchise/kpi', name: 'franchise_kpi')]
+    #[Route('/gym/kpi', name: 'gym_kpi')]
     public function index(): Response
     {
-        return $this->render('franchise/index.html.twig', [
+        $openRoutes = $this->user->getGym()->getRoutes()->filter(function ($element) {
+            return $element->getOpened() > 0;
+        });
+
+        return $this->render('gym/index.html.twig', [
+            'openRoutes' => $openRoutes,
             'month' => date_format(new DateTime(), 'n'),
         ]);
     }
 
-    #[Route('/franchise/employees', name: 'franchise_employees')]
+
+    #[Route('/gym/voies', name: 'gym_routes')]
+    public function routes(): Response
+    {
+        $routes = $this->user->getGym()->getRoutes();
+        return $this->render('gym/routes.html.twig', [
+            "routes" => $routes
+        ]);
+    }
+
+    #[Route('/gym/employees', name: 'gym_employees')]
     public function employees() : Response {
         $repo = $this->getDoctrine()->getManager()->getRepository(User::class);
-        $employees = $repo->findBy(["franchise" => $this->user->getFranchise()->getId() ]);
+        $employees = $repo->findBy(["gym" => $this->user->getGym()->getId() ]);
 
-        return $this->render('franchise/employees.html.twig', [
+        return $this->render('gym/employees.html.twig', [
             'employees' => $employees,
         ]);
     }
 
-    #[Route('/franchise/employees/edit/{id}/{check}', name: 'edit_franchise_employee')]
+
+    #[Route('/gym/employees/edit/{id}/{check}', name: 'edit_gym_employee')]
     public function editEmployee($id, $check = 'user') {
         $repo = $this->getDoctrine()->getManager()->getRepository(User::class);
         $employee = $repo->find($id);
 
-        if ($employee->getFranchise()->getId() === $this->user->getFranchise()->getId()) {
+        if ($employee->getGym()->getId() === $this->user->getGym()->getId()) {
             $roles = $employee->getRoles();
 
             switch ($check) {
@@ -53,18 +69,13 @@ class FranchiseAdminController extends AbstractController
                     if ($key) $employee->setRoles(["ROLE_USER"]);
                     else $employee->setRoles(["ROLE_OUVREUR"]);
                     break;
-                case 'admin_franchise':
-                    $key = array_search("ROLE_ADMIN_FRANCHISE", $roles);
-                    if ($key) $employee->setRoles(["ROLE_USER"]);
-                    else $employee->setRoles(["ROLE_ADMIN_FRANCHISE"]);
-                    break;
                 case 'admin_salle':
                     $key = array_search("ROLE_ADMIN_SALLE", $roles);
                     if ($key) $employee->setRoles(["ROLE_USER"]);
                     else $employee->setRoles(["ROLE_ADMIN_SALLE"]);
                     break;
                 default:
-                    return $this->redirectToRoute('franchise_employees');
+                    return $this->redirectToRoute('gym_employees');
             }
 
             $em = $this->getDoctrine()->getManager();
@@ -72,23 +83,23 @@ class FranchiseAdminController extends AbstractController
             $em->flush();
         }
 
-        return $this->redirectToRoute('franchise_employees');
+        return $this->redirectToRoute('gym_employees');
     }
 
-    #[Route('/franchise/employees/remove/{id}', name: 'remove_franchise_employee')]
+    #[Route('/gym/employees/remove/{id}', name: 'remove_gym_employee')]
     public function removeEmployee($id) {
         $repo = $this->getDoctrine()->getManager()->getRepository(User::class);
         $employee = $repo->find($id);
 
-        if ($employee->getFranchise()->getId() === $this->user->getFranchise()->getId()) {
+        if ($employee->getGym()->getId() === $this->user->getGym()->getId()) {
             $employee->setRoles(["ROLE_USER"]);
-            $employee->setFranchise(null);
+            $employee->setgym(null);
 
             $em = $this->getDoctrine()->getManager();
             $em->persist($employee);
             $em->flush();
         }
 
-        return $this->redirectToRoute('franchise_employees');
-}
+        return $this->redirectToRoute('gym_employees');
+    }
 }

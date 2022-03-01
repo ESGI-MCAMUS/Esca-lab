@@ -7,7 +7,11 @@
 {% block body %}
     <body id="page-top">
     <div id="wrapper">
-        {% include 'gym/nav.html.twig' %}
+        {% if "ROLE_ADMIN_FRANCHISE" in app.user.roles %}
+            {% include 'franchise/nav.html.twig' %}
+        {% else %}
+            {% include 'gym/nav.html.twig' %}
+        {% endif %}
         <div class="d-flex flex-column" id="content-wrapper">
             <div id="content">
                 <nav class="navbar navbar-light navbar-expand bg-white shadow mb-4 topbar static-top">
@@ -102,7 +106,7 @@
                 <div class="container-fluid">
                     <div class="d-sm-flex justify-content-start align-items-center mb-4">
                         <h3 class="text-dark mb-0 me-2 poppins bold text-black" style="color: rgb(33,37,41);">Routes</h3>
-                        <a href="{{ path('route_add') }}"><button type="button" class="btn btn-success ms-2">+ Add New</button></a>
+                        <a href="{% if "ROLE_ADMIN_FRANCHISE" in app.user.roles %}{{ path('route_add', {gymId: app.request.get('id')}) }}{% else %}{{ path('route_add') }}{% endif %}"><button type="button" class="btn btn-success ms-2">+ Add New</button></a>
                     </div>
                     <div class="row justify-content-around align-items-center">
                         {% for route in routes %}
@@ -121,7 +125,7 @@
                                                         <button type="button" class="btn btn-success">Open</button>
                                                     </a>
                                                 {% endif %}
-                                                <a href="{{ path('route_edit', {id: route.id}) }}">
+                                                <a href="{% if "ROLE_ADMIN_FRANCHISE" in app.user.roles %}{{ path('route_edit', {id: route.id, gymId: app.request.get('id')}) }}{% else %}{{ path('route_edit', {id: route.id}) }}{% endif %}">
                                                     <button type="button" class="btn btn-warning">
                                                         🚧
                                                     </button>

@@ -5,6 +5,7 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 use App\Entity\User;
 use DateTime;
@@ -38,6 +39,10 @@ class AdminController extends AbstractController
         ]);
     }
 
+    /**
+     * Gestion des utilisateurs
+     */
+    #[IsGranted("ROLE_SUPER_ADMIN")]
     #[Route('/admin/utilisateurs', name: 'admin_users')]
     public function admin_users(Request $request): Response
     {
@@ -63,4 +68,71 @@ class AdminController extends AbstractController
             'form' => $form,
         ]);
     }
+
+    #[IsGranted("ROLE_SUPER_ADMIN")]
+    #[Route('/admin/utilisateurs/suppression/{id}', name: 'admin_users_deletion')]
+    public function admin_users_deletion(int $id): Response
+    {
+        $user = $this->getDoctrine()
+            ->getRepository(User::class)
+            ->find($id);
+
+        if ($user->getIsDeleted() === false) {
+            $user->setIsDeleted(true);
+        } else {
+            $user->setIsDeleted(false);
+        }
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->flush();
+
+        return $this->redirectToRoute('admin_users');
+    }
+    #[IsGranted("ROLE_SUPER_ADMIN")]
+    #[Route('/admin/utilisateurs/activation/{id}', name: 'admin_users_activation')]
+    public function admin_users_activation(int $id): Response
+    {
+        $user = $this->getDoctrine()
+            ->getRepository(User::class)
+            ->find($id);
+
+        if ($user->getIsActivated() === false) {
+            $user->setIsActivated(true);
+        } else {
+            $user->setIsActivated(false);
+        }
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->flush();
+
+        return $this->redirectToRoute('admin_users');
+    }
+
+    #[IsGranted("ROLE_SUPER_ADMIN")]
+    #[Route('/admin/utilisateurs/setRole/{role}/{action}/{id}', name: 'admin_user_setrole')]
+    public function admin_user_setrole(
+        string $role,
+        string $action,
+        int $id
+    ): Response {
+        $user = $this->getDoctrine()
+            ->getRepository(User::class)
+            ->find($id);
+        $roles = $user->getRoles();
+        if ($action === 'add') {
+            array_push($roles, $role);
+            $user->setRoles($roles);
+        } else {
+            if (($key = array_search($role, $roles)) !== false) {
+                unset($roles[$key]);
+            }
+            $user->setRoles($roles);
+        }
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->flush();
+
+        return $this->redirectToRoute('admin_users');
+    }
+
+    /**
+     * Fin gestion des utilisateurs
+     */
 }

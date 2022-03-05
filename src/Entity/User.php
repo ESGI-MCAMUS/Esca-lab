@@ -93,9 +93,21 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $gym;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=User::class, inversedBy="users")
+     */
+    private $friends;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=User::class, mappedBy="friends")
+     */
+    private $users;
+
     public function __construct()
     {
         $this->gyms = new ArrayCollection();
+        $this->friends = new ArrayCollection();
+        $this->users = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -313,6 +325,57 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setGym(?Gym $gym): self
     {
         $this->gym = $gym;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, self>
+     */
+    public function getFriends(): Collection
+    {
+        return $this->friends;
+    }
+
+    public function addFriend(self $friend): self
+    {
+        if (!$this->friends->contains($friend)) {
+            $this->friends[] = $friend;
+        }
+
+        return $this;
+    }
+
+    public function removeFriend(self $friend): self
+    {
+        $this->friends->removeElement($friend);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, self>
+     */
+    public function getUsers(): Collection
+    {
+        return $this->users;
+    }
+
+    public function addUser(self $user): self
+    {
+        if (!$this->users->contains($user)) {
+            $this->users[] = $user;
+            $user->addFriend($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUser(self $user): self
+    {
+        if ($this->users->removeElement($user)) {
+            $user->removeFriend($this);
+        }
 
         return $this;
     }

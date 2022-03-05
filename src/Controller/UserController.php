@@ -5,9 +5,19 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Security;
+
 
 class UserController extends AbstractController
 {
+
+    private $user;
+
+    public function __construct(Security $security)
+    {
+        $this->user = $security->getUser();
+    }
+
     #[Route('/user', name: 'user')]
     public function index(): Response
     {
@@ -34,8 +44,25 @@ class UserController extends AbstractController
     #[Route('/user/friends', name: 'friendsUser')]
     public function friendsUser(): Response
     {
+        // $openRoutes = $this->user
+        //     ->getGym()
+        //     ->getRoutes()
+        //     ->filter(function ($element) {
+        //         return $element->getOpened() > 0;
+        //     });
+
+        // return $this->render('gym/index.html.twig', [
+        //     'openRoutes' => $openRoutes,
+        //     'month' => date_format(new DateTime(), 'n'),
+        // ]);
+
+        $friends = $this->user->getFriends();
+
+        //dd($friends);
+        
         return $this->render('user/friends.html.twig', [
-            'controller_name' => 'UserController',
+              'controller_name' => 'UserController'
+            , 'friends' => $friends
         ]);
     }
 

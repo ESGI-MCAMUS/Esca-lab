@@ -1,5 +1,7 @@
 window.addEventListener('load', function () {
 
+    $('.alert').alert();
+
     const labels = ['jaune', 'vert', 'bleu', 'rouge', 'noir', 'violet'];
     const data = {
         labels: labels,

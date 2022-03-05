@@ -1,0 +1,124 @@
+{% extends 'admin.html.twig' %}
+{% block title %}Admin ◈ Esca'Lab
+{% endblock %}
+
+
+{% block body %}
+<div class="container-fluid">
+	<h3 class="text-dark mb-4 poppins">Utilisateurs</h3>
+	<div class="card shadow">
+		<div class="card-header py-3">
+			<p class="text-primary m-0 fw-bold poppins">Gestion des utilisateurs</p>
+		</div>
+		<div class="card-body">
+			<div class="row">
+				<div class="col-md-6 text-nowrap">
+				</div>
+				<div class="col-md-6">
+					<div id="dataTable_filter" class="text-md-end dataTables_filter">
+						{{ form_start(form) }}
+						<div class="input-group">
+							{{ form_widget(form.search)}}
+							<div class="input-group-append">
+								<button class="btn btn-primary" type="submit" title="Rechercher un utilisateur">
+									<svg class="bi bi-search" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewbox="0 0 16 16">
+										<path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"></path>
+									</svg>
+								</button>
+								<button type="button" class="btn btn-danger" onclick="location.replace('/admin/utilisateurs');" title="Réinitialiser la recherche">
+									<svg class="bi bi-arrow-clockwise" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewbox="0 0 16 16">
+										<path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"></path>
+										<path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z"></path>
+									</svg>
+								</button>
+							</div>
+						</div>
+						{{ form_end(form) }}
+					</div>
+				</div>
+			</div>
+			<div id="dataTable" class="table-responsive table mt-2" role="grid" aria-describedby="dataTable_info">
+				<table id="dataTable" class="table my-0">
+					<thead>
+						<tr class="poppins">
+							<th>Nom complet</th>
+							<th>Pseudo</th>
+							<th>Email</th>
+							<th>Date de naissance</th>
+							<th>Role(s)</th>
+							<th>Actions</th>
+						</tr>
+					</thead>
+					<tbody>
+					{% for user in users %}
+						<tr class="poppins">
+
+							<td><img class="rounded-circle me-2" width="30" height="30" src="{{asset('images/profiles/') ~ user.picture}}"/>{{user.firstname}} {{user.lastname}}</td>
+							<td>{{user.username}}</td>
+							<td>{{user.email}}</td>
+							<td>{{user.birthdate|date('d/m/Y')}}</td>
+							<td>
+								<div class="form-check"><input onclick="setRole(this, 'ROLE_SUPER_ADMIN', {{user.id}})" id="formCheck-1" class="form-check-input" {% if "ROLE_SUPER_ADMIN" in user.roles %} checked {% endif %} type="checkbox"/><label class="form-check-label" for="formCheck-1">Super admin</label>
+								</div>
+								<div class="form-check"><input onclick="setRole(this, 'ROLE_ADMIN_FRANCHISE', {{user.id}})" id="formCheck-1" class="form-check-input" {% if "ROLE_ADMIN_FRANCHISE" in user.roles %} checked {% endif %} type="checkbox"/><label class="form-check-label" for="formCheck-1">Admin franchise</label>
+								</div>
+								<div class="form-check"><input onclick="setRole(this, 'ROLE_ADMIN_SALLE', {{user.id}})" id="formCheck-1" class="form-check-input" {% if "ROLE_ADMIN_SALLE" in user.roles %} checked {% endif %} type="checkbox"/><label class="form-check-label" for="formCheck-1">Admin salle</label>
+								</div>
+								<div class="form-check"><input onclick="setRole(this, 'ROLE_OUVREUR', {{user.id}})" id="formCheck-1" class="form-check-input" {% if "ROLE_OUVREUR" in user.roles %} checked {% endif %} type="checkbox"/><label class="form-check-label" for="formCheck-1">Ouvreur</label>
+								</div>
+							</td>
+							<td>
+							{% if user.isDeleted %}
+							<button class="btn btn-success" type="button" title="Annuler la suppression" onClick="location.replace('/admin/utilisateurs/suppression/{{user.id}}')">
+								<svg class="bi bi-recycle" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewbox="0 0 16 16">
+									<path d="M9.302 1.256a1.5 1.5 0 0 0-2.604 0l-1.704 2.98a.5.5 0 0 0 .869.497l1.703-2.981a.5.5 0 0 1 .868 0l2.54 4.444-1.256-.337a.5.5 0 1 0-.26.966l2.415.647a.5.5 0 0 0 .613-.353l.647-2.415a.5.5 0 1 0-.966-.259l-.333 1.242-2.532-4.431zM2.973 7.773l-1.255.337a.5.5 0 1 1-.26-.966l2.416-.647a.5.5 0 0 1 .612.353l.647 2.415a.5.5 0 0 1-.966.259l-.333-1.242-2.545 4.454a.5.5 0 0 0 .434.748H5a.5.5 0 0 1 0 1H1.723A1.5 1.5 0 0 1 .421 12.24l2.552-4.467zm10.89 1.463a.5.5 0 1 0-.868.496l1.716 3.004a.5.5 0 0 1-.434.748h-5.57l.647-.646a.5.5 0 1 0-.708-.707l-1.5 1.5a.498.498 0 0 0 0 .707l1.5 1.5a.5.5 0 1 0 .708-.707l-.647-.647h5.57a1.5 1.5 0 0 0 1.302-2.244l-1.716-3.004z"></path>
+								</svg>
+							</button>
+							{% else %}
+							<button class="btn btn-danger" type="button" title="Supprimer le compte" onclick="location.replace('/admin/utilisateurs/suppression/{{user.id}}')">
+								<svg class="bi bi-trash" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewbox="0 0 16 16">
+									<path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"></path>
+									<path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"></path>
+								</svg>
+							</button>
+							{% endif %}
+
+						{% if user.isActivated %}
+							<button class="btn btn-warning" type="button" title="Désactiver le compte" onclick="location.replace('/admin/utilisateurs/activation/{{user.id}}')">
+							<svg class="bi bi-exclamation-octagon" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewbox="0 0 16 16">
+								<path d="M4.54.146A.5.5 0 0 1 4.893 0h6.214a.5.5 0 0 1 .353.146l4.394 4.394a.5.5 0 0 1 .146.353v6.214a.5.5 0 0 1-.146.353l-4.394 4.394a.5.5 0 0 1-.353.146H4.893a.5.5 0 0 1-.353-.146L.146 11.46A.5.5 0 0 1 0 11.107V4.893a.5.5 0 0 1 .146-.353L4.54.146zM5.1 1 1 5.1v5.8L5.1 15h5.8l4.1-4.1V5.1L10.9 1H5.1z"></path>
+								<path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995z"></path>
+							</svg>
+						</button>
+						{% else %}
+						<button class="btn btn-success" type="button" title="Activer le compte" onclick="location.replace('/admin/utilisateurs/activation/{{user.id}}')">
+							<svg class="bi bi-check2-circle" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewbox="0 0 16 16">
+								<path d="M2.5 8a5.5 5.5 0 0 1 8.25-4.764.5.5 0 0 0 .5-.866A6.5 6.5 0 1 0 14.5 8a.5.5 0 0 0-1 0 5.5 5.5 0 1 1-11 0z"></path>
+								<path d="M15.354 3.354a.5.5 0 0 0-.708-.708L8 9.293 5.354 6.646a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l7-7z"></path>
+							</svg>
+						</button>
+						{% endif %}
+							</td>
+						</tr>			
+					{% endfor %}
+					</tbody>
+				</table>
+			</div>
+			<div class="row">
+				<div class="col-md-6 align-self-center">
+<p id="dataTable_info" class="dataTables_info poppins" role="status" aria-live="polite">{{users|length}}
+	utilisateur{% if users|length > 1 %}s{% endif %}</p>
+</p>
+
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script src="{{asset('js/adminCheckboxRole.js')}}"></script>
+
+
+
+
+{% endblock %}

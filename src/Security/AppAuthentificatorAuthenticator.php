@@ -63,8 +63,21 @@ class AppAuthentificatorAuthenticator extends AbstractLoginFormAuthenticator
             );
         }
 
+        $roles = $token->getUser()->getRoles();
+
+        if (in_array("ROLE_ADMIN_FRANCHISE", $roles)) {
+            return new RedirectResponse(
+                $this->urlGenerator->generate('franchise_kpi')
+            );
+        } elseif (in_array("ROLE_ADMIN_SALLE", $roles)) {
+            return new RedirectResponse(
+                $this->urlGenerator->generate('gym_kpi')
+            );
+        }
         // For example:
-        return new RedirectResponse($this->urlGenerator->generate('accueil'));
+        return new RedirectResponse(
+            $this->urlGenerator->generate('accueil')
+        );
         throw new \Exception(
             'TODO: provide a valid redirect inside ' . __FILE__
         );

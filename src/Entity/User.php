@@ -103,11 +103,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $users;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Event::class, mappedBy="participants")
+     */
+    private $events;
+
     public function __construct()
     {
         $this->gyms = new ArrayCollection();
         $this->friends = new ArrayCollection();
         $this->users = new ArrayCollection();
+        $this->events = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -375,6 +381,33 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if ($this->users->removeElement($user)) {
             $user->removeFriend($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Event>
+     */
+    public function getEvents(): Collection
+    {
+        return $this->events;
+    }
+
+    public function addEvent(Event $event): self
+    {
+        if (!$this->events->contains($event)) {
+            $this->events[] = $event;
+            $event->addParticipant($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEvent(Event $event): self
+    {
+        if ($this->events->removeElement($event)) {
+            $event->removeParticipant($this);
         }
 
         return $this;

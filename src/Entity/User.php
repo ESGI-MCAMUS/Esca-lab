@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -81,9 +83,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $picture;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Franchise::class, inversedBy="users")
+     */
+    private $franchise;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Gym::class, inversedBy="openers")
+     */
+    private $gym;
+
+    public function __construct()
+    {
+        $this->gyms = new ArrayCollection();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function setId(int $id): self
+    {
+        $this->id = $id;
+        return $this;
     }
 
     public function getEmail(): ?string
@@ -266,6 +289,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setPicture(?string $picture): self
     {
         $this->picture = $picture;
+
+        return $this;
+    }
+
+    public function getFranchise(): ?Franchise
+    {
+        return $this->franchise;
+    }
+
+    public function setFranchise(?Franchise $franchise): self
+    {
+        $this->franchise = $franchise;
+
+        return $this;
+    }
+
+    public function getGym(): ?Gym
+    {
+        return $this->gym;
+    }
+
+    public function setGym(?Gym $gym): self
+    {
+        $this->gym = $gym;
 
         return $this;
     }

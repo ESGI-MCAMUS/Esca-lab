@@ -44,32 +44,18 @@ class UserRepository extends ServiceEntityRepository implements
         $this->_em->flush();
     }
 
-    // /**
-    //  * @return User[] Returns an array of User objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function search($value)
     {
-        return $this->createQueryBuilder('u')
-            ->andWhere('u.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('u.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
+        $qb = $this->createQueryBuilder('u')
+            ->where('u.email LIKE :query')
+            ->orWhere('u.firstname LIKE :query')
+            ->orWhere('u.lastname LIKE :query')
+            ->orWhere('u.username LIKE :query')
+            ->setParameter('query', $value)
+            ->orderBy('u.firstname', 'ASC');
 
-    /*
-    public function findOneBySomeField($value): ?User
-    {
-        return $this->createQueryBuilder('u')
-            ->andWhere('u.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+        $query = $qb->getQuery();
+
+        return $query->execute();
     }
-    */
 }

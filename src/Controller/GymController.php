@@ -38,7 +38,7 @@ class GymController extends AbstractController
             $em->persist($form->getData());
             $em->flush();
 
-            return $this->redirectToRoute("franchise_gyms");
+            return $this->redirectToRoute('franchise_gyms');
         }
 
         return $this->renderForm('gym/add.html.twig', [
@@ -47,10 +47,13 @@ class GymController extends AbstractController
     }
 
     #[Route('/gym/edit/{id}', name: 'gym_edit')]
-    public function edit($id, EntityManagerInterface $em, Request $request): Response
-    {
+    public function edit(
+        $id,
+        EntityManagerInterface $em,
+        Request $request
+    ): Response {
         $repo = $this->getDoctrine()->getRepository(Gym::class);
-        $gym = $repo->findOneBy(["id" => $id]);
+        $gym = $repo->findOneBy(['id' => $id]);
 
         $form = $this->createForm(GymType::class)->setData($gym);
 
@@ -67,12 +70,12 @@ class GymController extends AbstractController
             $em->persist($gym);
             $em->flush();
 
-            return $this->redirectToRoute("franchise_gyms");
+            return $this->redirectToRoute('franchise_gyms');
         }
 
         return $this->renderForm('gym/edit.html.twig', [
             'route' => $gym,
-            'form_edit' => $form
+            'form_edit' => $form,
         ]);
     }
 
@@ -81,15 +84,18 @@ class GymController extends AbstractController
     {
         $repo = $this->getDoctrine()->getRepository(Gym::class);
 
-        $gym = $repo->findOneBy(["id" => $id]);
+        $gym = $repo->findOneBy(['id' => $id]);
 
-        if ($this->user->getFranchise()->getId() == $gym->getFranchise()->getId()) {
+        if (
+            $this->user->getFranchise()->getId() ==
+            $gym->getFranchise()->getId()
+        ) {
             $em->remove($gym);
             $em->flush();
         } else {
             $this->redirectToRoute('accueil');
         }
 
-        return $this->redirectToRoute("franchise_gyms");
+        return $this->redirectToRoute('franchise_gyms');
     }
 }

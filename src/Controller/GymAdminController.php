@@ -24,9 +24,12 @@ class GymAdminController extends AbstractController
     #[Route('/gym/kpi', name: 'gym_kpi')]
     public function index(): Response
     {
-        $openRoutes = $this->user->getGym()->getRoutes()->filter(function ($element) {
-            return $element->getOpened() > 0;
-        });
+        $openRoutes = $this->user
+            ->getGym()
+            ->getRoutes()
+            ->filter(function ($element) {
+                return $element->getOpened() > 0;
+            });
 
         return $this->render('gym/index.html.twig', [
             'openRoutes' => $openRoutes,
@@ -34,13 +37,12 @@ class GymAdminController extends AbstractController
         ]);
     }
 
-
     #[Route('/gym/voies', name: 'gym_routes')]
     public function routes(): Response
     {
         $routes = $this->user->getGym()->getRoutes();
         return $this->render('gym/routes.html.twig', [
-            "routes" => $routes
+            'routes' => $routes,
         ]);
     }
 
@@ -48,28 +50,40 @@ class GymAdminController extends AbstractController
     #[Route('/gym/voies/{id}', name: 'gym_routes_franchise', defaults: ["id" => null])]
     public function routesByFranchise($id): Response
     {
-        $repo = $this->getDoctrine()->getManager()->getRepository(Gym::class);
-        $gym = $this->user->getGym() ?? $repo->findOneBy(["id" => $id, "franchise" => $this->user->getFranchise()->getId()]);
+        $repo = $this->getDoctrine()
+            ->getManager()
+            ->getRepository(Gym::class);
+        $gym =
+            $this->user->getGym() ??
+            $repo->findOneBy([
+                'id' => $id,
+                'franchise' => $this->user->getFranchise()->getId(),
+            ]);
         $routes = $gym->getRoutes();
         return $this->render('gym/routes.html.twig', [
-            "routes" => $routes
+            'routes' => $routes,
         ]);
     }
 
     #[Route('/gym/employees', name: 'gym_employees')]
-    public function employees() : Response {
-        $repo = $this->getDoctrine()->getManager()->getRepository(User::class);
-        $employees = $repo->findBy(["gym" => $this->user->getGym()->getId() ]);
+    public function employees(): Response
+    {
+        $repo = $this->getDoctrine()
+            ->getManager()
+            ->getRepository(User::class);
+        $employees = $repo->findBy(['gym' => $this->user->getGym()->getId()]);
 
         return $this->render('gym/employees.html.twig', [
             'employees' => $employees,
         ]);
     }
 
-
     #[Route('/gym/employees/edit/{id}/{check}', name: 'edit_gym_employee')]
-    public function editEmployee($id, $check = 'user') {
-        $repo = $this->getDoctrine()->getManager()->getRepository(User::class);
+    public function editEmployee($id, $check = 'user')
+    {
+        $repo = $this->getDoctrine()
+            ->getManager()
+            ->getRepository(User::class);
         $employee = $repo->find($id);
 
         if ($employee->getGym()->getId() === $this->user->getGym()->getId()) {
@@ -77,14 +91,20 @@ class GymAdminController extends AbstractController
 
             switch ($check) {
                 case 'ouvreur':
-                    $key = array_search("ROLE_OUVREUR", $roles);
-                    if ($key) $employee->setRoles(["ROLE_USER"]);
-                    else $employee->setRoles(["ROLE_OUVREUR"]);
+                    $key = array_search('ROLE_OUVREUR', $roles);
+                    if ($key) {
+                        $employee->setRoles(['ROLE_USER']);
+                    } else {
+                        $employee->setRoles(['ROLE_OUVREUR']);
+                    }
                     break;
                 case 'admin_salle':
-                    $key = array_search("ROLE_ADMIN_SALLE", $roles);
-                    if ($key) $employee->setRoles(["ROLE_USER"]);
-                    else $employee->setRoles(["ROLE_ADMIN_SALLE"]);
+                    $key = array_search('ROLE_ADMIN_SALLE', $roles);
+                    if ($key) {
+                        $employee->setRoles(['ROLE_USER']);
+                    } else {
+                        $employee->setRoles(['ROLE_ADMIN_SALLE']);
+                    }
                     break;
                 default:
                     return $this->redirectToRoute('gym_employees');
@@ -99,12 +119,15 @@ class GymAdminController extends AbstractController
     }
 
     #[Route('/gym/employees/remove/{id}', name: 'remove_gym_employee')]
-    public function removeEmployee($id) {
-        $repo = $this->getDoctrine()->getManager()->getRepository(User::class);
+    public function removeEmployee($id)
+    {
+        $repo = $this->getDoctrine()
+            ->getManager()
+            ->getRepository(User::class);
         $employee = $repo->find($id);
 
         if ($employee->getGym()->getId() === $this->user->getGym()->getId()) {
-            $employee->setRoles(["ROLE_USER"]);
+            $employee->setRoles(['ROLE_USER']);
             $employee->setgym(null);
 
             $em = $this->getDoctrine()->getManager();

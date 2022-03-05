@@ -31,9 +31,14 @@ class FranchiseAdminController extends AbstractController
     }
 
     #[Route('/franchise/employees', name: 'franchise_employees')]
-    public function employees() : Response {
-        $repo = $this->getDoctrine()->getManager()->getRepository(User::class);
-        $employees = $repo->findBy(["franchise" => $this->user->getFranchise()->getId() ]);
+    public function employees(): Response
+    {
+        $repo = $this->getDoctrine()
+            ->getManager()
+            ->getRepository(User::class);
+        $employees = $repo->findBy([
+            'franchise' => $this->user->getFranchise()->getId(),
+        ]);
 
         return $this->render('franchise/employees.html.twig', [
             'employees' => $employees,
@@ -41,28 +46,43 @@ class FranchiseAdminController extends AbstractController
     }
 
     #[Route('/franchise/employees/edit/{id}/{check}', name: 'edit_franchise_employee')]
-    public function editEmployee($id, $check = 'user') {
-        $repo = $this->getDoctrine()->getManager()->getRepository(User::class);
+    public function editEmployee($id, $check = 'user')
+    {
+        $repo = $this->getDoctrine()
+            ->getManager()
+            ->getRepository(User::class);
         $employee = $repo->find($id);
 
-        if ($employee->getFranchise()->getId() === $this->user->getFranchise()->getId()) {
+        if (
+            $employee->getFranchise()->getId() ===
+            $this->user->getFranchise()->getId()
+        ) {
             $roles = $employee->getRoles();
 
             switch ($check) {
                 case 'ouvreur':
-                    $key = array_search("ROLE_OUVREUR", $roles);
-                    if ($key) $employee->setRoles(["ROLE_USER"]);
-                    else $employee->setRoles(["ROLE_OUVREUR"]);
+                    $key = array_search('ROLE_OUVREUR', $roles);
+                    if ($key) {
+                        $employee->setRoles(['ROLE_USER']);
+                    } else {
+                        $employee->setRoles(['ROLE_OUVREUR']);
+                    }
                     break;
                 case 'admin_franchise':
-                    $key = array_search("ROLE_ADMIN_FRANCHISE", $roles);
-                    if ($key) $employee->setRoles(["ROLE_USER"]);
-                    else $employee->setRoles(["ROLE_ADMIN_FRANCHISE"]);
+                    $key = array_search('ROLE_ADMIN_FRANCHISE', $roles);
+                    if ($key) {
+                        $employee->setRoles(['ROLE_USER']);
+                    } else {
+                        $employee->setRoles(['ROLE_ADMIN_FRANCHISE']);
+                    }
                     break;
                 case 'admin_salle':
-                    $key = array_search("ROLE_ADMIN_SALLE", $roles);
-                    if ($key) $employee->setRoles(["ROLE_USER"]);
-                    else $employee->setRoles(["ROLE_ADMIN_SALLE"]);
+                    $key = array_search('ROLE_ADMIN_SALLE', $roles);
+                    if ($key) {
+                        $employee->setRoles(['ROLE_USER']);
+                    } else {
+                        $employee->setRoles(['ROLE_ADMIN_SALLE']);
+                    }
                     break;
                 default:
                     return $this->redirectToRoute('franchise_employees');
@@ -77,12 +97,18 @@ class FranchiseAdminController extends AbstractController
     }
 
     #[Route('/franchise/employees/remove/{id}', name: 'remove_franchise_employee')]
-    public function removeEmployee($id) {
-        $repo = $this->getDoctrine()->getManager()->getRepository(User::class);
+    public function removeEmployee($id)
+    {
+        $repo = $this->getDoctrine()
+            ->getManager()
+            ->getRepository(User::class);
         $employee = $repo->find($id);
 
-        if ($employee->getFranchise()->getId() === $this->user->getFranchise()->getId()) {
-            $employee->setRoles(["ROLE_USER"]);
+        if (
+            $employee->getFranchise()->getId() ===
+            $this->user->getFranchise()->getId()
+        ) {
+            $employee->setRoles(['ROLE_USER']);
             $employee->setFranchise(null);
 
             $em = $this->getDoctrine()->getManager();
@@ -98,7 +124,7 @@ class FranchiseAdminController extends AbstractController
     {
         $gyms = $this->user->getFranchise()->getGyms();
         return $this->render('franchise/gyms.html.twig', [
-            "gyms" => $gyms
+            'gyms' => $gyms,
         ]);
     }
 }

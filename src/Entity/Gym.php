@@ -65,10 +65,16 @@ class Gym
      */
     private $openers;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Event::class, mappedBy="gym")
+     */
+    private $events;
+
     public function __construct()
     {
         $this->routes = new ArrayCollection();
         $this->openers = new ArrayCollection();
+        $this->events = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -214,6 +220,36 @@ class Gym
             // set the owning side to null (unless already changed)
             if ($opener->getGym() === $this) {
                 $opener->setGym(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Event>
+     */
+    public function getEvents(): Collection
+    {
+        return $this->events;
+    }
+
+    public function addEvent(Event $event): self
+    {
+        if (!$this->events->contains($event)) {
+            $this->events[] = $event;
+            $event->setGym($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEvent(Event $event): self
+    {
+        if ($this->events->removeElement($event)) {
+            // set the owning side to null (unless already changed)
+            if ($event->getGym() === $this) {
+                $event->setGym(null);
             }
         }
 

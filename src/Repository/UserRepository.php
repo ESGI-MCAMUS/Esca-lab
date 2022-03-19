@@ -58,4 +58,18 @@ class UserRepository extends ServiceEntityRepository implements
 
         return $query->execute();
     }
+
+    public function findAllUserMatchingName(string $username): array
+    {
+        // automatically knows to select Products
+        // the "p" is an alias you'll use in the rest of the query
+        $qb = $this->createQueryBuilder('u')
+            ->where('lower(u.username) like :name')
+            ->setParameter('name', '%' . strtolower($username) . '%')
+            ->orderBy('u.username', 'ASC');
+
+        $query = $qb->getQuery();
+
+        return $query->execute();
+    }
 }

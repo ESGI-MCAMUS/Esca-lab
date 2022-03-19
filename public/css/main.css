@@ -80,3 +80,8 @@ button.rounded {
 .blue-svg {
   filter: invert(50%) sepia(7%) saturate(6921%) hue-rotate(194deg) brightness(88%) contrast(98%);
 }
+
+.img-tn {
+  height: 200px !important;
+  width:  200px !important;
+}

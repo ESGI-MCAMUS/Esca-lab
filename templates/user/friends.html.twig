@@ -1,16 +1,12 @@
 {% extends 'user.html.twig' %}
 
 {% block javascripts %}
-	<script src="{{asset('js/jquery.min.js')}}"></script>
+	<script src="{{ asset('js/jquery.min.js') }}"></script>
     <script src="{{ asset('js/user/friends.js') }}"></script>
+    <script src="{{ asset('js/tiny-toast-1.1.0/tiny-toast.min.js') }}"></script>
 {% endblock %}
 
 {% block body %}
-{#
-{% for friend in friends %}
-    <li>{{ friend.firstname }} {{ friend.lastname }}</li>
-{% endfor %}
-#}
 <div class="container-fluid">
 	<div class="d-sm-flex align-items-center mb-4">
 		<h3 class="text-dark mb-0 poppins bold text-black" style="color: rgb(33,37,41);">Amis ({{ friends|length }})</h3>
@@ -30,7 +26,7 @@
             </div>
         {% else %}
             {% for friend in friends %}
-                <div class="col-md-6 col-xl-3 mb-4">
+                <div id="carte-user-{{ friend.id }}" class="col-md-6 col-xl-3 mb-4">
                         <div class="card shadow border-start-warning py-2">
                         <div class="card-body">
                             <div class="row align-items-center no-gutters">
@@ -42,6 +38,14 @@
                             <div class="row">
                                 <div class="col" style="text-align: center;"><strong>{{ friend.firstname }} {{ friend.lastname }}</strong></div>
                             </div>
+                            <div class="row">
+                                <div class="col" style="text-align: center;">{{ friend.username }}</div>
+                            </div>
+                            <div class="row">
+                                <div class="col" style="text-align: center;">
+                                    <button type="button" class="btn btn-warning btn-remove-friend" data-d-id="{{ friend.id }}">Retirer</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -49,4 +53,5 @@
         {% endif %}
     </div>
 </div>
+<input type="text" id="url_root" value="{{ app.request.getSchemeAndHttpHost() }}" hidden></input>
 {% endblock %}

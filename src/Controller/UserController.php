@@ -105,7 +105,7 @@ class UserController extends AbstractController
     }
 
     #[Route('/user/friends/add/{userId}', name: 'addFriendsUserId', defaults: ["userId" => null], methods: ['POST'])]
-    public function add(ManagerRegistry $doctrine, $userId): Response
+    public function addFriendsUserId(ManagerRegistry $doctrine, $userId): Response
     {
         $success = true;
         
@@ -114,6 +114,24 @@ class UserController extends AbstractController
         
         if($newFriend->getId() !== null) {
             $this->user->addFriend($newFriend);
+            $entityManager->flush();
+        } else {
+            $success = false;
+        }
+
+        return new JsonResponse(array('success' => $success));
+    }
+
+    #[Route('/user/friends/remove/{userId}', name: 'removeFriendsUserId', defaults: ["userId" => null], methods: ['POST'])]
+    public function removeFriendsUserId(ManagerRegistry $doctrine, $userId): Response
+    {
+        $success = true;
+        
+        $entityManager = $doctrine->getManager();
+        $newFriend = $entityManager->getRepository(User::class)->find($userId);
+        
+        if($newFriend->getId() !== null) {
+            $this->user->removeFriend($newFriend);
             $entityManager->flush();
         } else {
             $success = false;

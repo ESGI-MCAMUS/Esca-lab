@@ -2,7 +2,8 @@
 
 {% block javascripts %}
 	<script src="{{asset('js/jquery.min.js')}}"></script>
-    <script src="{{ asset('js/user/friends.js') }}"></script>
+    <script src="{{ asset('js/user/add-friends.js') }}"></script>
+    <script src="{{ asset('js/tiny-toast-1.1.0/tiny-toast.min.js') }}"></script>
 {% endblock %}
 
 {% block body %}
@@ -47,4 +48,20 @@
     {% endif %}
 </div>
 <input type="text" id="url_root" value="{{ hidden_uri }}" hidden></input>
+<div id="toast-add-success" class="toast top-0 end-0 align-items-center text-white bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+  <div class="d-flex">
+    <div class="toast-body">
+        Ami ajouté !
+    </div>
+    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+  </div>
+</div>
+<div id="toast-add-error" class="toast top-0 end-0 align-items-center text-white bg-danger border-0" role="alert" aria-live="assertive" aria-atomic="true">
+  <div class="d-flex">
+    <div class="toast-body">
+        Il y a eu une erreur durant l'ajout !
+    </div>
+    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+  </div>
+</div>
 {% endblock %}

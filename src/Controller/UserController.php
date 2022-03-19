@@ -114,6 +114,7 @@ class UserController extends AbstractController
         
         if($newFriend->getId() !== null) {
             $this->user->addFriend($newFriend);
+            $entityManager->flush();
         } else {
             $success = false;
         }

@@ -38,7 +38,7 @@
 							<span class="text-primary poppins">Voies ouvertes</span>
 						</div>
 						<div class="text-dark fw-bold h5 mb-0 poppins">
-							<span>572</span>
+							<span>{{ app.session.get('routes_count') }}</span>
 						</div>
 					</div>
 					<div class="col-auto">
@@ -59,7 +59,7 @@
 							<span class="text-primary poppins">Salles ouvertes</span>
 						</div>
 						<div class="text-dark fw-bold h5 mb-0 poppins">
-							<span>34</span>
+							<span>{{ app.session.get('gyms_count') }}</span>
 						</div>
 					</div>
 					<div class="col-auto">
@@ -83,7 +83,7 @@
 						<div class="row g-0 align-items-center">
 							<div class="col-auto">
 								<div class="text-dark fw-bold h5 mb-0 me-3 poppins">
-									<span>1293</span>
+									<span>{{ app.session.get('medias_count') }}</span>
 								</div>
 							</div>
 						</div>
@@ -104,10 +104,10 @@
 				<div class="row align-items-center no-gutters">
 					<div class="col me-2">
 						<div class="text-uppercase text-warning fw-bold text-xs mb-1">
-							<span class="text-primary poppins">Évènements mensuels</span>
+							<span class="text-primary poppins">Évènements</span>
 						</div>
 						<div class="text-dark fw-bold h5 mb-0 poppins">
-							<span>13</span>
+							<span>{{ app.session.get('events_count') }}</span>
 						</div>
 					</div>
 					<div class="col-auto">

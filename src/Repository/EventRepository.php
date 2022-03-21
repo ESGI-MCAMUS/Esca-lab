@@ -16,39 +16,51 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class EventRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
-    {
-        parent::__construct($registry, Event::class);
-    }
+  public function __construct(ManagerRegistry $registry)
+  {
+    parent::__construct($registry, Event::class);
+  }
 
-    /**
-     * @throws ORMException
-     * @throws OptimisticLockException
-     */
-    public function add(Event $entity, bool $flush = true): void
-    {
-        $this->_em->persist($entity);
-        if ($flush) {
-            $this->_em->flush();
-        }
+  /**
+   * @throws ORMException
+   * @throws OptimisticLockException
+   */
+  public function add(Event $entity, bool $flush = true): void
+  {
+    $this->_em->persist($entity);
+    if ($flush) {
+      $this->_em->flush();
     }
+  }
 
-    /**
-     * @throws ORMException
-     * @throws OptimisticLockException
-     */
-    public function remove(Event $entity, bool $flush = true): void
-    {
-        $this->_em->remove($entity);
-        if ($flush) {
-            $this->_em->flush();
-        }
+  /**
+   * @throws ORMException
+   * @throws OptimisticLockException
+   */
+  public function remove(Event $entity, bool $flush = true): void
+  {
+    $this->_em->remove($entity);
+    if ($flush) {
+      $this->_em->flush();
     }
+  }
 
-    // /**
-    //  * @return Event[] Returns an array of Event objects
-    //  */
-    /*
+  public function search($value)
+  {
+    $qb = $this->createQueryBuilder('event')
+      ->where('event.title LIKE :query')
+      ->orWhere('event.description LIKE :query')
+      ->setParameter('query', $value);
+
+    $query = $qb->getQuery();
+
+    return $query->execute();
+  }
+
+  // /**
+  //  * @return Event[] Returns an array of Event objects
+  //  */
+  /*
     public function findByExampleField($value)
     {
         return $this->createQueryBuilder('e')
@@ -62,7 +74,7 @@ class EventRepository extends ServiceEntityRepository
     }
     */
 
-    /*
+  /*
     public function findOneBySomeField($value): ?Event
     {
         return $this->createQueryBuilder('e')

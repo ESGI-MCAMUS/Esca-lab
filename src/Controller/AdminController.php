@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Event;
 use App\Entity\Gym;
+use App\Entity\Media;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -191,6 +192,41 @@ class AdminController extends AbstractController
 
     return $this->redirectToRoute('admin_events');
   }
+  /**
+   * Fin gestion des évènements
+   */
+
+  /**
+   * Gestion des médias
+   */
+
+  #[IsGranted("ROLE_SUPER_ADMIN")]
+  #[Route('/admin/medias', name: 'admin_medias')]
+  public function admin_medias(Request $request): Response
+  {
+    $this->setInformations();
+    $form = $this->createForm(GlobalSearchType::class);
+    $form->handleRequest($request);
+
+    if ($form->isSubmitted() && $form->isValid()) {
+      $search = $form->get('search')->getData();
+      $mediaRepo = $this->getDoctrine()
+        ->getManager()
+        ->getRepository(Media::class);
+      $result = $mediaRepo->search('%' . $search . '%');
+      return $this->renderForm('admin/medias.html.twig', [
+        'medias' => $result,
+        'form' => $form,
+      ]);
+    }
+
+    $entityManager = $this->getDoctrine()->getManager();
+    $medias = $entityManager->getRepository(Media::class)->findAll();
+    return $this->renderForm('admin/medias.html.twig', [
+      'medias' => $medias,
+      'form' => $form,
+    ]);
+  }
 
   private function setInformations()
   {
@@ -199,7 +235,11 @@ class AdminController extends AbstractController
     $eventsCount = count(
       $entityManager->getRepository(Event::class)->findAll()
     );
+    $mediasCount = count(
+      $entityManager->getRepository(Media::class)->findAll()
+    );
     $this->get('session')->set('users_count', $usersCount);
     $this->get('session')->set('events_count', $eventsCount);
+    $this->get('session')->set('medias_count', $mediasCount);
   }
 }

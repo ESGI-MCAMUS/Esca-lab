@@ -108,6 +108,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $events;
 
+    /**
+     * @ORM\OneToOne(targetEntity=Media::class, mappedBy="user_id", cascade={"persist", "remove"})
+     */
+    private $medias;
+
     public function __construct()
     {
         $this->gyms = new ArrayCollection();
@@ -409,6 +414,23 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         if ($this->events->removeElement($event)) {
             $event->removeParticipant($this);
         }
+
+        return $this;
+    }
+
+    public function getMedias(): ?Media
+    {
+        return $this->medias;
+    }
+
+    public function setMedias(Media $medias): self
+    {
+        // set the owning side of the relation if necessary
+        if ($medias->getUserId() !== $this) {
+            $medias->setUserId($this);
+        }
+
+        $this->medias = $medias;
 
         return $this;
     }

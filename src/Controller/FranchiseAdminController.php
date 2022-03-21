@@ -141,9 +141,19 @@ class FranchiseAdminController extends AbstractController
                 'franchise' => $this->user->getFranchise()->getId(),
             ])
         );
-        $gymsCount = count($this->user->getFranchise()->getGyms());
+        $gyms = $this->user->getFranchise()->getGyms();
+        $waysCount = 0;
+        $openedWays = 0;
+        foreach ($gyms as $gym) {
+            $waysCount += count($gym->getRoutes());
+            $openedWays += count($gym->getRoutes()->filter(function ($element) {
+                return $element->getOpened() > 0;
+            }));
+        }
+        $gymsCount = count($gyms);
         $this->get('session')->set('employees_count', $employeesCount);
         $this->get('session')->set('gyms_count', $gymsCount);
-        $this->get('session')->set('ways_count', 0);
+        $this->get('session')->set('ways_count', $waysCount);
+        $this->get('session')->set('opened_ways', $openedWays);
     }
 }

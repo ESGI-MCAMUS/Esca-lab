@@ -29,7 +29,7 @@
                                 </div>
                                 <div class="card-body">
                                     <div class="chart-area">
-                                        <canvas data-bss-chart="{&quot;type&quot;:&quot;doughnut&quot;,&quot;data&quot;:{&quot;labels&quot;:[&quot;Ouvertes&quot;,&quot;Fermée&quot;],&quot;datasets&quot;:[{&quot;label&quot;:&quot;Voies ouvertes&quot;,&quot;backgroundColor&quot;:[&quot;#4e73df&quot;,&quot;#1cc88a&quot;],&quot;borderColor&quot;:[&quot;#ffffff&quot;,&quot;#ffffff&quot;],&quot;data&quot;:[&quot;38&quot;,&quot;14&quot;]}]},&quot;options&quot;:{&quot;maintainAspectRatio&quot;:false,&quot;legend&quot;:{&quot;display&quot;:false,&quot;labels&quot;:{&quot;fontStyle&quot;:&quot;normal&quot;}},&quot;title&quot;:{&quot;fontStyle&quot;:&quot;normal&quot;,&quot;display&quot;:false}}}"></canvas>
+                                        <canvas data-bss-chart="{&quot;type&quot;:&quot;doughnut&quot;,&quot;data&quot;:{&quot;labels&quot;:[&quot;Ouvertes&quot;,&quot;Fermée&quot;],&quot;datasets&quot;:[{&quot;label&quot;:&quot;Voies ouvertes&quot;,&quot;backgroundColor&quot;:[&quot;#4e73df&quot;,&quot;#1cc88a&quot;],&quot;borderColor&quot;:[&quot;#ffffff&quot;,&quot;#ffffff&quot;],&quot;data&quot;:[&quot;{{ app.session.get('opened_ways') }}&quot;,&quot;{{ app.session.get('ways_count') - app.session.get('opened_ways') }}&quot;]}]},&quot;options&quot;:{&quot;maintainAspectRatio&quot;:false,&quot;legend&quot;:{&quot;display&quot;:false,&quot;labels&quot;:{&quot;fontStyle&quot;:&quot;normal&quot;}},&quot;title&quot;:{&quot;fontStyle&quot;:&quot;normal&quot;,&quot;display&quot;:false}}}"></canvas>
                                     </div>
                                 </div>
                             </div>
@@ -45,7 +45,7 @@
                                                 <span class="text-primary poppins">Voies ouvertes</span>
                                             </div>
                                             <div class="text-dark fw-bold h5 mb-0 poppins">
-                                                <span>38</span>
+                                                <span>{{ app.session.get('opened_ways') }}</span>
                                             </div>
                                         </div>
                                         <div class="col-auto">

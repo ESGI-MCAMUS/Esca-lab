@@ -6,6 +6,7 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
 use App\Entity\Event;
+use App\Entity\Media;
 use App\Entity\Gym;
 use App\Entity\User;
 use App\Entity\Franchise;
@@ -31,6 +32,7 @@ class UserFixtures extends Fixture
       $user->setOtp(12345);
       $user->setPicture('default.png');
       $manager->persist($user);
+      $this->generateMedias($manager, $user);
     }
     $adminAccount = new User();
     $adminAccount->setEmail('mcamus@condorcet93.fr');
@@ -52,6 +54,21 @@ class UserFixtures extends Fixture
     $this->generateFranchise($manager);
 
     $manager->flush();
+  }
+
+  // Generate medias
+  public function generateMedias(EntityManager $em, User $user)
+  {
+    $generator = Factory::create('fr_FR');
+    for ($i = 0; $i < $generator->numberBetween(0, 10); $i++) {
+      $media = new Media();
+      $media->setId($i + 1);
+      $media->setUserId($user);
+      $media->setSource($generator->imageUrl(640, 480, 'cats'));
+      $media->setType($generator->randomElement(['png', 'jpg', 'jpeg', 'gif']));
+      $media->setCreatedAt(new \DateTime());
+      $em->persist($media);
+    }
   }
 
   // Create Franchise

@@ -238,8 +238,13 @@ class AdminController extends AbstractController
     $mediasCount = count(
       $entityManager->getRepository(Media::class)->findAll()
     );
+    $routesCount = -1;
+    $gymsCount = count($entityManager->getRepository(Gym::class)->findAll());
+
     $this->get('session')->set('users_count', $usersCount);
     $this->get('session')->set('events_count', $eventsCount);
     $this->get('session')->set('medias_count', $mediasCount);
+    $this->get('session')->set('routes_count', $routesCount);
+    $this->get('session')->set('gyms_count', $gymsCount);
   }
 }

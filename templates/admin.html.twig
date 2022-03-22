@@ -72,6 +72,23 @@
                 </a>
               </li>
             {% endif %}
+            {% if is_granted('ROLE_ADMIN_SALLE') %}
+              <li class="nav-item">
+                <a class="nav-link active"
+                  href="{{ path('gym_kpi') }}"
+                  style="padding: 10px;color: rgb(33,37,41);">
+                  <svg xmlns="http://www.w3.org/2000/svg"
+                    width="1em"
+                    height="1em"
+                    fill="currentColor"
+                    viewbox="0 0 16 16"
+                    class="bi bi-bar-chart-line">
+                    <path d="M11 2a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v12h.5a.5.5 0 0 1 0 1H.5a.5.5 0 0 1 0-1H1v-3a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3h1V7a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v7h1V2zm1 12h2V2h-2v12zm-3 0V7H7v7h2zm-5 0v-3H2v3h2z"></path>
+                  </svg>
+                  <span style="padding-left: 5px;">KPIs</span>
+                </a>
+              </li>
+            {% endif %}
             {% if
               is_granted('ROLE_ADMIN_SALLE')
                 or is_granted('ROLE_ADMIN_FRANCHISE')
@@ -170,9 +187,7 @@
                 </a>
               </li>
             {% endif %}
-            {% if
-              is_granted('ROLE_ADMIN_SALLE')
-                or is_granted('ROLE_ADMIN_FRANCHISE')
+            {% if is_granted('ROLE_ADMIN_FRANCHISE')
                 or is_granted('ROLE_SUPER_ADMIN') %}
               <li class="nav-item">
                 <a class="nav-link poppins regular"
@@ -189,8 +204,7 @@
                     <path d="M2 11h1v1H2v-1zm2 0h1v1H4v-1zm-2 2h1v1H2v-1zm2 0h1v1H4v-1zm4-4h1v1H8V9zm2 0h1v1h-1V9zm-2 2h1v1H8v-1zm2 0h1v1h-1v-1zm2-2h1v1h-1V9zm0 2h1v1h-1v-1zM8 7h1v1H8V7zm2 0h1v1h-1V7zm2 0h1v1h-1V7zM8 5h1v1H8V5zm2 0h1v1h-1V5zm2 0h1v1h-1V5zm0-2h1v1h-1V3z"></path>
                   </svg>
                   <span style="padding-left: 5px;">
-                    Salles<span class="badge bg-primary poppins" style="margin-left: 5px;">{{ app.user.gym.routes
-                        ?? ([]|length) }}</span>
+                    Salles<span class="badge bg-primary poppins" style="margin-left: 5px;"></span>
                   </span>
                 </a>
               </li>
@@ -213,7 +227,7 @@
                     <path d="M0 .5A.5.5 0 0 1 .5 0h15a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-.5.5H14v2h1.5a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-.5.5H14v2h1.5a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-.5.5H.5a.5.5 0 0 1-.5-.5v-3a.5.5 0 0 1 .5-.5H2v-2H.5a.5.5 0 0 1-.5-.5v-3A.5.5 0 0 1 .5 6H2V4H.5a.5.5 0 0 1-.5-.5v-3zM3 4v2h4.5V4H3zm5.5 0v2H13V4H8.5zM3 10v2h4.5v-2H3zm5.5 0v2H13v-2H8.5zM1 1v2h3.5V1H1zm4.5 0v2h5V1h-5zm6 0v2H15V1h-3.5zM1 7v2h3.5V7H1zm4.5 0v2h5V7h-5zm6 0v2H15V7h-3.5zM1 13v2h3.5v-2H1zm4.5 0v2h5v-2h-5zm6 0v2H15v-2h-3.5z"></path>
                   </svg>
                   <span style="padding-left: 5px;">
-                    Voies<span class="badge bg-primary poppins" style="margin-left: 5px;">2733</span>
+                    Voies<span class="badge bg-primary poppins" style="margin-left: 5px;">{{ app.session.get('ways_count') }}</span>
                   </span>
                 </a>
               </li>

@@ -1,0 +1,65 @@
+{% extends 'accueil/index.html.twig' %}
+{# {% extends 'base.html.twig' %} #}
+
+{% block title %}
+        Esca'Lab - Franchises
+{% endblock %}
+
+{% block javascripts %}
+	<script src="{{ asset('js/jquery.min.js') }}"></script>
+    <script src="{{ asset('js/user/friends.js') }}"></script>
+    <script src="{{ asset('js/tiny-toast-1.1.0/tiny-toast.min.js') }}"></script>
+{% endblock %}
+
+{% block corps %}
+<div class="container-fluid">
+	<div class="d-sm-flex align-items-center mb-4">
+		<h4 class="text-dark mb-0 poppins bold text-black" style="color: rgb(33,37,41);">
+            <a href="/franchises/all">Franchises</a> > <a href="/franchise/{{ franchise.id }}/gyms">{{ franchise.name }}</a> > {{ gym.name }} ({{ routes|length }})
+        </h4>
+	</div>
+    <br/>
+	<div class="row">
+        {% for route in routes %}
+            <div id="carte-user-{{ route.id }}" class="col-md-6 col-xl-3 mb-4">
+                <div class="card shadow border-start-warning py-2">
+                    <div class="card-body">
+                        <div class="row align-items-center no-gutters">
+                            <div class="col"></div>
+                            <div class="col">
+                                <img src="{{ asset('images/profiles/default.png') }}"  class="img-tn rounded" />
+                            </div>
+                            <div class="col"></div>
+                        </div>
+                        <hr class="bg-danger border-2 border-top border-secondary">
+                        <div class="row">
+                            <div class="col ms-3" style="text-align: left;">
+                                <p>Statut : {{ route.opened}}
+                                    {% if route.opened == 1 %}
+                                        <span class="badge rounded-pill bg-success">Ouverte</span>
+                                    {% else %}
+                                        <span class="badge rounded-pill bg-danger">Fermée</span>
+                                    {% endif %}
+                                </p>
+                            </div>
+                            <div class="col me-3" style="text-align: right;">
+                                <p>
+                                    Difficultée : <strong>{{ getDiff(route.difficulty) }}</strong>
+                                </p>
+                            </div>
+                        </div>
+                        {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+                            <div class="row">
+                                <div class="col mt-2" style="text-align: center;">
+                                    <button type="button" class="btn btn-info" data-b-route="{{ route.id }}">Je l'ai faite !</button>
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+<input type="text" id="url_root" value="{{ app.request.getSchemeAndHttpHost() }}" hidden></input>
+{% endblock %}

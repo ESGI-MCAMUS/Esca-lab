@@ -37,5 +37,5 @@ php bin/console doctrine:schema:update --force
 
 ## Generate user
 ```bash
-bin/console d:f:l
+php bin/console d:f:l
 ```

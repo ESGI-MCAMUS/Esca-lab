@@ -56,17 +56,11 @@ class Franchise
     return $this->id;
   }
 
-    public function setId(int $id): self
-    {
-        $this->id = $id;
-        return $this;
-    }
-
-
-    public function getAdmin(): ?int
-    {
-        return $this->admin;
-    }
+  public function setId(int $id): self
+  {
+    $this->id = $id;
+    return $this;
+  }
 
   public function getAdmin(): ?int
   {
@@ -148,10 +142,9 @@ class Franchise
         $gym->setFranchise(null);
       }
     }
+  }
 
-    public function getNumberOfGyms(): int {
-        return sizeof($this->gyms);
-    }
-
-
+  public function getNumberOfGyms(): int {
+    return sizeof($this->gyms);
+  }
 }

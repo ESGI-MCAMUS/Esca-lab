@@ -7,7 +7,8 @@
 
 {% block javascripts %}
 	<script src="{{ asset('js/jquery.min.js') }}"></script>
-    <script src="{{ asset('js/user/friends.js') }}"></script>
+    <script src="{{ asset('js/route/add-route.js') }}"></script>
+    <script src="{{ asset('js/route/remove-route.js') }}"></script>
     <script src="{{ asset('js/tiny-toast-1.1.0/tiny-toast.min.js') }}"></script>
 {% endblock %}
 
@@ -15,7 +16,7 @@
 <div class="container-fluid">
 	<div class="d-sm-flex align-items-center mb-4">
 		<h4 class="text-dark mb-0 poppins bold text-black" style="color: rgb(33,37,41);">
-            <a href="/franchises/all">Franchises</a> > <a href="/franchise/{{ franchise.id }}/gyms">{{ franchise.name }}</a> > {{ gym.name }} ({{ routes|length }})
+            <a href="/franchise/all">Franchises</a> > <a href="/franchise/{{ franchise.id }}/gyms">{{ franchise.name }}</a> > {{ gym.name }} ({{ routes|length }})
         </h4>
 	</div>
     <br/>
@@ -27,14 +28,16 @@
                         <div class="row align-items-center no-gutters">
                             <div class="col"></div>
                             <div class="col">
-                                <img src="{{ asset('images/profiles/default.png') }}"  class="img-tn rounded" />
+                                <a href="#">
+                                    <img src="{{ asset('images/profiles/default.png') }}"  class="img-tn rounded" />
+                                </a>
                             </div>
                             <div class="col"></div>
                         </div>
                         <hr class="bg-danger border-2 border-top border-secondary">
                         <div class="row">
                             <div class="col ms-3" style="text-align: left;">
-                                <p>Statut : {{ route.opened}}
+                                <p>Statut :
                                     {% if route.opened == 1 %}
                                         <span class="badge rounded-pill bg-success">Ouverte</span>
                                     {% else %}
@@ -51,7 +54,15 @@
                         {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
                             <div class="row">
                                 <div class="col mt-2" style="text-align: center;">
-                                    <button type="button" class="btn btn-info" data-b-route="{{ route.id }}">Je l'ai faite !</button>
+                                    {% if route.opened == 1 %}
+                                        {% if route.id not in resolved %}
+                                            <button type="button" class="btn btn-info btn-add" data-b-route="{{ route.id }}">Je l'ai faite !</button>
+                                        {% else %}
+                                            <button type="button" class="btn btn-warning btn-remove" data-b-route="{{ route.id }}">Je me suis trompé</button>
+                                        {% endif %}
+                                    {% else %}
+                                        <button type="button" class="btn btn-secondary disabled">Trop tard</button>
+                                    {% endif %}
                                 </div>
                             </div>
                         {% endif %}

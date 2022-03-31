@@ -41,7 +41,7 @@
         <!-- DEBUT HEADER -->
 		<nav class="navbar navbar-dark shadow-sm align-items-start sidebar sidebar-dark accordion bg-gradient-primary p-0" style="background: #ffffff;opacity: 1;">
 			<div class="container-fluid d-flex flex-column p-0">
-				<a class="navbar-brand d-flex justify-content-center align-items-center sidebar-brand m-0" href="#">
+				<a class="navbar-brand d-flex justify-content-center align-items-center sidebar-brand m-0" href="/">
 					<div class="sidebar-brand-icon">
                         <img width="50" height="50" src="{{ asset('images/logo.png') }}"/>
 					</div>
@@ -162,7 +162,11 @@
 							<li class="nav-item dropdown no-arrow">
 								<div class="nav-item dropdown no-arrow">
 									<a class="dropdown-toggle nav-link poppins" aria-expanded="false" data-bs-toggle="dropdown" href="#">
-										<span class="d-none d-lg-inline me-2 text-gray-600 small">{{app.user.username}}</span><img class="border rounded-circle img-profile" src="{{asset('images/profiles/') ~ app.user.picture}}"></a>
+										<span class="d-none d-lg-inline me-2 text-gray-600 small">
+											{{app.user.username}}
+										</span>
+										<img class="border rounded-circle img-profile" src="{{asset('images/profiles/') ~ app.user.picture}}">
+									</a>
 									<div class="dropdown-menu shadow dropdown-menu-end animated--grow-in">
 										<a class="dropdown-item poppins" href="#">
 											<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="black" viewbox="0 0 16 16" class="bi bi-person fa-sm fa-fw me-2 text-gray-400">

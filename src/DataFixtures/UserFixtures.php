@@ -9,7 +9,9 @@ use App\Entity\Event;
 use App\Entity\Media;
 use App\Entity\Gym;
 use App\Entity\User;
+use App\Entity\Payments;
 use App\Entity\Franchise;
+use App\Entity\Route;
 use Doctrine\ORM\EntityManager;
 
 class UserFixtures extends Fixture
@@ -34,6 +36,21 @@ class UserFixtures extends Fixture
       $manager->persist($user);
       $this->generateMedias($manager, $user);
     }
+    $user = new User();
+    $user->setEmail('krafteck666@gmail.com');
+    $user->setFirstname('Arthur');
+    $user->setLastname('Vadrot');
+    $user->setUsername('Aesahaettr');
+    $user->setPassword(
+      '$2y$13$YvFuVu1Rtasj5Di.AKcOAuosclgfw/57CFXq4OXRUbx9eXoYPzAei'
+    );
+    $user->setBirthdate($generator->dateTimeBetween('-24 years', '-23 years'));
+    $user->setCreatedAt(new \DateTime());
+    $user->setOtp(12345);
+    $user->setPicture('aesahaettr.gif');
+    $manager->persist($user);
+
+    //Admin part
     $adminAccount = new User();
     $adminAccount->setEmail('mcamus@condorcet93.fr');
     $adminAccount->setFirstname('Milan');
@@ -49,26 +66,12 @@ class UserFixtures extends Fixture
     $adminAccount->setOtp(12345);
     $adminAccount->setIsActivated(true);
     $adminAccount->setPicture('mistergooddeal.jpg');
+    $adminAccount->setRoles(['ROLE_SUPER_ADMIN']);
     $manager->persist($adminAccount);
 
     $this->generateFranchise($manager);
 
     $manager->flush();
-  }
-
-  // Generate medias
-  public function generateMedias(EntityManager $em, User $user)
-  {
-    $generator = Factory::create('fr_FR');
-    for ($i = 0; $i < $generator->numberBetween(0, 10); $i++) {
-      $media = new Media();
-      $media->setId($i + 1);
-      $media->setUserId($user);
-      $media->setSource($generator->imageUrl(640, 480, 'cats'));
-      $media->setType($generator->randomElement(['png', 'jpg', 'jpeg', 'gif']));
-      $media->setCreatedAt(new \DateTime());
-      $em->persist($media);
-    }
   }
 
   // Create Franchise
@@ -81,6 +84,29 @@ class UserFixtures extends Fixture
       $franchise->setName($generator->company);
       $em->persist($franchise);
       $this->generateGym($em, $franchise);
+      $this->generatePayments($em, $franchise);
+    }
+    $em->flush();
+  }
+
+  // Generate fake payments
+  public function generatePayments(EntityManager $em, Franchise $franchise)
+  {
+    $generator = Factory::create('fr_FR');
+    for ($i = 0; $i < $generator->numberBetween(10, 50); $i++) {
+      $type = $generator->randomElement(['route', 'gym']);
+      $aDate = $generator->dateTimeBetween('-1 years', 'now');
+      $payment = new Payments();
+      $payment->setType($type);
+      $payment->setCreatedAt($aDate);
+      $payment->setUpdatedAt($aDate);
+      $payment->setAmount($type === 'route' ? 100 : 1500);
+      $payment->setStatus(
+        $generator->randomElement(['pending', 'success', 'failed'])
+      );
+      $payment->setFranchise($franchise);
+      $payment->setToken(null);
+      $em->persist($payment);
     }
     $em->flush();
   }
@@ -100,6 +126,21 @@ class UserFixtures extends Fixture
       $gym->setFranchise($franchise);
       $em->persist($gym);
       $this->generateEvents($em, $gym);
+      $this->generateRoute($em, $gym);
+    }
+    $em->flush();
+  }
+
+  public function generateRoute(EntityManager $em, Gym $gym)
+  {
+    $generator = Factory::create('fr_FR');
+    for ($i = 0; $i < $generator->numberBetween(3, 10); $i++) {
+      $route = new Route();
+      $route->setId($i + 1);
+      $route->setOpened($generator->numberBetween(0, 1));
+      $route->setGym($gym);
+      $route->setDifficulty($generator->numberBetween(1, 42));
+      $em->persist($route);
     }
     $em->flush();
   }
@@ -121,5 +162,20 @@ class UserFixtures extends Fixture
       $em->persist($event);
     }
     $em->flush();
+  }
+
+  // Generate medias
+  public function generateMedias(EntityManager $em, User $user)
+  {
+    $generator = Factory::create('fr_FR');
+    for ($i = 0; $i < $generator->numberBetween(0, 10); $i++) {
+      $media = new Media();
+      $media->setId($i + 1);
+      $media->setUserId($user);
+      $media->setSource($generator->imageUrl(640, 480, 'cats'));
+      $media->setType($generator->randomElement(['png', 'jpg', 'jpeg', 'gif']));
+      $media->setCreatedAt(new \DateTime());
+      $em->persist($media);
+    }
   }
 }

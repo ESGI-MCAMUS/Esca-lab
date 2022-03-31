@@ -24,13 +24,20 @@
                                     </form>
                                 </div>
                             </li>
-                            <div class="d-none d-sm-block topbar-divider"></div>
+                            <div class="d-none d-sm-block topbar-divider"></div>                            
                             <li class="nav-item dropdown no-arrow">
                                 {% if app.user.id is defined and app.user.id != 0 %}
-                                    <li class="nav-item"><a class="nav-link" href="/user"><span class="d-none d-lg-inline me-2 text-gray-600 small">{{app.user.username}}</span><img class="border rounded-circle img-profile" src="{{asset('images/profiles/') ~ app.user.picture}}" /></a></li>
+                                    <div class="nav-item">
+									<a href="/user" class="nav-link poppins">
+										<span class="d-none d-lg-inline me-2 text-gray-600 small">
+											{{app.user.username}}
+										</span>
+										{# <img class="border rounded-circle img-profile" src="{{asset('images/profiles/') ~ app.user.picture}}"> #}
+									</a>
+								</div>
                                 {% else %}
                                     <li class="nav-item"><a class="nav-link" href="/connexion">Se connecter</a></li>
-                                    <div class="d-none d-sm-block topbar-divider"></div>
+                                        <div class="d-none d-sm-block topbar-divider"></div>
                                     <li class="nav-item"><a class="nav-link" href="/inscription">S&#39;inscrire</a></li>
                                 {% endif %}
                             </li>
@@ -39,15 +46,9 @@
                 </nav>
                 <div class="container-fluid">
                     <div class="d-sm-flex justify-content-between align-items-center mb-4">
-                        <div class="example-wrapper">
-                            <h1>Hello {{ controller_name }}! ✅</h1>
-
-                            This friendly message is coming from:
-                            <ul>
-                                <li>Your controller at <code><a href="{{ '/var/www/src/Controller/AccueilController.php'|file_link(0) }}">src/Controller/AccueilController.php</a></code></li>
-                                <li>Your template at <code><a href="{{ '/var/www/templates/accueil/index.html.twig'|file_link(0) }}">templates/accueil/index.html.twig</a></code></li>
-                            </ul>
-                        </div>
+                        {% block corps %}
+                            <p>coucou ceci est un message</p>
+                        {% endblock %}
 					</div>
                 </div>
             </div>

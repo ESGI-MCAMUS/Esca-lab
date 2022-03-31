@@ -1,0 +1,51 @@
+{% extends 'accueil/index.html.twig' %}
+{# {% extends 'base.html.twig' %} #}
+
+{% block title %}
+        Esca'Lab - Franchises
+{% endblock %}
+
+{% block javascripts %}
+	<script src="{{ asset('js/jquery.min.js') }}"></script>
+    <script src="{{ asset('js/user/friends.js') }}"></script>
+    <script src="{{ asset('js/tiny-toast-1.1.0/tiny-toast.min.js') }}"></script>
+{% endblock %}
+
+{% block corps %}
+<div class="container-fluid">
+	<div class="d-sm-flex align-items-center mb-4">
+		<h3 class="text-dark mb-0 poppins bold text-black" style="color: rgb(33,37,41);">Franchises ({{ franchises|length }})</h3>
+	</div>
+    <br/>
+	<div class="row">
+        {% for franchise in franchises %}
+            <div id="carte-user-{{ franchise.id }}" class="col-md-6 col-xl-3 mb-4">
+                <div class="card shadow border-start-warning py-2">
+                    <div class="card-body">
+                        <div class="row align-items-center no-gutters">
+                            <div class="col"></div>
+                            <div class="col">
+                                <a href="/franchise/{{ franchise.id }}/gyms">
+                                    <img src="{{ asset('images/profiles/default.png') }}"  class="img-tn rounded" />
+                                </a>
+                            </div>
+                            <div class="col"></div>
+                        </div>
+                        <hr class="bg-danger border-2 border-top border-secondary">
+                        <div class="row">
+                            <div class="col" style="text-align: center;">
+                                <a href="/franchise/{{ franchise.id }}/gyms" style="text-decoration: none;color: black;">
+                                    <h3>
+                                        <strong>{{ franchise.name }} ({{ franchise.gyms|length }})</strong>
+                                    </h3>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+<input type="text" id="url_root" value="{{ app.request.getSchemeAndHttpHost() }}" hidden></input>
+{% endblock %}

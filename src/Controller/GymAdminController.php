@@ -24,15 +24,9 @@ class GymAdminController extends AbstractController
     #[Route('/gym/kpi', name: 'gym_kpi')]
     public function index(): Response
     {
-        $openRoutes = $this->user
-            ->getGym()
-            ->getRoutes()
-            ->filter(function ($element) {
-                return $element->getOpened() > 0;
-            });
+        $this->setInformations();
 
         return $this->render('gym/index.html.twig', [
-            'openRoutes' => $openRoutes,
             'month' => date_format(new DateTime(), 'n'),
         ]);
     }
@@ -136,5 +130,27 @@ class GymAdminController extends AbstractController
         }
 
         return $this->redirectToRoute('gym_employees');
+    }
+
+    private function setInformations()
+    {
+        $repo = $this->getDoctrine()
+            ->getManager()
+            ->getRepository(User::class);
+        $employeesCount = count(
+            $repo->findBy([
+                'gym' => $this->user->getGym()->getId(),
+            ])
+        );
+        $ways = $this->user->getGym()->getRoutes();
+
+        $waysCount = count($ways);
+        $openedWays = count($ways->filter(function ($element) {
+            return $element->getOpened() > 0;
+        }));
+
+        $this->get('session')->set('employees_count', $employeesCount);
+        $this->get('session')->set('ways_count', $waysCount);
+        $this->get('session')->set('opened_ways', $openedWays);
     }
 }

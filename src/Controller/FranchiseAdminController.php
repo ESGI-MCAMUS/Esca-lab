@@ -132,32 +132,42 @@ class FranchiseAdminController extends AbstractController
     ]);
   }
 
-  private function setInformations()
-  {
-    $repo = $this->getDoctrine()
-      ->getManager()
-      ->getRepository(User::class);
-    $employeesCount = count(
-      $repo->findBy([
-        'franchise' => $this->user->getFranchise()->getId(),
-      ])
-    );
-    $gymsCount = count($this->user->getFranchise()->getGyms());
+    private function setInformations()
+    {
+        $repo = $this->getDoctrine()
+            ->getManager()
+            ->getRepository(User::class);
+        $employeesCount = count(
+            $repo->findBy([
+                'franchise' => $this->user->getFranchise()->getId(),
+            ])
+        );
+        $gyms = $this->user->getFranchise()->getGyms();
+        $waysCount = 0;
+        $openedWays = 0;
+        foreach ($gyms as $gym) {
+            $waysCount += count($gym->getRoutes());
+            $openedWays += count($gym->getRoutes()->filter(function ($element) {
+                return $element->getOpened() > 0;
+            }));
+        }
+        $gymsCount = count($gyms);
 
-    // Payments
-    $payment_repo = $this->getDoctrine()
-      ->getManager()
-      ->getRepository(Payments::class);
-    $payments = $payment_repo->findBy([
-      'franchise' => $this->user->getFranchise()->getId(),
-    ]);
-    $total_payments = 0;
-    foreach ($payments as $payment) {
-      $payment->getStatus() !== "success" ? $total_payments++ : $total_payments;
+        $payment_repo = $this->getDoctrine()
+            ->getManager()
+            ->getRepository(Payments::class);
+        $payments = $payment_repo->findBy([
+            'franchise' => $this->user->getFranchise()->getId(),
+        ]);
+        $total_payments = 0;
+        foreach ($payments as $payment) {
+            $payment->getStatus() !== "success" ? $total_payments++ : $total_payments;
+        }
+
+        $this->get('session')->set('employees_count', $employeesCount);
+        $this->get('session')->set('gyms_count', $gymsCount);
+        $this->get('session')->set('ways_count', $waysCount);
+        $this->get('session')->set('opened_ways', $openedWays);
+        $this->get('session')->set('payments', $total_payments);
     }
-    $this->get('session')->set('employees_count', $employeesCount);
-    $this->get('session')->set('gyms_count', $gymsCount);
-    $this->get('session')->set('ways_count', 0);
-    $this->get('session')->set('payments', $total_payments);
-  }
 }

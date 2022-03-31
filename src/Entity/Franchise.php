@@ -45,10 +45,16 @@ class Franchise
    */
   private $gyms;
 
+  /**
+   * @ORM\OneToMany(targetEntity=Payments::class, mappedBy="franchise", orphanRemoval=true)
+   */
+  private $payments;
+
   public function __construct()
   {
     $this->users = new ArrayCollection();
     $this->gyms = new ArrayCollection();
+    $this->payments = new ArrayCollection();
   }
 
   public function getId(): ?int
@@ -146,5 +152,35 @@ class Franchise
 
   public function getNumberOfGyms(): int {
     return sizeof($this->gyms);
+  }
+
+  /**
+   * @return Collection<int, Payments>
+   */
+  public function getPayments(): Collection
+  {
+      return $this->payments;
+  }
+
+  public function addPayment(Payments $payment): self
+  {
+      if (!$this->payments->contains($payment)) {
+          $this->payments[] = $payment;
+          $payment->setFranchise($this);
+      }
+
+      return $this;
+  }
+
+  public function removePayment(Payments $payment): self
+  {
+      if ($this->payments->removeElement($payment)) {
+          // set the owning side to null (unless already changed)
+          if ($payment->getFranchise() === $this) {
+              $payment->setFranchise(null);
+          }
+      }
+
+      return $this;
   }
 }

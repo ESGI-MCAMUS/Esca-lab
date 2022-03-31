@@ -9,6 +9,7 @@ use App\Entity\Event;
 use App\Entity\Media;
 use App\Entity\Gym;
 use App\Entity\User;
+use App\Entity\Payments;
 use App\Entity\Franchise;
 use App\Entity\Route;
 use Doctrine\ORM\EntityManager;
@@ -41,11 +42,9 @@ class UserFixtures extends Fixture
     $user->setLastname('Vadrot');
     $user->setUsername('Aesahaettr');
     $user->setPassword(
-        '$2y$13$YvFuVu1Rtasj5Di.AKcOAuosclgfw/57CFXq4OXRUbx9eXoYPzAei'
+      '$2y$13$YvFuVu1Rtasj5Di.AKcOAuosclgfw/57CFXq4OXRUbx9eXoYPzAei'
     );
-    $user->setBirthdate(
-        $generator->dateTimeBetween('-24 years', '-23 years')
-    );
+    $user->setBirthdate($generator->dateTimeBetween('-24 years', '-23 years'));
     $user->setCreatedAt(new \DateTime());
     $user->setOtp(12345);
     $user->setPicture('aesahaettr.gif');
@@ -67,6 +66,7 @@ class UserFixtures extends Fixture
     $adminAccount->setOtp(12345);
     $adminAccount->setIsActivated(true);
     $adminAccount->setPicture('mistergooddeal.jpg');
+    $adminAccount->setRoles(['ROLE_SUPER_ADMIN']);
     $manager->persist($adminAccount);
 
     $this->generateFranchise($manager);
@@ -84,6 +84,29 @@ class UserFixtures extends Fixture
       $franchise->setName($generator->company);
       $em->persist($franchise);
       $this->generateGym($em, $franchise);
+      $this->generatePayments($em, $franchise);
+    }
+    $em->flush();
+  }
+
+  // Generate fake payments
+  public function generatePayments(EntityManager $em, Franchise $franchise)
+  {
+    $generator = Factory::create('fr_FR');
+    for ($i = 0; $i < $generator->numberBetween(10, 50); $i++) {
+      $type = $generator->randomElement(['route', 'gym']);
+      $aDate = $generator->dateTimeBetween('-1 years', 'now');
+      $payment = new Payments();
+      $payment->setType($type);
+      $payment->setCreatedAt($aDate);
+      $payment->setUpdatedAt($aDate);
+      $payment->setAmount($type === 'route' ? 100 : 1500);
+      $payment->setStatus(
+        $generator->randomElement(['pending', 'success', 'failed'])
+      );
+      $payment->setFranchise($franchise);
+      $payment->setToken(null);
+      $em->persist($payment);
     }
     $em->flush();
   }
@@ -108,7 +131,8 @@ class UserFixtures extends Fixture
     $em->flush();
   }
 
-  public function generateRoute(EntityManager $em, Gym $gym) {
+  public function generateRoute(EntityManager $em, Gym $gym)
+  {
     $generator = Factory::create('fr_FR');
     for ($i = 0; $i < $generator->numberBetween(3, 10); $i++) {
       $route = new Route();

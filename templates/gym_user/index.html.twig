@@ -7,10 +7,15 @@
 
 {% block javascripts %}
 	<script src="{{ asset('js/jquery.min.js') }}"></script>
-    <script src="{{ asset('js/route/add-route.js') }}"></script>
-    <script src="{{ asset('js/route/remove-route.js') }}"></script>
+	<script src="{{ asset('js/route/update-route-status.js') }}"></script>
+    {# <script src="{{ asset('js/route/add-route.js') }}"></script>
+    <script src="{{ asset('js/route/remove-route.js') }}"></script> #}
     <script src="{{ asset('js/tiny-toast-1.1.0/tiny-toast.min.js') }}"></script>
 {% endblock %}
+
+{% set templateSpan %}
+<span id="spinner-__id__" class="spinner-border spinner-border-sm text-dark" role="status" aria-hidden="true" hidden></span>
+{% endset %}
 
 {% block corps %}
 <div class="container-fluid">
@@ -56,9 +61,15 @@
                                 <div class="col mt-2" style="text-align: center;">
                                     {% if route.opened == 1 %}
                                         {% if route.id not in resolved %}
-                                            <button type="button" class="btn btn-info btn-add" data-b-route="{{ route.id }}">Je l'ai faite !</button>
+                                            <button id="btn-{{ route.id }}" type="button" class="btn btn-info btn-add" data-b-route="{{ route.id }}">
+                                                <span id="spinner-{{ route.id }}" class="spinner-border spinner-border-sm text-dark" role="status" aria-hidden="true" hidden></span>
+                                                Je l'ai faite !
+                                            </button>
                                         {% else %}
-                                            <button type="button" class="btn btn-warning btn-remove" data-b-route="{{ route.id }}">Je me suis trompé</button>
+                                            <button id="btn-{{ route.id }}" type="button" class="btn btn-warning btn-remove" data-b-route="{{ route.id }}">
+                                                <span id="spinner-{{ route.id }}" class="spinner-border spinner-border-sm text-dark" role="status" aria-hidden="true" hidden></span>
+                                                Je me suis trompé
+                                            </button>
                                         {% endif %}
                                     {% else %}
                                         <button type="button" class="btn btn-secondary disabled">Trop tard</button>
@@ -73,4 +84,5 @@
     </div>
 </div>
 <input type="text" id="url_root" value="{{ app.request.getSchemeAndHttpHost() }}" hidden></input>
+<input type="text" id="templateSpan" data-t-span="{{ templateSpan|escape }}" hidden>
 {% endblock %}

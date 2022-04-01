@@ -21,14 +21,6 @@ class GymUserController extends AbstractController
         $this->user = $security->getUser();
     }
 
-    // #[Route('/gym/user', name: 'app_gym_user')]
-    // public function index(): Response
-    // {
-    //     return $this->render('gym_user/index.html.twig', [
-    //         'controller_name' => 'GymUserController',
-    //     ]);
-    // }
-
     #[Route('/gym/{id}', name: 'gym')]
     public function index($id, ManagerRegistry $doctrine)
     {

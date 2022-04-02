@@ -87,4 +87,5 @@ class GymRepository extends ServiceEntityRepository
 
         // return $results[0]->getRoutes();
     }
+    */
 }

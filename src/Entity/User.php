@@ -113,12 +113,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $medias;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Route::class, inversedBy="users")
+     */
+    private $routes;
+
     public function __construct()
     {
         $this->gyms = new ArrayCollection();
         $this->friends = new ArrayCollection();
         $this->users = new ArrayCollection();
         $this->events = new ArrayCollection();
+        $this->routes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -431,6 +437,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         }
 
         $this->medias = $medias;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Route>
+     */
+    public function getRoutes(): Collection
+    {
+        return $this->routes;
+    }
+
+    public function addRoute(Route $route): self
+    {
+        if (!$this->routes->contains($route)) {
+            $this->routes[] = $route;
+        }
+
+        return $this;
+    }
+
+    public function removeRoute(Route $route): self
+    {
+        $this->routes->removeElement($route);
 
         return $this;
     }

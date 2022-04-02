@@ -7,15 +7,21 @@
 
 {% block javascripts %}
 	<script src="{{ asset('js/jquery.min.js') }}"></script>
-    <script src="{{ asset('js/user/friends.js') }}"></script>
+	<script src="{{ asset('js/route/update-route-status.js') }}"></script>
+    {# <script src="{{ asset('js/route/add-route.js') }}"></script>
+    <script src="{{ asset('js/route/remove-route.js') }}"></script> #}
     <script src="{{ asset('js/tiny-toast-1.1.0/tiny-toast.min.js') }}"></script>
 {% endblock %}
+
+{% set templateSpan %}
+<span id="spinner-__id__" class="spinner-border spinner-border-sm text-dark" role="status" aria-hidden="true" hidden></span>
+{% endset %}
 
 {% block corps %}
 <div class="container-fluid">
 	<div class="d-sm-flex align-items-center mb-4">
 		<h4 class="text-dark mb-0 poppins bold text-black" style="color: rgb(33,37,41);">
-            <a href="/franchises/all">Franchises</a> > <a href="/franchise/{{ franchise.id }}/gyms">{{ franchise.name }}</a> > {{ gym.name }} ({{ routes|length }})
+            <a href="/franchise/all">Franchises</a> > <a href="/franchise/{{ franchise.id }}/gyms">{{ franchise.name }}</a> > {{ gym.name }} ({{ routes|length }})
         </h4>
 	</div>
     <br/>
@@ -27,14 +33,16 @@
                         <div class="row align-items-center no-gutters">
                             <div class="col"></div>
                             <div class="col">
-                                <img src="{{ asset('images/profiles/default.png') }}"  class="img-tn rounded" />
+                                <a href="#">
+                                    <img src="{{ asset('images/profiles/default.png') }}"  class="img-tn rounded" />
+                                </a>
                             </div>
                             <div class="col"></div>
                         </div>
                         <hr class="bg-danger border-2 border-top border-secondary">
                         <div class="row">
                             <div class="col ms-3" style="text-align: left;">
-                                <p>Statut : {{ route.opened}}
+                                <p>Statut :
                                     {% if route.opened == 1 %}
                                         <span class="badge rounded-pill bg-success">Ouverte</span>
                                     {% else %}
@@ -51,7 +59,21 @@
                         {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
                             <div class="row">
                                 <div class="col mt-2" style="text-align: center;">
-                                    <button type="button" class="btn btn-info" data-b-route="{{ route.id }}">Je l'ai faite !</button>
+                                    {% if route.opened == 1 %}
+                                        {% if route.id not in resolved %}
+                                            <button id="btn-{{ route.id }}" type="button" class="btn btn-info btn-add" data-b-route="{{ route.id }}">
+                                                <span id="spinner-{{ route.id }}" class="spinner-border spinner-border-sm text-dark" role="status" aria-hidden="true" hidden></span>
+                                                Je l'ai faite !
+                                            </button>
+                                        {% else %}
+                                            <button id="btn-{{ route.id }}" type="button" class="btn btn-warning btn-remove" data-b-route="{{ route.id }}">
+                                                <span id="spinner-{{ route.id }}" class="spinner-border spinner-border-sm text-dark" role="status" aria-hidden="true" hidden></span>
+                                                Je me suis trompé
+                                            </button>
+                                        {% endif %}
+                                    {% else %}
+                                        <button type="button" class="btn btn-secondary disabled">Trop tard</button>
+                                    {% endif %}
                                 </div>
                             </div>
                         {% endif %}
@@ -62,4 +84,5 @@
     </div>
 </div>
 <input type="text" id="url_root" value="{{ app.request.getSchemeAndHttpHost() }}" hidden></input>
+<input type="text" id="templateSpan" data-t-span="{{ templateSpan|escape }}" hidden>
 {% endblock %}

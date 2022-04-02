@@ -65,17 +65,26 @@ class GymRepository extends ServiceEntityRepository
             ->getResult()
         ;
     }
-    */
+    
 
   /*
     public function findOneBySomeField($value): ?Gym
     {
-        return $this->createQueryBuilder('g')
-            ->andWhere('g.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+        // $results = $this->createQueryBuilder('g')
+        //     ->leftJoin('g.routes', 'r')
+        //     ->andWhere('r.opened = 0')
+        //     ->andWhere('g.id = :gymId')
+        //     ->setParameter('gymId', $value)
+        //     ->getQuery()
+        //     ->getResult();
+
+        // $results = $this->createQueryBuilder->select('r')
+        //     ->from('Routes', 'r')
+        //     ->where('r.id = ?1')
+        //     ->orderBy('u.name', 'ASC');
+         
+        // dd($results);
+
+        // return $results[0]->getRoutes();
     }
-    */
 }

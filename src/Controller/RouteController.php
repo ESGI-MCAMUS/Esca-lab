@@ -2,16 +2,23 @@
 
 namespace App\Controller;
 
+use \App\Entity\Route as RouteEntity;
 use App\Entity\Gym;
+
 use App\Form\RouteType;
+
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\Persistence\ManagerRegistry;
+
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use \App\Entity\Route as RouteEntity;
 use Symfony\Component\Security\Core\Security;
+use Symfony\Component\HttpFoundation\JsonResponse;
+
 
 class RouteController extends AbstractController
 {
@@ -161,4 +168,41 @@ class RouteController extends AbstractController
         return $this->redirectToRoute("gym_routes");
     }
 
+    #[IsGranted('ROLE_USER')]
+    #[Route('/route/resolved/{routeId}', name: 'route_resolved', defaults: ["routeId" => null], methods: ['POST'])]
+    public function resolved(ManagerRegistry $doctrine, $routeId): Response
+    {
+        $success = true;
+
+        $entityManager = $doctrine->getManager();
+        $resolvedRoute = $entityManager->getRepository(RouteEntity::class)->find($routeId);
+        
+        if($resolvedRoute->getId() !== null) {
+            $this->user->addRoute($resolvedRoute);
+            $entityManager->flush();
+        } else {
+            $success = false;
+        }
+
+        return new JsonResponse(array('success' => $success));
+    }
+
+    #[IsGranted('ROLE_USER')]
+    #[Route('/route/unresolved/{routeId}', name: 'route_unresolved', defaults: ["routeId" => null], methods: ['POST'])]
+    public function unresolved(ManagerRegistry $doctrine, $routeId): Response
+    {
+        $success = true;
+
+        $entityManager = $doctrine->getManager();
+        $resolvedRoute = $entityManager->getRepository(RouteEntity::class)->find($routeId);
+        
+        if($resolvedRoute->getId() !== null) {
+            $this->user->removeRoute($resolvedRoute);
+            $entityManager->flush();
+        } else {
+            $success = false;
+        }
+
+        return new JsonResponse(array('success' => $success));
+    }
 }

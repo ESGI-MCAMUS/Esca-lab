@@ -19,7 +19,7 @@
 <div class="container-fluid">
 	<div class="d-sm-flex align-items-center mb-4">
 		<h4 class="text-dark mb-0 poppins bold text-black" style="color: rgb(33,37,41);">
-            <a href="/franchise/all">Franchises</a> > <a href="/franchise/{{ franchise.id }}/gyms">{{ franchise.name }}</a> > {{ gym.name }}
+            <a href="/franchise/all">Franchises</a> > <a href="/franchise/{{ franchise.id }}/gyms">{{ franchise.name }}</a> > <a href="/franchise/{{ gym.id }}/gyms">{{ gym.name }}</a>
         </h4>
 	</div>
     <br/>
@@ -35,8 +35,8 @@
                         <div class="col"></div>
                     </div>
                     <hr class="bg-danger border-2 border-top border-secondary">
-                    <div id="chat-container" class="row align-items-center no-gutters" style="text-align: center;">
-                        <div class="col">
+                    <div id="chat-container" class="row align-items-center no-gutters classContainerChat" style="text-align: center;max-height:60vh;overflow-y:hidden;">
+                        <div class="col" style="">
                             <div id="comment-XXX"  class="row align-items-center" style="border-bottom: 1px solid lightgray;">
                                 <div class="col-2">
                                     <img class="border rounded-circle img-profile" src="{{asset('images/profiles/mistergooddeal.jpg')}}" style="width:50px;">
@@ -50,6 +50,7 @@
                                     <i class="bi bi-emoji-smile"></i>
                                 </div>
                             </div>
+                            {% for i in 0..10 %}
                             <div id="comment-XXX"  class="row align-items-center" style="border-bottom: 1px solid lightgray;">
                                 <div class="col-2">
                                     <img class="border rounded-circle img-profile" src="{{asset('images/profiles/aesahaettr.gif')}}" style="width:50px;">
@@ -63,12 +64,19 @@
                                     <i class="bi bi-emoji-smile"></i>
                                 </div>
                             </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div id="chat-message" class="row align-items-center no-gutters pt-3" style="text-align: center;border-top: 1px solid lightgray;">
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" placeholder="Recipient's username" aria-label="Recipient's username" aria-describedby="button-addon2">
+                            <button class="btn btn-outline-secondary" type="button" id="button-addon2">Button</button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div id="carte-user-{{ route.id }}" class="col">
+        <div id="carte-user-{{ route.id }}" class="col" style="max-height:78vh;">
             <div class="card shadow border-start-warning py-2">
                 <div class="card-body">
                     <div class="row align-items-center no-gutters">
@@ -117,7 +125,7 @@
                 </div>
             </div>
         </div>
-        <div class="col">
+        <div class="col" style="max-height:78vh;overflow-y:hidden;">
             <div class="card shadow border-start-warning py-2">
                 <div class="card-body">
                     <div class="row align-items-center no-gutters" style="text-align: center;">
@@ -134,6 +142,20 @@
                             <p class="lead">A été reussie {{ route.users|length }} fois</p>
                         </div>
                         <div class="col"></div>
+                    </div>
+                    <div class="row align-items-center no-gutters">
+                        {# <div class="col"></div> #}
+                        <div class="col">
+                            <div class="row">
+                                <div class="col">
+                                    <p class="lead" style="text-align: left;">Ouverte le : 03/02/2022</p>
+                                </div>
+                                <div class="col">
+                                    <p class="lead" style="text-align: right;">Fermée le : 03/02/2022</p>
+                                </div>
+                            </div>
+                        </div>
+                        {# <div class="col"></div> #}
                     </div>
                 </div>
             </div>

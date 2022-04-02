@@ -14,15 +14,50 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class FranchiseRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
-    {
-        parent::__construct($registry, Franchise::class);
-    }
+  public function __construct(ManagerRegistry $registry)
+  {
+    parent::__construct($registry, Franchise::class);
+  }
 
-    // /**
-    //  * @return Franchise[] Returns an array of Franchise objects
-    //  */
-    /*
+  /**
+   * @throws ORMException
+   * @throws OptimisticLockException
+   */
+  public function remove(Franchise $entity, bool $flush = true): void
+  {
+    // Remove all gyms from franchise
+    foreach ($entity->getGyms() as $gym) {
+      // Remove all routes from gym
+      foreach ($gym->getRoutes() as $route) {
+        $this->_em->remove($route);
+      }
+      // Remove all event
+      foreach ($gym->getEvents() as $event) {
+        $this->_em->remove($event);
+      }
+      $this->_em->remove($gym);
+    }
+    $this->_em->remove($entity);
+    if ($flush) {
+      $this->_em->flush();
+    }
+  }
+
+  public function search($value)
+  {
+    $qb = $this->createQueryBuilder('franchise')
+      ->where('franchise.name LIKE :query')
+      ->setParameter('query', $value);
+
+    $query = $qb->getQuery();
+
+    return $query->execute();
+  }
+
+  // /**
+  //  * @return Franchise[] Returns an array of Franchise objects
+  //  */
+  /*
     public function findByExampleField($value)
     {
         return $this->createQueryBuilder('f')
@@ -36,7 +71,7 @@ class FranchiseRepository extends ServiceEntityRepository
     }
     */
 
-    /*
+  /*
     public function findOneBySomeField($value): ?Franchise
     {
         return $this->createQueryBuilder('f')

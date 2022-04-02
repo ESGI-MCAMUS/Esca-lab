@@ -65,9 +65,7 @@ class PaymentsController extends AbstractController
   #[Route('/franchise/checkout/{id}', name: 'app_init_payment')]
   public function initPayment($id)
   {
-    \Stripe\Stripe::setApiKey(
-      "sk_test_51JG3aOJ6EFTnNcYzrKi63lGT1m9OwAYPQ2U5AvT25cCZZEEFx9hOUfieohT8xl24dRfLAHhBrc6GsJR1Ab7wTCl800NzlC3jgw"
-    );
+    \Stripe\Stripe::setApiKey($_SERVER['STRIPE_API_KEY']);
 
     $token = $this->uuidv4();
 
@@ -80,9 +78,6 @@ class PaymentsController extends AbstractController
     $entityManager = $this->getDoctrine()->getManager();
     $entityManager->persist($payment);
     $entityManager->flush();
-
-    dump($payment);
-    dump($entityManager);
 
     $URL_SITE =
       'http://' . $_SERVER['SERVER_NAME'] . ':' . $_SERVER['SERVER_PORT'];

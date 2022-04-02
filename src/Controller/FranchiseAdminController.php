@@ -23,6 +23,7 @@ class FranchiseAdminController extends AbstractController
     $this->user = $security->getUser();
   }
 
+  #[IsGranted('ROLE_ADMIN_FRANCHISE')]
   #[Route('/franchise/kpi', name: 'franchise_kpi')]
   public function index(): Response
   {
@@ -32,6 +33,7 @@ class FranchiseAdminController extends AbstractController
     ]);
   }
 
+  #[IsGranted('ROLE_ADMIN_FRANCHISE')]
   #[Route('/franchise/employees', name: 'franchise_employees')]
   public function employees(): Response
   {
@@ -48,6 +50,7 @@ class FranchiseAdminController extends AbstractController
     ]);
   }
 
+  #[IsGranted('ROLE_ADMIN_FRANCHISE')]
   #[Route('/franchise/employees/edit/{id}/{check}', name: 'edit_franchise_employee')]
   public function editEmployee($id, $check = 'user')
   {
@@ -99,6 +102,7 @@ class FranchiseAdminController extends AbstractController
     return $this->redirectToRoute('franchise_employees');
   }
 
+  #[IsGranted('ROLE_ADMIN_FRANCHISE')]
   #[Route('/franchise/employees/remove/{id}', name: 'remove_franchise_employee')]
   public function removeEmployee($id)
   {
@@ -122,6 +126,7 @@ class FranchiseAdminController extends AbstractController
     return $this->redirectToRoute('franchise_employees');
   }
 
+  #[IsGranted('ROLE_ADMIN_FRANCHISE')]
   #[Route('/franchise/salles', name: 'franchise_gyms')]
   public function routes(): Response
   {

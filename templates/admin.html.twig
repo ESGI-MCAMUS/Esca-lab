@@ -171,7 +171,7 @@
                 or is_granted('ROLE_SUPER_ADMIN') %}
               <li class="nav-item">
                 <a class="nav-link poppins regular"
-                  href="profile.html"
+                  href="/admin/franchises"
                   style="height: auto;padding: 10px;color: rgb(33,37,41);">
                   <svg xmlns="http://www.w3.org/2000/svg"
                     width="1em"
@@ -182,7 +182,9 @@
                     <path d="M6.5 1A1.5 1.5 0 0 0 5 2.5V3H1.5A1.5 1.5 0 0 0 0 4.5v8A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-8A1.5 1.5 0 0 0 14.5 3H11v-.5A1.5 1.5 0 0 0 9.5 1h-3zm0 1h3a.5.5 0 0 1 .5.5V3H6v-.5a.5.5 0 0 1 .5-.5zm1.886 6.914L15 7.151V12.5a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5V7.15l6.614 1.764a1.5 1.5 0 0 0 .772 0zM1.5 4h13a.5.5 0 0 1 .5.5v1.616L8.129 7.948a.5.5 0 0 1-.258 0L1 6.116V4.5a.5.5 0 0 1 .5-.5z"></path>
                   </svg>
                   <span style="padding-left: 5px;">
-                    Franchises<span class="badge bg-primary poppins" style="margin-left: 5px;">4</span>
+                    Franchises<span class="badge bg-primary poppins" style="margin-left: 5px;">{{
+                        app.session.get('franchises_count')
+                      }}</span>
                   </span>
                 </a>
               </li>
@@ -191,7 +193,7 @@
                 or is_granted('ROLE_SUPER_ADMIN') %}
               <li class="nav-item">
                 <a class="nav-link poppins regular"
-                  href="/franchise/salles"
+                  href="/admin/salles"
                   style="padding: 10px;color: rgb(33,37,41);">
                   <svg xmlns="http://www.w3.org/2000/svg"
                     width="1em"
@@ -204,7 +206,9 @@
                     <path d="M2 11h1v1H2v-1zm2 0h1v1H4v-1zm-2 2h1v1H2v-1zm2 0h1v1H4v-1zm4-4h1v1H8V9zm2 0h1v1h-1V9zm-2 2h1v1H8v-1zm2 0h1v1h-1v-1zm2-2h1v1h-1V9zm0 2h1v1h-1v-1zM8 7h1v1H8V7zm2 0h1v1h-1V7zm2 0h1v1h-1V7zM8 5h1v1H8V5zm2 0h1v1h-1V5zm2 0h1v1h-1V5zm0-2h1v1h-1V3z"></path>
                   </svg>
                   <span style="padding-left: 5px;">
-                    Salles<span class="badge bg-primary poppins" style="margin-left: 5px;"></span>
+                    Salles<span class="badge bg-primary poppins" style="margin-left: 5px;">{{
+                        app.session.get('gyms_count')
+                      }}</span>
                   </span>
                 </a>
               </li>
@@ -216,7 +220,7 @@
                 or is_granted('ROLE_SUPER_ADMIN') %}
               <li class="nav-item">
                 <a class="nav-link poppins regular"
-                  href="table.html"
+                  href="/admin/voies"
                   style="padding: 10px;color: rgb(33,37,41);">
                   <svg xmlns="http://www.w3.org/2000/svg"
                     width="1em"
@@ -227,7 +231,9 @@
                     <path d="M0 .5A.5.5 0 0 1 .5 0h15a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-.5.5H14v2h1.5a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-.5.5H14v2h1.5a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-.5.5H.5a.5.5 0 0 1-.5-.5v-3a.5.5 0 0 1 .5-.5H2v-2H.5a.5.5 0 0 1-.5-.5v-3A.5.5 0 0 1 .5 6H2V4H.5a.5.5 0 0 1-.5-.5v-3zM3 4v2h4.5V4H3zm5.5 0v2H13V4H8.5zM3 10v2h4.5v-2H3zm5.5 0v2H13v-2H8.5zM1 1v2h3.5V1H1zm4.5 0v2h5V1h-5zm6 0v2H15V1h-3.5zM1 7v2h3.5V7H1zm4.5 0v2h5V7h-5zm6 0v2H15V7h-3.5zM1 13v2h3.5v-2H1zm4.5 0v2h5v-2h-5zm6 0v2H15v-2h-3.5z"></path>
                   </svg>
                   <span style="padding-left: 5px;">
-                    Voies<span class="badge bg-primary poppins" style="margin-left: 5px;">{{ app.session.get('ways_count') }}</span>
+                    Voies<span class="badge bg-primary poppins" style="margin-left: 5px;">{{
+                        app.session.get('routes_count')
+                      }}</span>
                   </span>
                 </a>
               </li>
@@ -240,7 +246,7 @@
             <ul class="navbar-nav text-light" id="accordionSidebar-2">
               <li class="nav-item">
                 <a class="nav-link poppins regular"
-                  href="table.html"
+                  href="/admin/paiements"
                   style="padding: 10px;color: rgb(33,37,41);">
                   <svg xmlns="http://www.w3.org/2000/svg"
                     width="1em"
@@ -253,7 +259,9 @@
                       d="M7.964 1.527c-2.977 0-5.571 1.704-6.32 4.125h-.55A1 1 0 0 0 .11 6.824l.254 1.46a1.5 1.5 0 0 0 1.478 1.243h.263c.3.513.688.978 1.145 1.382l-.729 2.477a.5.5 0 0 0 .48.641h2a.5.5 0 0 0 .471-.332l.482-1.351c.635.173 1.31.267 2.011.267.707 0 1.388-.095 2.028-.272l.543 1.372a.5.5 0 0 0 .465.316h2a.5.5 0 0 0 .478-.645l-.761-2.506C13.81 9.895 14.5 8.559 14.5 7.069c0-.145-.007-.29-.02-.431.261-.11.508-.266.705-.444.315.306.815.306.815-.417 0 .223-.5.223-.461-.026a.95.95 0 0 0 .09-.255.7.7 0 0 0-.202-.645.58.58 0 0 0-.707-.098.735.735 0 0 0-.375.562c-.024.243.082.48.32.654a2.112 2.112 0 0 1-.259.153c-.534-2.664-3.284-4.595-6.442-4.595zM2.516 6.26c.455-2.066 2.667-3.733 5.448-3.733 3.146 0 5.536 2.114 5.536 4.542 0 1.254-.624 2.41-1.67 3.248a.5.5 0 0 0-.165.535l.66 2.175h-.985l-.59-1.487a.5.5 0 0 0-.629-.288c-.661.23-1.39.359-2.157.359a6.558 6.558 0 0 1-2.157-.359.5.5 0 0 0-.635.304l-.525 1.471h-.979l.633-2.15a.5.5 0 0 0-.17-.534 4.649 4.649 0 0 1-1.284-1.541.5.5 0 0 0-.446-.275h-.56a.5.5 0 0 1-.492-.414l-.254-1.46h.933a.5.5 0 0 0 .488-.393zm12.621-.857a.565.565 0 0 1-.098.21.704.704 0 0 1-.044-.025c-.146-.09-.157-.175-.152-.223a.236.236 0 0 1 .117-.173c.049-.027.08-.021.113.012a.202.202 0 0 1 .064.199z"></path>
                   </svg>
                   <span style="padding-left: 5px;">
-                    Paiements<span class="badge bg-primary poppins bg-danger" style="margin-left: 5px;">7</span>
+                    Paiements<span class="badge bg-primary poppins bg-danger" style="margin-left: 5px;">{{
+                        app.session.get('payments_count')
+                      }}</span>
                   </span>
                 </a>
               </li>
@@ -381,7 +389,7 @@
                         }}" />
                     </a>
                     <div class="dropdown-menu shadow dropdown-menu-end animated--grow-in">
-                      <a class="dropdown-item poppins" href="#">
+                      <a class="dropdown-item poppins" href="/user">
                         <svg xmlns="http://www.w3.org/2000/svg"
                           width="1em"
                           height="1em"

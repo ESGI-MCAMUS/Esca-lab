@@ -19,6 +19,18 @@ class MediaRepository extends ServiceEntityRepository
     parent::__construct($registry, Media::class);
   }
 
+  /**
+   * @throws ORMException
+   * @throws OptimisticLockException
+   */
+  public function remove(Media $entity, bool $flush = true): void
+  {
+    $this->_em->remove($entity);
+    if ($flush) {
+      $this->_em->flush();
+    }
+  }
+
   public function search($value)
   {
     $qb = $this->createQueryBuilder('media')

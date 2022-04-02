@@ -47,7 +47,19 @@
                 <div class="container-fluid">
                     <div class="d-sm-flex justify-content-between align-items-center mb-4">
                         {% block corps %}
-                            <p>coucou ceci est un message</p>
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    <a class="btn btn-primary disabled" href="#" role="button">TBD</a>
+                                </div>
+                                <div class="col-lg-4">
+                                    <a class="btn btn-primary" href="/franchise/all" role="button">Voir les franchises</a>
+                                </div>
+                                <div class="col-lg-4">
+                                    {% if app.user.id is defined and app.user.id != 0 %}
+                                        <a class="btn btn-primary" href="/user" role="button">Acceder a mon profil</a>
+                                    {% endif %}
+                                </div>
+                            </div>
                         {% endblock %}
 					</div>
                 </div>

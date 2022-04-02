@@ -14,15 +14,46 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class GymRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
-    {
-        parent::__construct($registry, Gym::class);
-    }
+  public function __construct(ManagerRegistry $registry)
+  {
+    parent::__construct($registry, Gym::class);
+  }
 
-    // /**
-    //  * @return Gym[] Returns an array of Gym objects
-    //  */
-    /*
+  public function remove(Gym $entity, bool $flush = true): void
+  {
+    // Remove all events from gym
+    foreach ($entity->getEvents() as $event) {
+      $this->_em->remove($event);
+    }
+    // Remove all routes from gym
+    foreach ($entity->getRoutes() as $route) {
+      $this->_em->remove($route);
+    }
+    $this->_em->remove($entity);
+    if ($flush) {
+      $this->_em->flush();
+    }
+  }
+
+  public function search($value)
+  {
+    $qb = $this->createQueryBuilder('Gym')
+      ->where('Gym.name LIKE :query')
+      ->where('Gym.size LIKE :query')
+      ->where('Gym.pc LIKE :query')
+      ->where('Gym.address LIKE :query')
+      ->where('Gym.city LIKE :query')
+      ->setParameter('query', $value);
+
+    $query = $qb->getQuery();
+
+    return $query->execute();
+  }
+
+  // /**
+  //  * @return Gym[] Returns an array of Gym objects
+  //  */
+  /*
     public function findByExampleField($value)
     {
         return $this->createQueryBuilder('g')
@@ -36,7 +67,7 @@ class GymRepository extends ServiceEntityRepository
     }
     */
 
-    /*
+  /*
     public function findOneBySomeField($value): ?Gym
     {
         return $this->createQueryBuilder('g')

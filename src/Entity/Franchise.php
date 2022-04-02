@@ -150,7 +150,8 @@ class Franchise
     }
   }
 
-  public function getNumberOfGyms(): int {
+  public function getNumberOfGyms(): int
+  {
     return sizeof($this->gyms);
   }
 
@@ -159,28 +160,28 @@ class Franchise
    */
   public function getPayments(): Collection
   {
-      return $this->payments;
+    return $this->payments;
   }
 
   public function addPayment(Payments $payment): self
   {
-      if (!$this->payments->contains($payment)) {
-          $this->payments[] = $payment;
-          $payment->setFranchise($this);
-      }
+    if (!$this->payments->contains($payment)) {
+      $this->payments[] = $payment;
+      $payment->setFranchise($this);
+    }
 
-      return $this;
+    return $this;
   }
 
   public function removePayment(Payments $payment): self
   {
-      if ($this->payments->removeElement($payment)) {
-          // set the owning side to null (unless already changed)
-          if ($payment->getFranchise() === $this) {
-              $payment->setFranchise(null);
-          }
+    if ($this->payments->removeElement($payment)) {
+      // set the owning side to null (unless already changed)
+      if ($payment->getFranchise() === $this) {
+        $payment->setFranchise(null);
       }
+    }
 
-      return $this;
+    return $this;
   }
 }

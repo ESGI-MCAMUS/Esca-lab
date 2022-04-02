@@ -1,0 +1,121 @@
+{% extends 'admin.html.twig' %}
+{% block title %}Médias ◈ Esca'Lab
+{% endblock %}
+
+
+{% block body %}
+<div class="container-fluid">
+	<h3 class="text-dark mb-4 bold poppins">Paiements</h3>
+	{% for message in app.flashes('success') %}
+    <div class="alert alert-success"
+      role="alert">
+        {{ message | raw }}
+    </div>
+    {% endfor %}
+    {% for message in app.flashes('failed') %}
+    <div class="alert alert-danger"
+      role="alert">
+        {{ message | raw }}
+    </div>
+		{% endfor %}
+	<div class="card shadow">
+		<div class="card-header py-3">
+			<p class="text-primary m-0 fw-bold poppins">Gestion des paiements</p>
+		</div>
+		<div class="card-body">
+			<div class="row">
+				<div class="col-md-6 text-nowrap">
+				</div>
+				<div class="col-md-6">
+					<div id="dataTable_filter" class="text-md-end dataTables_filter">
+						{{ form_start(form) }}
+						<div class="input-group">
+							{{ form_widget(form.search)}}
+							<div class="input-group-append">
+								<button class="btn btn-primary" type="submit" title="Rechercher un paiement">
+									<svg class="bi bi-search" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewbox="0 0 16 16">
+										<path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"></path>
+									</svg>
+								</button>
+								<button type="button" class="btn btn-danger" onclick="location.replace('/admin/paiements');" title="Réinitialiser la recherche">
+									<svg class="bi bi-arrow-clockwise" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewbox="0 0 16 16">
+										<path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"></path>
+										<path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z"></path>
+									</svg>
+								</button>
+							</div>
+						</div>
+						{{ form_end(form) }}
+					</div>
+				</div>
+			</div>
+			<div id="dataTable" class="table-responsive table mt-2" role="grid" aria-describedby="dataTable_info">
+				<table id="dataTable" class="table my-0">
+					<thead>
+						<tr class="poppins">
+							<th>Id</th>
+							<th>Type</th>
+							<th>Statut</th>
+							<th>Date de création</th>
+							<th>Date de MàJ</th>
+							<th>Montant</th>
+							<th>Franchise</th>
+							<th>Actions</th>
+						</tr>
+					</thead>
+					<tbody>
+					{% for paiement in paiements %}
+						<tr class="poppins">
+							<td>{{paiement.id}}</td>
+							<td>{{('gym' in paiement.type) ? '<span class="badge bg-info poppins"> <svg xmlns="http://www.w3.org/2000/svg"
+                    width="1em"
+                    height="1em"
+                    fill="currentColor"
+                    viewbox="0 0 16 16"
+                    class="bi bi-building">
+                    <path fill-rule="evenodd"
+                      d="M14.763.075A.5.5 0 0 1 15 .5v15a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5V14h-1v1.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V10a.5.5 0 0 1 .342-.474L6 7.64V4.5a.5.5 0 0 1 .276-.447l8-4a.5.5 0 0 1 .487.022zM6 8.694 1 10.36V15h5V8.694zM7 15h2v-1.5a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 .5.5V15h2V1.309l-7 3.5V15z"></path>
+                    <path d="M2 11h1v1H2v-1zm2 0h1v1H4v-1zm-2 2h1v1H2v-1zm2 0h1v1H4v-1zm4-4h1v1H8V9zm2 0h1v1h-1V9zm-2 2h1v1H8v-1zm2 0h1v1h-1v-1zm2-2h1v1h-1V9zm0 2h1v1h-1v-1zM8 7h1v1H8V7zm2 0h1v1h-1V7zm2 0h1v1h-1V7zM8 5h1v1H8V5zm2 0h1v1h-1V5zm2 0h1v1h-1V5zm0-2h1v1h-1V3z"></path>
+                  </svg> Salle</span>' : '<span class="badge bg-info poppins"><svg xmlns="http://www.w3.org/2000/svg"
+                    width="1em"
+                    height="1em"
+                    fill="currentColor"
+                    viewbox="0 0 16 16"
+                    class="bi bi-bricks">
+                    <path d="M0 .5A.5.5 0 0 1 .5 0h15a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-.5.5H14v2h1.5a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-.5.5H14v2h1.5a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-.5.5H.5a.5.5 0 0 1-.5-.5v-3a.5.5 0 0 1 .5-.5H2v-2H.5a.5.5 0 0 1-.5-.5v-3A.5.5 0 0 1 .5 6H2V4H.5a.5.5 0 0 1-.5-.5v-3zM3 4v2h4.5V4H3zm5.5 0v2H13V4H8.5zM3 10v2h4.5v-2H3zm5.5 0v2H13v-2H8.5zM1 1v2h3.5V1H1zm4.5 0v2h5V1h-5zm6 0v2H15V1h-3.5zM1 7v2h3.5V7H1zm4.5 0v2h5V7h-5zm6 0v2H15V7h-3.5zM1 13v2h3.5v-2H1zm4.5 0v2h5v-2h-5zm6 0v2H15v-2h-3.5z"></path>
+                  </svg> Voie</span>' }}</td>
+							<td>{{('pending' in paiement.status) ? '<span class="badge bg-warning poppins">En attente</span>' : ('failed' in
+                                paiement.status) ? '<span class="badge bg-danger poppins">Refusé</span>' : '<span class="badge bg-success poppins">Payé</span>'}}</td>
+							<td>{{paiement.createdAt|date('d/m/Y H:i')}}</td>
+							<td>{{paiement.updatedAt|date('d/m/Y H:i')}}</td>
+							<td>{{paiement.amount / 100}} €</td>
+							<td>{{paiement.franchise.name}} (n°{{paiement.franchise.id}})</td>
+							{% if ('pending' in paiement.status) or ('failed' in paiement.status) %}
+							<td><button class="btn btn-danger" type="button" onclick="location.replace('/admin/paiement/remind/{{paiement.franchise.id}}/{{paiement.franchise.admin}}')">
+								Envoyer un rappel
+							</button>
+							</td>
+							{% endif %}
+						</tr>			
+					{% endfor %}
+					</tbody>
+				</table>
+			</div>
+			<div class="row">
+				<div class="col-md-6 align-self-center">
+<p id="dataTable_info" class="dataTables_info poppins" role="status" aria-live="polite">{{paiements|length}}
+	paiement{% if paiements|length > 1 %}s{% endif %}</p>
+</p>
+
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script src="{{asset('js/adminCheckboxRole.js')}}"></script>
+
+
+
+
+{% endblock %}

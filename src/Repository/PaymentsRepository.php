@@ -57,6 +57,19 @@ class PaymentsRepository extends ServiceEntityRepository
     return $query->execute();
   }
 
+  public function getNotPaidById($id)
+  {
+    $qb = $this->createQueryBuilder('payment')
+      ->where('payment.franchise = :id')
+      ->andWhere('payment.status != :status')
+      ->setParameter('id', $id)
+      ->setParameter('status', 'success');
+
+    $query = $qb->getQuery();
+
+    return $query->execute();
+  }
+
   // /**
   //  * @return Payments[] Returns an array of Payments objects
   //  */

@@ -3,8 +3,11 @@
 namespace App\Controller;
 
 use App\Entity\Event;
+use App\Entity\Payments;
+use App\Entity\Route as RouteEntity;
 use App\Entity\Gym;
 use App\Entity\Media;
+use App\Entity\Franchise;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -170,7 +173,6 @@ class AdminController extends AbstractController
     $entityManager = $this->getDoctrine()->getManager();
     $events = $entityManager->getRepository(Event::class)->findAll();
     $gyms = $entityManager->getRepository(Gym::class)->findAll();
-    dump($events);
     return $this->renderForm('admin/events.html.twig', [
       'events' => $events,
       'gyms' => $gyms,
@@ -228,6 +230,258 @@ class AdminController extends AbstractController
     ]);
   }
 
+  // Remove media
+  #[IsGranted("ROLE_SUPER_ADMIN")]
+  #[Route('/admin/medias/suppression/{id}', name: 'admin_medias_deletion')]
+  public function admin_medias_deletion(int $id): Response
+  {
+    $media = $this->getDoctrine()
+      ->getRepository(Media::class)
+      ->find($id);
+    $mediaRepo = $this->getDoctrine()
+      ->getManager()
+      ->getRepository(Media::class);
+    $mediaRepo->remove($media);
+
+    return $this->redirectToRoute('admin_medias');
+  }
+
+  /**
+   * Fin gestion des médias
+   */
+
+  /**
+   * Gestion des franchises
+   */
+  #[IsGranted("ROLE_SUPER_ADMIN")]
+  #[Route('/admin/franchises', name: 'admin_franchises')]
+  public function admin_franchises(Request $request): Response
+  {
+    $this->setInformations();
+    $form = $this->createForm(GlobalSearchType::class);
+    $form->handleRequest($request);
+
+    if ($form->isSubmitted() && $form->isValid()) {
+      $search = $form->get('search')->getData();
+      $franchiseRepo = $this->getDoctrine()
+        ->getManager()
+        ->getRepository(Franchise::class);
+      $result = $franchiseRepo->search('%' . $search . '%');
+      return $this->renderForm('admin/franchises.html.twig', [
+        'franchises' => $result,
+        'form' => $form,
+      ]);
+    }
+
+    $entityManager = $this->getDoctrine()->getManager();
+    $franchises = $entityManager->getRepository(Franchise::class)->findAll();
+    return $this->renderForm('admin/franchises.html.twig', [
+      'franchises' => $franchises,
+      'form' => $form,
+    ]);
+  }
+
+  // Delete franchise by id
+  #[IsGranted("ROLE_SUPER_ADMIN")]
+  #[Route('/admin/franchise/suppression/{id}', name: 'admin_franchises_deletion')]
+  public function admin_franchises_deletion(int $id): Response
+  {
+    $franchise = $this->getDoctrine()
+      ->getRepository(Franchise::class)
+      ->find($id);
+    $franchiseRepo = $this->getDoctrine()
+      ->getManager()
+      ->getRepository(Franchise::class);
+    $franchiseRepo->remove($franchise);
+
+    return $this->redirectToRoute('admin_franchises');
+  }
+
+  /**
+   * Fin gestion des franchises
+   */
+
+  /** Gestion des salles
+   *
+   */
+  #[IsGranted("ROLE_SUPER_ADMIN")]
+  #[Route('/admin/salles', name: 'admin_salles')]
+  public function admin_salles(Request $request): Response
+  {
+    $this->setInformations();
+    $form = $this->createForm(GlobalSearchType::class);
+    $form->handleRequest($request);
+
+    if ($form->isSubmitted() && $form->isValid()) {
+      $search = $form->get('search')->getData();
+      $gymRepo = $this->getDoctrine()
+        ->getManager()
+        ->getRepository(Gym::class);
+      $result = $gymRepo->search('%' . $search . '%');
+      return $this->renderForm('admin/salles.html.twig', [
+        'salles' => $result,
+        'form' => $form,
+      ]);
+    }
+
+    $entityManager = $this->getDoctrine()->getManager();
+    $gyms = $entityManager->getRepository(Gym::class)->findAll();
+    return $this->renderForm('admin/salles.html.twig', [
+      'salles' => $gyms,
+      'form' => $form,
+    ]);
+  }
+
+  // Delete gym by id
+  #[IsGranted("ROLE_SUPER_ADMIN")]
+  #[Route('/admin/salle/suppression/{id}', name: 'admin_salles_deletion')]
+  public function admin_salles_deletion(int $id): Response
+  {
+    $gym = $this->getDoctrine()
+      ->getRepository(Gym::class)
+      ->find($id);
+    $gymRepo = $this->getDoctrine()
+      ->getManager()
+      ->getRepository(Gym::class);
+    $gymRepo->remove($gym);
+
+    return $this->redirectToRoute('admin_salles');
+  }
+
+  /**
+   * Fin gestion des salles
+   */
+
+  /**
+   * Gestion des voies
+   */
+  #[IsGranted("ROLE_SUPER_ADMIN")]
+  #[Route('/admin/voies', name: 'admin_voies')]
+  public function admin_voies(Request $request): Response
+  {
+    $this->setInformations();
+    $form = $this->createForm(GlobalSearchType::class);
+    $form->handleRequest($request);
+
+    if ($form->isSubmitted() && $form->isValid()) {
+      $search = $form->get('search')->getData();
+      $voieRepo = $this->getDoctrine()
+        ->getManager()
+        ->getRepository(RouteEntity::class);
+      $result = $voieRepo->search('%' . $search . '%');
+      return $this->renderForm('admin/voies.html.twig', [
+        'voies' => $result,
+        'form' => $form,
+      ]);
+    }
+
+    $entityManager = $this->getDoctrine()->getManager();
+    $voies = $entityManager->getRepository(RouteEntity::class)->findAll();
+    return $this->renderForm('admin/voies.html.twig', [
+      'voies' => $voies,
+      'form' => $form,
+    ]);
+  }
+
+  // Delete voie by id
+  #[IsGranted("ROLE_SUPER_ADMIN")]
+  #[Route('/admin/voie/suppression/{id}', name: 'admin_voies_deletion')]
+  public function admin_voies_deletion(int $id): Response
+  {
+    $voie = $this->getDoctrine()
+      ->getRepository(RouteEntity::class)
+      ->find($id);
+    $voieRepo = $this->getDoctrine()
+      ->getManager()
+      ->getRepository(RouteEntity::class);
+    $voieRepo->remove($voie);
+
+    return $this->redirectToRoute('admin_voies');
+  }
+
+  /**
+   * Fin gestion des voies
+   */
+
+  /**
+   * Gestion des paiements
+   */
+  #[IsGranted("ROLE_SUPER_ADMIN")]
+  #[Route('/admin/paiements', name: 'admin_paiements')]
+  public function admin_paiements(Request $request): Response
+  {
+    $this->setInformations();
+    $form = $this->createForm(GlobalSearchType::class);
+    $form->handleRequest($request);
+
+    if ($form->isSubmitted() && $form->isValid()) {
+      $search = $form->get('search')->getData();
+      $paymentRepo = $this->getDoctrine()
+        ->getManager()
+        ->getRepository(Payments::class);
+      $result = $paymentRepo->search('%' . $search . '%');
+      return $this->renderForm('admin/paiements.html.twig', [
+        'paiements' => $result,
+        'form' => $form,
+      ]);
+    }
+
+    $entityManager = $this->getDoctrine()->getManager();
+    $payments = $entityManager->getRepository(Payments::class)->findAll();
+    return $this->renderForm('admin/paiements.html.twig', [
+      'paiements' => $payments,
+      'form' => $form,
+    ]);
+  }
+
+  // Send email reminder to user
+  #[IsGranted("ROLE_SUPER_ADMIN")]
+  #[Route('/admin/paiement/remind/{franchise}/{user}', name: 'admin_paiement_reminder')]
+  public function admin_paiement_reminder($franchise, $user): Response
+  {
+    $franchise = $this->getDoctrine()
+      ->getRepository(Franchise::class)
+      ->find($franchise);
+    $payments = $this->getDoctrine()
+      ->getRepository(Payments::class)
+      ->getNotPaidById($franchise->getId());
+
+    // get user by id
+    $user = $this->getDoctrine()
+      ->getRepository(User::class)
+      ->find($user);
+
+    $userEmail = $user->getEmail();
+    $userName = $user->getFirstname();
+
+    $mailer = new MailerController();
+    $mailSent = $mailer->sendPaymentReminderEmail(
+      $userEmail,
+      $userName,
+      $payments
+    );
+    if ($mailSent) {
+      $this->addFlash(
+        'success',
+        'Un email de rappel a été envoyé à ' .
+          $userName .
+          ' (' .
+          $userEmail .
+          ') avec le récapitulatif de l\'intégralité de ses paiements à régulariser.'
+      );
+    } else {
+      $this->addFlash(
+        'error',
+        'Une erreur s\est produite lors de l\'envoi de l\'email de rappel à ' .
+          $userName .
+          ' (' .
+          $userEmail .
+          '). Veuillez rééssayer.'
+      );
+    }
+    return $this->redirectToRoute('admin_paiements');
+  }
+
   private function setInformations()
   {
     $entityManager = $this->getDoctrine()->getManager();
@@ -240,11 +494,23 @@ class AdminController extends AbstractController
     );
     $routesCount = -1;
     $gymsCount = count($entityManager->getRepository(Gym::class)->findAll());
+    $franchisesCount = count(
+      $entityManager->getRepository(Franchise::class)->findAll()
+    );
+    $routesCount = count(
+      $entityManager->getRepository(RouteEntity::class)->findAll()
+    );
+    $paymentsCount = count(
+      $entityManager->getRepository(Payments::class)->findAll()
+    );
 
     $this->get('session')->set('users_count', $usersCount);
     $this->get('session')->set('events_count', $eventsCount);
     $this->get('session')->set('medias_count', $mediasCount);
     $this->get('session')->set('routes_count', $routesCount);
     $this->get('session')->set('gyms_count', $gymsCount);
+    $this->get('session')->set('franchises_count', $franchisesCount);
+    $this->get('session')->set('routes_count', $routesCount);
+    $this->get('session')->set('payments_count', $paymentsCount);
   }
 }

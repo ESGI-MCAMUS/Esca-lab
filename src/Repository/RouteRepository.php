@@ -14,15 +14,34 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class RouteRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
-    {
-        parent::__construct($registry, Route::class);
-    }
+  public function __construct(ManagerRegistry $registry)
+  {
+    parent::__construct($registry, Route::class);
+  }
 
-    // /**
-    //  * @return Route[] Returns an array of Route objects
-    //  */
-    /*
+  public function remove(Route $entity, bool $flush = true): void
+  {
+    $this->_em->remove($entity);
+    if ($flush) {
+      $this->_em->flush();
+    }
+  }
+
+  public function search($value)
+  {
+    $qb = $this->createQueryBuilder('route')
+      ->where('route.name LIKE :query')
+      ->setParameter('query', $value);
+
+    $query = $qb->getQuery();
+
+    return $query->execute();
+  }
+
+  // /**
+  //  * @return Route[] Returns an array of Route objects
+  //  */
+  /*
     public function findByExampleField($value)
     {
         return $this->createQueryBuilder('r')
@@ -36,7 +55,7 @@ class RouteRepository extends ServiceEntityRepository
     }
     */
 
-    /*
+  /*
     public function findOneBySomeField($value): ?Route
     {
         return $this->createQueryBuilder('r')

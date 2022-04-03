@@ -20,6 +20,7 @@ use Symfony\Component\Security\Core\Security;
 use Symfony\Component\HttpFoundation\Request;
 
 use App\Form\GlobalSearchType;
+use App\Form\AddFranchiseType;
 
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -295,6 +296,34 @@ class AdminController extends AbstractController
     $franchiseRepo->remove($franchise);
 
     return $this->redirectToRoute('admin_franchises');
+  }
+
+  // Add franchise
+  #[IsGranted("ROLE_SUPER_ADMIN")]
+  #[Route('/admin/franchises/ajouter', name: 'admin_franchises_add')]
+  public function admin_franchises_add(Request $request): Response
+  {
+    // get all users
+    $entityManager = $this->getDoctrine()->getManager();
+    $users = $entityManager->getRepository(User::class)->findAll();
+    $this->setInformations();
+    $franchise = new Franchise();
+    $form = $this->createForm(AddFranchiseType::class, $franchise, [
+      'users' => $users,
+    ]);
+    $form->handleRequest($request);
+
+    if ($form->isSubmitted() && $form->isValid()) {
+      $entityManager = $this->getDoctrine()->getManager();
+      $entityManager->persist($franchise);
+      $entityManager->flush();
+
+      return $this->redirectToRoute('admin_franchises');
+    }
+
+    return $this->renderForm('admin/addFranchises.html.twig', [
+      'form' => $form,
+    ]);
   }
 
   /**

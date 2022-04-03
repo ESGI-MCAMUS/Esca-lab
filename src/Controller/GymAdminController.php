@@ -5,8 +5,10 @@ namespace App\Controller;
 use App\Entity\Event;
 use App\Entity\Gym;
 use App\Entity\User;
+use App\Form\EventType;
 use App\Form\GlobalSearchType;
 use DateTime;
+use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -170,6 +172,62 @@ class GymAdminController extends AbstractController
             'events' => $events,
             'form' => $form,
         ]);
+    }
+
+    #[IsGranted("ROLE_ADMIN_SALLE")]
+    #[Route('/gym/evenements/ajout', name: 'gym_events_add')]
+    public function admin_events_add(Request $request, EntityManagerInterface $em): Response
+    {
+        $this->setInformations();
+        $form = $this->createForm(EventType::class);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $event = $form->getData();
+            $event->setGym($this->user->getGym());
+
+            $em->persist($event);
+            $em->flush();
+
+            return $this->redirectToRoute('gym_events');
+        }
+
+        return $this->renderForm('event/add.html.twig', [
+            'form_add' => $form,
+        ]);
+    }
+
+    #[IsGranted("ROLE_ADMIN_SALLE")]
+    #[Route('/gym/evenements/edition/{id}', name: 'gym_events_edit')]
+    public function admin_events_edit($id, Request $request, EntityManagerInterface $em): Response
+    {
+        $this->setInformations();
+
+        $repo = $this->getDoctrine()->getRepository(Event::class);
+        $event = $repo->findOneBy(["id" => $id, "gym" => $this->user->getGym()->getId()]);
+
+        if ($event) {
+            $form = $this->createForm(EventType::class)->setData($event);
+            $form->handleRequest($request);
+
+            if ($form->isSubmitted() && $form->isValid()) {
+                $eventEdit = $form->getData();
+                $event->setTitle($eventEdit->getTitle());
+                $event->setDescription($eventEdit->getDescription());
+                $event->setEventDate($eventEdit->getEventDate());
+                $event->setEndDate($eventEdit->getEndDate());
+
+                $em->persist($event);
+                $em->flush();
+
+                return $this->redirectToRoute('gym_events');
+            }
+
+            return $this->renderForm('event/edit.html.twig', [
+                'form_edit' => $form,
+            ]);
+        }
+        return $this->redirectToRoute('gym_events');
     }
 
     #[IsGranted("ROLE_ADMIN_SALLE")]

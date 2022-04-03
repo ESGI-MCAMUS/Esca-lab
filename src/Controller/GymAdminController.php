@@ -10,8 +10,10 @@ use App\Form\EventType;
 use App\Form\GlobalSearchType;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\Persistence\ManagerRegistry;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -41,6 +43,7 @@ class GymAdminController extends AbstractController
     #[Route('/gym/voies', name: 'gym_routes')]
     public function routes(): Response
     {
+        $this->setInformations();
         $routes = $this->user->getGym()->getRoutes();
         return $this->render('gym/routes.html.twig', [
             'routes' => $routes,
@@ -70,6 +73,7 @@ class GymAdminController extends AbstractController
     #[Route('/gym/employees', name: 'gym_employees')]
     public function employees(): Response
     {
+        $this->setInformations();
         $repo = $this->getDoctrine()
             ->getManager()
             ->getRepository(User::class);
@@ -84,6 +88,7 @@ class GymAdminController extends AbstractController
     #[Route('/gym/employees/add', name: 'add_gym_employee')]
     public function addEmployee(Request $request, EntityManagerInterface $em) {
 
+        $this->setInformations();
         $form = $this->createForm(EmployeeType::class);
         $form->handleRequest($request);
 
@@ -92,18 +97,18 @@ class GymAdminController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $search_user = $form->getData()['username'];
 
-            // we retrieve our friends so we don't get friends and randoms
-            $friends = $this->user->getFriends()->getValues();
+            // we retrieve our employees so we don't get employees and randoms
+            $employees = $em->getRepository(User::class)->findBy(['gym' => $this->user->getGym()->getId()]);
 
             $ids_arra = [];
 
-            foreach ($friends as $friend) {
-                $ids_arra[] = $friend->getId();
+            foreach ($employees as $employee) {
+                $ids_arra[] = $employee->getId();
             }
 
             $liste_user = $em->getRepository(User::class)->findAllUserMatchingName($search_user);
 
-            // we remove the users that are already friends with us
+            // we remove the users that are already employees with us
             $user_array = [];
             foreach ($liste_user as $user) {
                 if(!in_array($user->getId(), $ids_arra)) {
@@ -118,6 +123,26 @@ class GymAdminController extends AbstractController
             'liste_user'    => $liste_user,
             'hidden_uri'    => $request->getUri()
         ]);
+    }
+
+    #[Route('/gym/employees/add/{userId}', name: 'add_gym_employee_id', defaults: ["userId" => null], methods: ['POST'])]
+    public function addEmployeeUserId(ManagerRegistry $doctrine, $userId): Response
+    {
+        $success = true;
+
+        $entityManager = $doctrine->getManager();
+        $newEmployee = $entityManager->getRepository(User::class)->find($userId);
+
+        if($newEmployee->getId() !== null) {
+            $newEmployee->setGym($this->user->getGym());
+            $newEmployee->setRoles(["ROLE_USER", "ROLE_OUVREUR"]);
+            $entityManager->persist($newEmployee);
+            $entityManager->flush();
+        } else {
+            $success = false;
+        }
+
+        return new JsonResponse(array('success' => $success));
     }
 
     #[IsGranted('ROLE_ADMIN_SALLE')]

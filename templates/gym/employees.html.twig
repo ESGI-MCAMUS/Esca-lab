@@ -9,6 +9,9 @@
             <div class="d-sm-flex justify-content-between align-items-center mb-4">
                 <h3 class="text-dark mb-0 poppins bold text-black" style="color: rgb(33,37,41);">Employés de
                     <i>{{ app.user.gym.name }}</i></h3>
+                {% if "ROLE_ADMIN_FRANCHISE" not in app.user.roles %}
+                    <a href="{{ path('add_gym_employee') }}"><button type="button" class="btn btn-success ms-2">+ Add New</button></a>
+                {% endif %}
             </div>
             <div class="row">
                 <div class="table table-responsive mt-2">

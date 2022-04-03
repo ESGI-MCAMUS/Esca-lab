@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Event;
 use App\Entity\Gym;
 use App\Entity\User;
+use App\Form\EmployeeType;
 use App\Form\EventType;
 use App\Form\GlobalSearchType;
 use DateTime;
@@ -76,6 +77,46 @@ class GymAdminController extends AbstractController
 
         return $this->render('gym/employees.html.twig', [
             'employees' => $employees,
+        ]);
+    }
+
+    #[IsGranted('ROLE_ADMIN_SALLE')]
+    #[Route('/gym/employees/add', name: 'add_gym_employee')]
+    public function addEmployee(Request $request, EntityManagerInterface $em) {
+
+        $form = $this->createForm(EmployeeType::class);
+        $form->handleRequest($request);
+
+        $liste_user = [];
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $search_user = $form->getData()['username'];
+
+            // we retrieve our friends so we don't get friends and randoms
+            $friends = $this->user->getFriends()->getValues();
+
+            $ids_arra = [];
+
+            foreach ($friends as $friend) {
+                $ids_arra[] = $friend->getId();
+            }
+
+            $liste_user = $em->getRepository(User::class)->findAllUserMatchingName($search_user);
+
+            // we remove the users that are already friends with us
+            $user_array = [];
+            foreach ($liste_user as $user) {
+                if(!in_array($user->getId(), $ids_arra)) {
+                    $user_array[] = $user;
+                }
+            }
+            $liste_user = $user_array;
+        }
+
+        return $this->renderForm('gym/employee_add.html.twig', [
+            'form_add'      => $form,
+            'liste_user'    => $liste_user,
+            'hidden_uri'    => $request->getUri()
         ]);
     }
 

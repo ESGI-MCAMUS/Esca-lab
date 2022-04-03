@@ -1,4 +1,4 @@
-{% extends 'admin-user.html.twig' %}
+{% extends is_granted('ROLE_ADMIN_SALLE') ? 'admin-user.html.twig' : 'user.html.twig' %}
 
 {% block title %}Gym Admin ◈ Esca'Lab
 {% endblock %}

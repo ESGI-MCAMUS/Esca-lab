@@ -14,7 +14,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Security;
 
-#[IsGranted('ROLE_ADMIN_SALLE')]
 class GymAdminController extends AbstractController
 {
     private $user;
@@ -24,6 +23,7 @@ class GymAdminController extends AbstractController
         $this->user = $security->getUser();
     }
 
+    #[IsGranted('ROLE_ADMIN_SALLE')]
     #[Route('/gym/kpi', name: 'gym_kpi')]
     public function index(): Response
     {
@@ -34,6 +34,7 @@ class GymAdminController extends AbstractController
         ]);
     }
 
+    #[IsGranted('ROLE_OUVREUR')]
     #[Route('/gym/voies', name: 'gym_routes')]
     public function routes(): Response
     {
@@ -62,6 +63,7 @@ class GymAdminController extends AbstractController
         ]);
     }
 
+    #[IsGranted('ROLE_ADMIN_SALLE')]
     #[Route('/gym/employees', name: 'gym_employees')]
     public function employees(): Response
     {
@@ -75,6 +77,7 @@ class GymAdminController extends AbstractController
         ]);
     }
 
+    #[IsGranted('ROLE_ADMIN_SALLE')]
     #[Route('/gym/employees/edit/{id}/{check}', name: 'edit_gym_employee')]
     public function editEmployee($id, $check = 'user')
     {
@@ -115,6 +118,7 @@ class GymAdminController extends AbstractController
         return $this->redirectToRoute('gym_employees');
     }
 
+    #[IsGranted('ROLE_ADMIN_SALLE')]
     #[Route('/gym/employees/remove/{id}', name: 'remove_gym_employee')]
     public function removeEmployee($id)
     {

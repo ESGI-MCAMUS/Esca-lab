@@ -1,4 +1,4 @@
-{% extends 'admin-user.html.twig' %}
+{% extends is_granted('ROLE_ADMIN_SALLE') ? 'admin-user.html.twig' : 'user.html.twig' %}
 
 {% block title %}Gym Admin ◈ Esca'Lab
 {% endblock %}
@@ -64,4 +64,29 @@
                         {% else %}
                         {% endfor %}
                     </div>
+    <div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="myModalLabel">Suppression</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Êtes-vous sûr de vouloir supprimer cette route ?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+                    <a class="btn btn-outline-danger">Supprimer</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        var modal = document.getElementById('confirm-delete');
+        modal.addEventListener('show.bs.modal', function (e) {
+            var btn = this.getElementsByClassName('btn-outline-danger')[0];
+            btn.href = e.relatedTarget.getAttribute('data-href');
+            return false;
+        });
+    </script>
 {% endblock %}

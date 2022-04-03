@@ -29,7 +29,7 @@ class RouteController extends AbstractController
         $this->user = $security->getUser();
     }
 
-    #[IsGranted('ROLE_ADMIN_SALLE')]
+    #[IsGranted('ROLE_OUVREUR')]
     #[Route('/route/add/{gymId}', name: 'route_add', defaults: ["gymId" => null])]
     public function add($gymId, EntityManagerInterface $em, Request $request): Response
     {
@@ -58,7 +58,7 @@ class RouteController extends AbstractController
         ]);
     }
 
-    #[IsGranted('ROLE_ADMIN_SALLE')]
+    #[IsGranted('ROLE_OUVREUR')]
     #[Route('/route/edit/{id}/{gymId}', name: 'route_edit', defaults: ["gymId" => null])]
     public function edit($id, $gymId, EntityManagerInterface $em, Request $request): Response
     {
@@ -99,7 +99,7 @@ class RouteController extends AbstractController
         return $this->redirectToRoute("gym_routes");
     }
 
-    #[IsGranted('ROLE_ADMIN_SALLE')]
+    #[IsGranted('ROLE_OUVREUR')]
     #[Route('/route/remove/{id}', name: 'route_remove')]
     public function remove($id, EntityManagerInterface $em)
     {

@@ -2,11 +2,14 @@
 
 namespace App\Controller;
 
+use App\Entity\Event;
 use App\Entity\Gym;
 use App\Entity\User;
+use App\Form\GlobalSearchType;
 use DateTime;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Security;
@@ -131,6 +134,60 @@ class GymAdminController extends AbstractController
 
         return $this->redirectToRoute('gym_employees');
     }
+
+
+    /**
+     * Gestion des évènements
+     */
+
+    #[IsGranted("ROLE_ADMIN_SALLE")]
+    #[Route('/gym/evenements', name: 'gym_events')]
+    public function admin_events(Request $request): Response
+    {
+        $this->setInformations();
+        $form = $this->createForm(GlobalSearchType::class);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $search = $form->get('search')->getData();
+            $eventRepo = $this->getDoctrine()
+                ->getManager()
+                ->getRepository(Event::class);
+            $result = $eventRepo->searchByGym('%' . $search . '%', $this->user->getGym()->getId());
+            return $this->renderForm('admin/events.html.twig', [
+                'events' => $result,
+                'form' => $form,
+            ]);
+        }
+
+        $entityManager = $this->getDoctrine()->getManager();
+        $events = $entityManager->getRepository(Event::class)->findBy(['gym' => $this->user->getGym()->getId()]);
+        return $this->renderForm('admin/events.html.twig', [
+            'events' => $events,
+            'form' => $form,
+        ]);
+    }
+
+    #[IsGranted("ROLE_ADMIN_SALLE")]
+    #[Route('/gym/evenements/suppression/{id}', name: 'gym_events_deletion')]
+    public function admin_events_deletion(int $id): Response
+    {
+        $event = $this->getDoctrine()
+            ->getRepository(Event::class)
+            ->findOneBy(['id' => $id, 'gym' => $this->user->getGym()->getId()]);
+        $eventRepo = $this->getDoctrine()
+            ->getManager()
+            ->getRepository(Event::class);
+
+        if ($event) {
+            $eventRepo->remove($event);
+        }
+
+        return $this->redirectToRoute('gym_events');
+    }
+    /**
+     * Fin gestion des évènements
+     */
 
     private function setInformations()
     {

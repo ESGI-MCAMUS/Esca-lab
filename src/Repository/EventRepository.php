@@ -57,6 +57,19 @@ class EventRepository extends ServiceEntityRepository
     return $query->execute();
   }
 
+  public function searchByGym($value, $gym) {
+      $qb = $this->createQueryBuilder('event')
+          ->where('event.title LIKE :query')
+          ->orWhere('event.description LIKE :query')
+          ->andWhere('event.gym_id = :gym')
+          ->setParameter('query', $value)
+          ->setParameter('gym', $gym);
+
+      $query = $qb->getQuery();
+
+      return $query->execute();
+  }
+
   // /**
   //  * @return Event[] Returns an array of Event objects
   //  */

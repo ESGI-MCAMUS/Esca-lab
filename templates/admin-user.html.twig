@@ -136,7 +136,11 @@
           <ul class="navbar-nav text-light" id="accordionSidebar-1">
             <li class="nav-item">
               <a class="nav-link poppins regular"
-                href="table.html"
+                {% if is_granted('ROLE_ADMIN_SALLE') and "ROLE_ADMIN_FRANCHISE" not in app.user.roles %}
+                  href="{{ path('gym_events') }}"
+                {% elseif is_granted('ROLE_SUPER_ADMIN') %}
+                  href="{{ path('admin_events') }}"
+                {% endif %}
                 style="padding: 10px;color: rgb(33,37,41);">
                 <svg xmlns="http://www.w3.org/2000/svg"
                   width="1em"

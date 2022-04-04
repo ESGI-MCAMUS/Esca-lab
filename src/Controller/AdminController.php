@@ -305,7 +305,9 @@ class AdminController extends AbstractController
   {
     // get all users
     $entityManager = $this->getDoctrine()->getManager();
-    $users = $entityManager->getRepository(User::class)->findAll();
+    $users = $entityManager
+      ->getRepository(User::class)
+      ->findBy([], ['email' => 'ASC']);
     $this->setInformations();
     $franchise = new Franchise();
     $form = $this->createForm(AddFranchiseType::class, $franchise, [
@@ -487,12 +489,14 @@ class AdminController extends AbstractController
       ->getNotPaidById($franchise->getId());
 
     // get user by id
-    $user = $this->getDoctrine()
+    $userDoctrine = $this->getDoctrine()
       ->getRepository(User::class)
       ->find($user);
 
-    $userEmail = $user->getEmail();
-    $userName = $user->getFirstname();
+    dump($userDoctrine);
+
+    $userEmail = $userDoctrine->getEmail();
+    $userName = $userDoctrine->getFirstname();
 
     $mailer = new MailerController();
     $mailSent = $mailer->sendPaymentReminderEmail(

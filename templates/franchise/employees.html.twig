@@ -115,5 +115,32 @@
             </tbody>
         </table>
     </div>
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Suppression</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Êtes-vous sûr de vouloir supprimer cet|te employé|e ?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                    <a class="btn btn-outline-danger">Supprimer</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        var modal = document.getElementById('exampleModal');
+
+        modal.addEventListener('show.bs.modal', function (e) {
+            var btn = this.getElementsByClassName('btn-outline-danger')[0];
+            btn.href = e.relatedTarget.getAttribute('data-href');
+            return false;
+        });
+    </script>
 </div>
 {% endblock %}

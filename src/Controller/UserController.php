@@ -28,6 +28,9 @@ class UserController extends AbstractController
     #[Route('/user', name: 'user')]
     public function index(): Response
     {
+        if ($this->isGranted('ROLE_OUVREUR')) {
+            $this->setInformations();
+        }
         return $this->render('user/resume.html.twig', [
             'controller_name' => 'UserController',
         ]);
@@ -146,5 +149,17 @@ class UserController extends AbstractController
         return $this->render('user/medias.html.twig', [
             'controller_name' => 'UserController',
         ]);
+    }
+
+    private function setInformations()
+    {
+        $repo = $this->getDoctrine()
+            ->getManager()
+            ->getRepository(User::class);
+        $ways = $this->user->getGym()->getRoutes();
+
+        $waysCount = count($ways);
+
+        $this->get('session')->set('ways_count', $waysCount);
     }
 }

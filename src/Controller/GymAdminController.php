@@ -57,9 +57,7 @@ class GymAdminController extends AbstractController
         $repo = $this->getDoctrine()
             ->getManager()
             ->getRepository(Gym::class);
-        $gym =
-            $this->user->getGym() ??
-            $repo->findOneBy([
+        $gym = $repo->findOneBy([
                 'id' => $id,
                 'franchise' => $this->user->getFranchise()->getId(),
             ]);

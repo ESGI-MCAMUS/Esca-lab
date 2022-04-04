@@ -279,4 +279,31 @@ class RouteController extends AbstractController
 
     return new JsonResponse(['success' => $success]);
   }
+
+    #[IsGranted('ROLE_USER')]
+    #[Route('/route/{routeId}', name: 'route_display')]
+    public function route_display(ManagerRegistry $doctrine, $routeId): Response
+    {
+        $entityManager = $doctrine->getManager();
+        $route      = $entityManager->getRepository(RouteEntity::class)->find($routeId);
+        $gym        = $route->getGym();
+        $franchise  = $gym->getFranchise();
+
+        $resolvedRoutes = $this->user->getRoutes();
+        $resolved = false;
+        foreach($resolvedRoutes as $key => $value) {
+            if($value->getId() === $routeId) {
+                $resolved = true;
+                break;
+            }
+        }
+
+        return $this->render('route/index.html.twig', [
+            'user'      => $this->user,
+            'franchise' => $franchise,
+            'gym'       => $gym,
+            'route'     => $route,
+            'resolved'  => $resolved
+        ]);
+    }
 }

@@ -5,9 +5,13 @@ namespace App\Controller;
 use App\Entity\Gym;
 use App\Entity\Payments;
 use App\Entity\User;
+use App\Form\EmployeeType;
+use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bridge\Doctrine\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Security;
@@ -49,6 +53,72 @@ class FranchiseAdminController extends AbstractController
       'employees' => $employees,
     ]);
   }
+
+    #[IsGranted('ROLE_ADMIN_FRANCHISE')]
+    #[Route('/franchise/employees/add', name: 'add_franchise_employee')]
+    public function addEmployee(Request $request, EntityManagerInterface $em) {
+
+        $this->setInformations();
+        $form = $this->createForm(EmployeeType::class);
+        $form->handleRequest($request);
+
+        $liste_user = [];
+        $gyms = $this->user->getFranchise()->getGyms();
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $search_user = $form->getData()['username'];
+
+            // we retrieve our employees so we don't get employees and randoms
+            $employees = $em->getRepository(User::class)->findBy(['franchise' => $this->user->getFranchise()->getId()]);
+
+            $ids_arra = [];
+
+            foreach ($employees as $employee) {
+                $ids_arra[] = $employee->getId();
+            }
+
+            $liste_user = $em->getRepository(User::class)->findAllUserMatchingName($search_user);
+
+            // we remove the users that are already employees with us
+            $user_array = [];
+            foreach ($liste_user as $user) {
+                if(!in_array($user->getId(), $ids_arra)) {
+                    $user_array[] = $user;
+                }
+            }
+            $liste_user = $user_array;
+        }
+
+        return $this->renderForm('franchise/employee_add.html.twig', [
+            'form_add'      => $form,
+            'liste_user'    => $liste_user,
+            'gyms'          => $gyms,
+            'hidden_uri'    => $request->getUri()
+        ]);
+    }
+
+    #[IsGranted('ROLE_ADMIN_SALLE')]
+    #[Route('/franchise/employees/add/{userId}', name: 'add_franchise_employee_id', defaults: ["userId" => null], methods: ['POST'])]
+    public function addEmployeeUserId(\Doctrine\Persistence\ManagerRegistry $doctrine, $userId, Request $request): Response
+    {
+        $success = true;
+
+        $entityManager = $doctrine->getManager();
+        $newEmployee = $entityManager->getRepository(User::class)->find($userId);
+        $gym = $entityManager->getRepository(Gym::class)->findOneBy(['id' => $request->get('gym')]);
+
+        if($newEmployee->getId() !== null) {
+            $newEmployee->setGym($gym);
+            $newEmployee->setFranchise($this->user->getFranchise());
+            $newEmployee->setRoles(["ROLE_USER", "ROLE_OUVREUR"]);
+            $entityManager->persist($newEmployee);
+            $entityManager->flush();
+        } else {
+            $success = false;
+        }
+
+        return new JsonResponse(array('success' => $success));
+    }
 
   #[IsGranted('ROLE_ADMIN_FRANCHISE')]
   #[Route('/franchise/employees/edit/{id}/{check}', name: 'edit_franchise_employee')]
@@ -116,6 +186,7 @@ class FranchiseAdminController extends AbstractController
       $this->user->getFranchise()->getId()
     ) {
       $employee->setRoles(['ROLE_USER']);
+      $employee->setGym(null);
       $employee->setFranchise(null);
 
       $em = $this->getDoctrine()->getManager();

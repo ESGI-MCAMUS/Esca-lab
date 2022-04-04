@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\User;
 use App\Entity\Franchise;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -25,6 +26,13 @@ class FranchiseRepository extends ServiceEntityRepository
    */
   public function remove(Franchise $entity, bool $flush = true): void
   {
+    // Get user by id
+    $user = $this->getEntityManager()->getReference(
+      User::class,
+      $entity->getAdmin()
+    );
+    $user->setFranchise(null);
+
     // Remove all gyms from franchise
     foreach ($entity->getGyms() as $gym) {
       // Remove all routes from gym

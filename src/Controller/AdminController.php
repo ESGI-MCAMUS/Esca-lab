@@ -318,6 +318,17 @@ class AdminController extends AbstractController
       $entityManager->persist($franchise);
       $entityManager->flush();
 
+      dump($franchise);
+
+      $user = $this->getDoctrine()
+        ->getRepository(User::class)
+        ->find($franchise->getAdmin());
+
+      $user->setRoles(['ROLE_ADMIN_FRANCHISE']);
+      $user->setFranchise($franchise);
+      $entityManager->persist($user);
+      $entityManager->flush();
+
       return $this->redirectToRoute('admin_franchises');
     }
 

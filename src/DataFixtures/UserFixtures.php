@@ -69,6 +69,46 @@ class UserFixtures extends Fixture
     $adminAccount->setRoles(['ROLE_SUPER_ADMIN']);
     $manager->persist($adminAccount);
 
+    $this->generateUser(
+      $manager,
+      $generator,
+      'Admin',
+      'Franchise',
+      'AdminFranchise',
+      'admin@franchise.fr',
+      'ROLE_ADMIN_FRANCHISE'
+    );
+
+    $this->generateUser(
+      $manager,
+      $generator,
+      'Admin',
+      'Salle',
+      'AdminSalle',
+      'admin@salle.fr',
+      'ROLE_ADMIN_SALLE'
+    );
+
+    $this->generateUser(
+      $manager,
+      $generator,
+      'Ouvreur',
+      'Salle',
+      'OuvreurSalle',
+      'ouveur@salle.fr',
+      'ROLE_OUVREUR'
+    );
+
+    $this->generateUser(
+      $manager,
+      $generator,
+      'User',
+      'Lambda',
+      'AdminLambda',
+      'user@lambda.fr',
+      'ROLE_USER'
+    );
+
     $this->generateFranchise($manager);
 
     $manager->flush();
@@ -177,5 +217,32 @@ class UserFixtures extends Fixture
       $media->setCreatedAt(new \DateTime());
       $em->persist($media);
     }
+  }
+
+  public function generateUser(
+    EntityManager $em,
+    $generator,
+    $fn,
+    $ln,
+    $nn,
+    $email,
+    $role
+  ) {
+    //Admin part
+    $user = new User();
+    $user->setEmail($email);
+    $user->setFirstname($fn);
+    $user->setLastname($ln);
+    $user->setUsername($nn);
+    $user->setPassword(
+      '$2y$13$6lBervVYeDGuuwi5VeSv3e.H0YlWo03yNhWOgPWIA8BIHkKIC/InC'
+    );
+    $user->setBirthdate($generator->dateTimeBetween('-22 years', '-21 years'));
+    $user->setCreatedAt(new \DateTime());
+    $user->setOtp(12345);
+    $user->setIsActivated(true);
+    $user->setPicture('default.jpg');
+    $user->setRoles([$role]);
+    $em->persist($user);
   }
 }

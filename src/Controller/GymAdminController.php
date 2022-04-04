@@ -125,6 +125,7 @@ class GymAdminController extends AbstractController
         ]);
     }
 
+    #[IsGranted('ROLE_ADMIN_SALLE')]
     #[Route('/gym/employees/add/{userId}', name: 'add_gym_employee_id', defaults: ["userId" => null], methods: ['POST'])]
     public function addEmployeeUserId(ManagerRegistry $doctrine, $userId): Response
     {
@@ -135,6 +136,7 @@ class GymAdminController extends AbstractController
 
         if($newEmployee->getId() !== null) {
             $newEmployee->setGym($this->user->getGym());
+            $newEmployee->setFranchise($this->user->getGym()->getFranchise());
             $newEmployee->setRoles(["ROLE_USER", "ROLE_OUVREUR"]);
             $entityManager->persist($newEmployee);
             $entityManager->flush();
@@ -197,7 +199,8 @@ class GymAdminController extends AbstractController
 
         if ($employee->getGym()->getId() === $this->user->getGym()->getId()) {
             $employee->setRoles(['ROLE_USER']);
-            $employee->setgym(null);
+            $employee->setGym(null);
+            $employee->setFranchise(null);
 
             $em = $this->getDoctrine()->getManager();
             $em->persist($employee);

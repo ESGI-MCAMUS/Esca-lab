@@ -1,0 +1,72 @@
+{% extends 'admin-user.html.twig' %}
+
+{% block javascripts %}
+    <script src="{{asset('js/jquery.min.js')}}"></script>
+    <script src="{{ asset('js/franchise/add-employee.js') }}"></script>
+    <script src="{{ asset('js/tiny-toast-1.1.0/tiny-toast.min.js') }}"></script>
+{% endblock %}
+
+{% block body %}
+    <div class="container-fluid">
+        <div class="d-sm-flex align-items-center mb-4">
+            <h3 class="text-dark mb-0 poppins bold text-black" style="color: rgb(33,37,41);">Employés {% if liste_user|length > 0 %}({{ liste_user|length }} trouves){% endif %}</h3>
+        </div>
+        <br/>
+        <div class="row">
+            {{ form_start(form_add) }}
+
+            {{ form_end(form_add) }}
+            <select id="gyms">
+                {% for gym in gyms %}
+                    <option value="{{ gym.id }}">{{ gym.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        {% if liste_user|length > 0 %}
+            <div class="row">
+                {% for employee in liste_user %}
+                    <div id="carte-user-{{ employee.id }}" class="col-md-6 col-xl-3 mb-4">
+                        <div class="card shadow border-start-warning py-2">
+                            <div class="card-body">
+                                <div class="row align-items-center no-gutters">
+                                    <div class="col"></div>
+                                    <div class="col"><img src="{{ asset('images/profiles/'~employee.picture|e) }}"  class="img-tn rounded" /></div>
+                                    <div class="col"></div>
+                                </div>
+                                <hr class="bg-danger border-2 border-top border-secondary">
+                                <div class="row">
+                                    <div class="col" style="text-align: center;"><strong>{{ employee.firstname }} {{ employee.lastname }}</strong></div>
+                                </div>
+                                <div class="row">
+                                    <div class="col" style="text-align: center;">({{ employee.username }})</div>
+                                </div>
+                                <div class="row">
+                                    <div class="col" style="text-align: center;">
+                                        <button type="button" class="btn btn-success btn-add-employee" data-d-id="{{ employee.id }}">Ajouter l'employé(e)</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+    <input type="text" id="url_root" value="{{ hidden_uri }}" hidden></input>
+    <div id="toast-add-success" class="toast top-0 end-0 align-items-center text-white bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+            <div class="toast-body">
+                Employé(e) ajouté !
+            </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+    </div>
+    <div id="toast-add-error" class="toast top-0 end-0 align-items-center text-white bg-danger border-0" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+            <div class="toast-body">
+                Il y a eu une erreur durant l'ajout !
+            </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+    </div>
+{% endblock %}

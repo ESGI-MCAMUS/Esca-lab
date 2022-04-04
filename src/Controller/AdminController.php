@@ -40,9 +40,129 @@ class AdminController extends AbstractController
   #[Route('/admin', name: 'admin')]
   public function index(): Response
   {
+    // Date of today ans date of today - 1 month
+    $date1 = new DateTime();
+    $date2 = new DateTime();
+    $date2->modify('-1 month');
+
+    // Get payments with getAllBetweenDates function
+    $payments1 = $this->em
+      ->getRepository(Payments::class)
+      ->getAllBetweenDates($date2, $date1);
+
+    $date1->modify('-1 month');
+    $date2->modify('-2 month');
+    $payments2 = $this->em
+      ->getRepository(Payments::class)
+      ->getAllBetweenDates($date2, $date1);
+
+    $date1->modify('-2 month');
+    $date2->modify('-3 month');
+    $payments3 = $this->em
+      ->getRepository(Payments::class)
+      ->getAllBetweenDates($date2, $date1);
+
+    $date1->modify('-3 month');
+    $date2->modify('-4 month');
+    $payments4 = $this->em
+      ->getRepository(Payments::class)
+      ->getAllBetweenDates($date2, $date1);
+
+    $date1->modify('-4 month');
+    $date2->modify('-5 month');
+    $payments5 = $this->em
+      ->getRepository(Payments::class)
+      ->getAllBetweenDates($date2, $date1);
+
+    $date1->modify('-5 month');
+    $date2->modify('-6 month');
+    $payments6 = $this->em
+      ->getRepository(Payments::class)
+      ->getAllBetweenDates($date2, $date1);
+
+    $amountMonth1 = 0;
+    $amountMonth2 = 0;
+    $amountMonth3 = 0;
+    $amountMonth4 = 0;
+    $amountMonth5 = 0;
+    $amountMonth6 = 0;
+
+    foreach ($payments1 as $payment) {
+      $amountMonth1 += $payment->getAmount();
+    }
+
+    foreach ($payments2 as $payment) {
+      $amountMonth2 += $payment->getAmount();
+    }
+
+    foreach ($payments3 as $payment) {
+      $amountMonth3 += $payment->getAmount();
+    }
+
+    foreach ($payments4 as $payment) {
+      $amountMonth4 += $payment->getAmount();
+    }
+
+    foreach ($payments5 as $payment) {
+      $amountMonth5 += $payment->getAmount();
+    }
+
+    foreach ($payments6 as $payment) {
+      $amountMonth6 += $payment->getAmount();
+    }
+
+    // get all users
+    $usersAll = $this->em->getRepository(User::class)->findAll();
+
+    // check id users role contains ROLE_OUVREUR
+    $ouvreurs = 0;
+    foreach ($usersAll as $user) {
+      if (in_array('ROLE_OUVREUR', $user->getRoles())) {
+        $ouvreurs++;
+      }
+    }
+
+    // check id users role contains ROLE_ADMIN_FRANCHISE
+    $adminFranchise = 0;
+    foreach ($usersAll as $user) {
+      if (in_array('ROLE_ADMIN_FRANCHISE', $user->getRoles())) {
+        $adminFranchise++;
+      }
+    }
+
+    // check id users role contains ROLE_ADMIN_SALLE
+    $adminSalle = 0;
+    foreach ($usersAll as $user) {
+      if (in_array('ROLE_ADMIN_SALLE', $user->getRoles())) {
+        $adminSalle++;
+      }
+    }
+
+    // check id users role contains ROLE_USER
+    $users = 0;
+    foreach ($usersAll as $user) {
+      if (in_array('ROLE_USER', $user->getRoles())) {
+        $users++;
+      }
+    }
+
     $this->setInformations();
     return $this->render('admin/index.html.twig', [
       'month' => date_format(new DateTime(), 'n'),
+      'paymentsAmount' => [
+        'month1' => $amountMonth1 / 100,
+        'month2' => $amountMonth2 / 100,
+        'month3' => $amountMonth3 / 100,
+        'month4' => $amountMonth4 / 100,
+        'month5' => $amountMonth5 / 100,
+        'month6' => $amountMonth6 / 100,
+      ],
+      'usersRepartition' => [
+        'ouvreurs' => $ouvreurs,
+        'adminFranchise' => $adminFranchise,
+        'adminSalle' => $adminSalle,
+        'users' => $users,
+      ],
     ]);
   }
 

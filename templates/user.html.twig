@@ -73,7 +73,13 @@
 					{% if is_granted('ROLE_OUVREUR') %}
 						<li class="nav-item">
 							<a class="nav-link poppins regular"
-							   href="{{ path('gym_routes') }}"
+							   {% if is_granted('ROLE_SUPER_ADMIN') %}
+							   href="{{ path('admin_voies') }}"
+							   {% elseif is_granted("ROLE_ADMIN_FRANCHISE") %}
+								   href="{{ path('gym_routes_franchise') }}"
+							   {% else %}
+								   href="{{ path('gym_routes') }}"
+							   {% endif %}
 							   style="padding: 10px;color: rgb(33,37,41);">
 								<svg xmlns="http://www.w3.org/2000/svg"
 									 width="1em"

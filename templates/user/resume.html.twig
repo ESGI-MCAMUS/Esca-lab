@@ -1,4 +1,4 @@
-{% extends 'user.html.twig' %}
+{% extends is_granted('ROLE_ADMIN_SALLE') ? (is_granted('ROLE_SUPER_ADMIN') ? 'admin.html.twig' : 'admin-user.html.twig') : 'user.html.twig' %}
 
 
 {% block body %}

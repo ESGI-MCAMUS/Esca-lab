@@ -159,7 +159,7 @@ class UserController extends AbstractController
             $waysCount = count($this->getDoctrine()->getManager()->getRepository(\App\Entity\Route::class)->findAll());
         } elseif ($this->isGranted("ROLE_ADMIN_FRANCHISE")) {
             foreach ($this->user->getFranchise()->getGyms() as $gym) {
-                $waysCount += count($gym->getWay());
+                $waysCount += count($gym->getRoutes());
             }
         } else {
             $waysCount = count($this->user->getGym()->getRoutes());

@@ -35,7 +35,7 @@ class Route
   private $name;
 
   /**
-   * @ORM\Column(type="integer", nullable=true)
+   * @ORM\Column(type="string", length="3", nullable=true)
    */
   private $difficulty;
 
@@ -97,12 +97,12 @@ class Route
     return $this;
   }
 
-  public function getDifficulty(): ?int
+  public function getDifficulty(): ?string
   {
     return $this->difficulty;
   }
 
-  public function setDifficulty(?int $difficulty): self
+  public function setDifficulty(?string $difficulty): self
   {
     $this->difficulty = $difficulty;
 

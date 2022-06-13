@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Gym;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use App\Form\AddFriendType;
 use Doctrine\ORM\EntityManagerInterface;
@@ -153,12 +154,16 @@ class UserController extends AbstractController
 
     private function setInformations()
     {
-        $repo = $this->getDoctrine()
-            ->getManager()
-            ->getRepository(User::class);
-        $ways = $this->user->getGym()->getRoutes();
-
-        $waysCount = count($ways);
+        $waysCount = 0;
+        if ($this->isGranted("ROLE_SUPER_ADMIN")) {
+            $waysCount = count($this->getDoctrine()->getManager()->getRepository(\App\Entity\Route::class)->findAll());
+        } elseif ($this->isGranted("ROLE_ADMIN_FRANCHISE")) {
+            foreach ($this->user->getFranchise()->getGyms() as $gym) {
+                $waysCount += count($gym->getRoutes());
+            }
+        } else {
+            $waysCount = count($this->user->getGym()->getRoutes());
+        }
 
         $this->get('session')->set('ways_count', $waysCount);
     }

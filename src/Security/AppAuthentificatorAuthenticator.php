@@ -65,7 +65,11 @@ class AppAuthentificatorAuthenticator extends AbstractLoginFormAuthenticator
 
         $roles = $token->getUser()->getRoles();
 
-        if (in_array("ROLE_ADMIN_FRANCHISE", $roles)) {
+        if (in_array("ROLE_SUPER_ADMIN", $roles)) {
+            return new RedirectResponse(
+                $this->urlGenerator->generate('admin')
+            );
+        } elseif (in_array("ROLE_ADMIN_FRANCHISE", $roles)) {
             return new RedirectResponse(
                 $this->urlGenerator->generate('franchise_kpi')
             );

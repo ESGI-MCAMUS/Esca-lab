@@ -12,20 +12,19 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class RouteType extends AbstractType
 {
+
+    private $difficulty = ["1" => "1", "2" => "2", "3" => "3", "4" => "4", "5a" => "5a", "5b" => "5b", "5c" => "5c",
+        "6a" => "6a", "6a+" => "6a+", "6b" => "6b", "6b+" => "6b+", "6c" => "6c", "6c+" => "6c+",
+        "7a" => "7a", "7a+" => "7a+", "7b" => "7b", "7b+" => "7b+", "7c" => "7c", "7c+" => "7c+",
+        "8a" => "8a", "8a+" => "8a+", "8b" => "8b", "8b+" => "8b+", "8c" => "8c", "8c+" => "8c+",
+        "9a" => "9a", "9a+" => "9a+", "9b" => "9b", "9b+" => "9b+", "9c" => "9c"];
+
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
             ->add('name')
             ->add('difficulty', ChoiceType::class, [
-                'choices' => [
-                    '5' => 5,
-                    '4' => 4,
-                    '3' => 3,
-                    '2' => 2,
-                    '1' => 1
-                ],
-                'expanded' => true,
-                'attr' => ['class' => 'rating']
+                'choices' => $this->difficulty,
             ])
             ->add('save', SubmitType::class, [
                 'label' => 'Save !',

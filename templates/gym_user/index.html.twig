@@ -1,5 +1,4 @@
 {% extends 'accueil/index.html.twig' %}
-{# {% extends 'base.html.twig' %} #}
 
 {% block title %}
     Franchises ◈ Esca'Lab
@@ -8,8 +7,6 @@
 {% block javascripts %}
 	<script src="{{ asset('js/jquery.min.js') }}"></script>
 	<script src="{{ asset('js/route/update-route-status.js') }}"></script>
-    {# <script src="{{ asset('js/route/add-route.js') }}"></script>
-    <script src="{{ asset('js/route/remove-route.js') }}"></script> #}
     <script src="{{ asset('js/tiny-toast-1.1.0/tiny-toast.min.js') }}"></script>
 {% endblock %}
 
@@ -31,13 +28,11 @@
                 <div class="card shadow border-start-warning py-2">
                     <div class="card-body">
                         <div class="row align-items-center no-gutters">
-                            <div class="col"></div>
                             <div class="col">
-                                <a href="#">
-                                    <img src="{{ asset('images/profiles/default.png') }}"  class="img-tn rounded" />
+                                <a href="/route/{{ route.id }}">
+                                    <img src="{{ asset('images/profiles/route_ex.jpg') }}"  class="img-fluid mx-auto d-block" style="object-fit: cover;height:400px;width:100%;"/>
                                 </a>
                             </div>
-                            <div class="col"></div>
                         </div>
                         <hr class="bg-danger border-2 border-top border-secondary">
                         <div class="row">

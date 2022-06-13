@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Gym;
+use App\Entity\Payments;
 use App\Entity\Route as RouteEntity;
 use App\Form\GymType;
 use App\Form\RouteType;
@@ -17,85 +18,94 @@ use Symfony\Component\Security\Core\Security;
 #[IsGranted('ROLE_ADMIN_SALLE')]
 class GymController extends AbstractController
 {
-    private $user;
+  private $user;
 
-    public function __construct(Security $security)
-    {
-        $this->user = $security->getUser();
+  public function __construct(Security $security)
+  {
+    $this->user = $security->getUser();
+  }
+
+  #[Route('/gym/add', name: 'gym_add')]
+  public function add(EntityManagerInterface $em, Request $request): Response
+  {
+    $form = $this->createForm(GymType::class);
+
+    $form->handleRequest($request);
+    if ($form->isSubmitted() && $form->isValid()) {
+      $gym = $form->getData();
+
+      $gym->setFranchise($this->user->getFranchise());
+
+      $em->persist($form->getData());
+      $em->flush();
+
+      // Create a payment for the gym
+      $payment = new Payments();
+      $payment->setFranchise($gym->getFranchise());
+      $payment->setType('gym');
+      $payment->setAmount(1500);
+      $payment->setStatus('pending');
+      $payment->setToken(null);
+      $payment->setCreatedAt(new \DateTime());
+      $payment->setUpdatedAt(new \DateTime());
+      $em->persist($payment);
+      $em->flush();
+
+      return $this->redirectToRoute('franchise_gyms');
     }
 
-    #[Route('/gym/add', name: 'gym_add')]
-    public function add(EntityManagerInterface $em, Request $request): Response
-    {
-        $form = $this->createForm(GymType::class);
+    return $this->renderForm('gym/add.html.twig', [
+      'form_add' => $form,
+    ]);
+  }
 
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $gym = $form->getData();
+  #[Route('/gym/edit/{id}', name: 'gym_edit')]
+  public function edit(
+    $id,
+    EntityManagerInterface $em,
+    Request $request
+  ): Response {
+    $repo = $this->getDoctrine()->getRepository(Gym::class);
+    $gym = $repo->findOneBy(['id' => $id]);
 
-            $gym->setFranchise($this->user->getFranchise());
+    $form = $this->createForm(GymType::class)->setData($gym);
 
-            $em->persist($form->getData());
-            $em->flush();
+    $form->handleRequest($request);
+    if ($form->isSubmitted() && $form->isValid()) {
+      $gymEdit = $form->getData();
 
-            return $this->redirectToRoute('franchise_gyms');
-        }
+      $gym->setName($gymEdit->getName());
+      $gym->setSize($gymEdit->getSize());
+      $gym->setAddress($gymEdit->getAddress());
+      $gym->setCity($gymEdit->getCity());
+      $gym->setPc($gymEdit->getPc());
 
-        return $this->renderForm('gym/add.html.twig', [
-            'form_add' => $form,
-        ]);
+      $em->persist($gym);
+      $em->flush();
+
+      return $this->redirectToRoute('franchise_gyms');
     }
 
-    #[Route('/gym/edit/{id}', name: 'gym_edit')]
-    public function edit(
-        $id,
-        EntityManagerInterface $em,
-        Request $request
-    ): Response {
-        $repo = $this->getDoctrine()->getRepository(Gym::class);
-        $gym = $repo->findOneBy(['id' => $id]);
+    return $this->renderForm('gym/edit.html.twig', [
+      'route' => $gym,
+      'form_edit' => $form,
+    ]);
+  }
 
-        $form = $this->createForm(GymType::class)->setData($gym);
+  #[Route('/gym/remove/{id}', name: 'gym_remove')]
+  public function remove($id, EntityManagerInterface $em)
+  {
+    $repo = $this->getDoctrine()->getRepository(Gym::class);
 
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $gymEdit = $form->getData();
+    $gym = $repo->findOneBy(['id' => $id]);
 
-            $gym->setName($gymEdit->getName());
-            $gym->setSize($gymEdit->getSize());
-            $gym->setAddress($gymEdit->getAddress());
-            $gym->setCity($gymEdit->getCity());
-            $gym->setPc($gymEdit->getPc());
-
-            $em->persist($gym);
-            $em->flush();
-
-            return $this->redirectToRoute('franchise_gyms');
-        }
-
-        return $this->renderForm('gym/edit.html.twig', [
-            'route' => $gym,
-            'form_edit' => $form,
-        ]);
+    if ($this->user->getFranchise()->getId() == $gym->getFranchise()->getId()) {
+      $em->remove($gym);
+      $em->flush();
+    } else {
+      $this->redirectToRoute('accueil');
     }
 
-    #[Route('/gym/remove/{id}', name: 'gym_remove')]
-    public function remove($id, EntityManagerInterface $em)
-    {
-        $repo = $this->getDoctrine()->getRepository(Gym::class);
-
-        $gym = $repo->findOneBy(['id' => $id]);
-
-        if (
-            $this->user->getFranchise()->getId() ==
-            $gym->getFranchise()->getId()
-        ) {
-            $em->remove($gym);
-            $em->flush();
-        } else {
-            $this->redirectToRoute('accueil');
-        }
-
-        return $this->redirectToRoute('franchise_gyms');
-    }
+    return $this->redirectToRoute('franchise_gyms');
+  }
 }

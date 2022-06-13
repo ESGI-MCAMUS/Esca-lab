@@ -70,6 +70,21 @@ class PaymentsRepository extends ServiceEntityRepository
     return $query->execute();
   }
 
+  // Get all payments with status success and between two dates
+  public function getAllBetweenDates($start, $end)
+  {
+    $qb = $this->createQueryBuilder('payment')
+      ->where('payment.status = :status')
+      ->andWhere('payment.updated_at BETWEEN :start AND :end')
+      ->setParameter('status', 'success')
+      ->setParameter('start', $start)
+      ->setParameter('end', $end);
+
+    $query = $qb->getQuery();
+
+    return $query->execute();
+  }
+
   // /**
   //  * @return Payments[] Returns an array of Payments objects
   //  */

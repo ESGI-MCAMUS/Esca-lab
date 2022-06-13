@@ -16,60 +16,57 @@ use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
  * @method User[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class UserRepository extends ServiceEntityRepository implements
-    PasswordUpgraderInterface
+  PasswordUpgraderInterface
 {
-    public function __construct(ManagerRegistry $registry)
-    {
-        parent::__construct($registry, User::class);
+  public function __construct(ManagerRegistry $registry)
+  {
+    parent::__construct($registry, User::class);
+  }
+
+  /**
+   * Used to upgrade (rehash) the user's password automatically over time.
+   */
+  public function upgradePassword(
+    PasswordAuthenticatedUserInterface $user,
+    string $newHashedPassword
+  ): void {
+    if (!$user instanceof User) {
+      throw new UnsupportedUserException(
+        sprintf('Instances of "%s" are not supported.', \get_class($user))
+      );
     }
 
-    /**
-     * Used to upgrade (rehash) the user's password automatically over time.
-     */
-    public function upgradePassword(
-        PasswordAuthenticatedUserInterface $user,
-        string $newHashedPassword
-    ): void {
-        if (!$user instanceof User) {
-            throw new UnsupportedUserException(
-                sprintf(
-                    'Instances of "%s" are not supported.',
-                    \get_class($user)
-                )
-            );
-        }
+    $user->setPassword($newHashedPassword);
+    $this->_em->persist($user);
+    $this->_em->flush();
+  }
 
-        $user->setPassword($newHashedPassword);
-        $this->_em->persist($user);
-        $this->_em->flush();
-    }
+  public function search($value)
+  {
+    $qb = $this->createQueryBuilder('u')
+      ->where('u.email LIKE :query')
+      ->orWhere('u.firstname LIKE :query')
+      ->orWhere('u.lastname LIKE :query')
+      ->orWhere('u.username LIKE :query')
+      ->setParameter('query', $value)
+      ->orderBy('u.firstname', 'ASC');
 
-    public function search($value)
-    {
-        $qb = $this->createQueryBuilder('u')
-            ->where('u.email LIKE :query')
-            ->orWhere('u.firstname LIKE :query')
-            ->orWhere('u.lastname LIKE :query')
-            ->orWhere('u.username LIKE :query')
-            ->setParameter('query', $value)
-            ->orderBy('u.firstname', 'ASC');
+    $query = $qb->getQuery();
 
-        $query = $qb->getQuery();
+    return $query->execute();
+  }
 
-        return $query->execute();
-    }
+  public function findAllUserMatchingName(string $username): array
+  {
+    // automatically knows to select Products
+    // the "p" is an alias you'll use in the rest of the query
+    $qb = $this->createQueryBuilder('u')
+      ->where('lower(u.username) like :name')
+      ->setParameter('name', '%' . strtolower($username) . '%')
+      ->orderBy('u.username', 'ASC');
 
-    public function findAllUserMatchingName(string $username): array
-    {
-        // automatically knows to select Products
-        // the "p" is an alias you'll use in the rest of the query
-        $qb = $this->createQueryBuilder('u')
-            ->where('lower(u.username) like :name')
-            ->setParameter('name', '%' . strtolower($username) . '%')
-            ->orderBy('u.username', 'ASC');
+    $query = $qb->getQuery();
 
-        $query = $qb->getQuery();
-
-        return $query->execute();
-    }
+    return $query->execute();
+  }
 }

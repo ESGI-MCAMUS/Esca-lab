@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.8"
 
 x-cache-from:
   - &app-cache-from
@@ -10,9 +10,9 @@ services:
     image: postgres:13-alpine
     restart: always
     environment:
-        POSTGRES_PASSWORD: password
-        POSTGRES_DB: db
-        POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: db
+      POSTGRES_USER: postgres
     volumes:
       - db-data:/var/lib/postgresql/data:rw
     ports:
@@ -22,6 +22,8 @@ services:
 
   php:
     image: php:8.0-fpm
+    networks:
+      - default
     build:
       context: ./docker/php-fpm
       <<: *app-cache-from
@@ -58,3 +60,7 @@ services:
 volumes:
   db-data: {}
   app-cache: {}
+
+networks:
+  default:
+    driver: bridge

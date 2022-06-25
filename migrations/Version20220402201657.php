@@ -10,15 +10,12 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20220402201657 extends AbstractMigration
-{
-    public function getDescription(): string
-    {
+final class Version20220402201657 extends AbstractMigration {
+    public function getDescription(): string {
         return '';
     }
 
-    public function up(Schema $schema): void
-    {
+    public function up(Schema $schema): void {
         // this up() migration is auto-generated, please modify it to your needs
         $this->addSql('ALTER TABLE event_user DROP CONSTRAINT fk_92589ae2a76ed395');
         $this->addSql('ALTER TABLE media DROP CONSTRAINT fk_6a2ca10c9d86650f');
@@ -58,8 +55,7 @@ final class Version20220402201657 extends AbstractMigration
         $this->addSql('DROP TABLE "Gym"');
     }
 
-    public function down(Schema $schema): void
-    {
+    public function down(Schema $schema): void {
         // this down() migration is auto-generated, please modify it to your needs
         $this->addSql('ALTER TABLE "public"."Gym" DROP CONSTRAINT FK_7880253E523CAB89');
         $this->addSql('ALTER TABLE payments DROP CONSTRAINT FK_65D29B32523CAB89');
@@ -96,5 +92,9 @@ final class Version20220402201657 extends AbstractMigration
         $this->addSql('DROP TABLE payments');
         $this->addSql('DROP TABLE route_user');
         $this->addSql('DROP TABLE "public"."user"');
+    }
+
+    public function isTransactional(): bool {
+        return false;
     }
 }

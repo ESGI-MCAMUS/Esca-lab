@@ -12,11 +12,9 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
-class SecurityController extends AbstractController
-{
+class SecurityController extends AbstractController {
   #[Route('/connexion', name: 'login')]
-  public function login(AuthenticationUtils $authenticationUtils): Response
-  {
+  public function login(AuthenticationUtils $authenticationUtils): Response {
     // if ($this->getUser()) {
     //     return $this->redirectToRoute('target_path');
     // }
@@ -44,13 +42,13 @@ class SecurityController extends AbstractController
     if ($form->isSubmitted() && $form->isValid()) {
       if (
         $form
-          ->get('password')
-          ->get('first')
-          ->getData() ===
+        ->get('password')
+        ->get('first')
+        ->getData() ===
         $form
-          ->get('password')
-          ->get('second')
-          ->getData()
+        ->get('password')
+        ->get('second')
+        ->getData()
       ) {
         $utils = new UtilsController();
         $user->setPassword(
@@ -86,8 +84,7 @@ class SecurityController extends AbstractController
   /**
    * @Route("/logout", name="app_logout")
    */
-  public function logout()
-  {
+  public function logout() {
     return $this->redirectToRoute('login');
   }
 }

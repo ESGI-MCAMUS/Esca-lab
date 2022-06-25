@@ -5,75 +5,74 @@
 
 
 {% block body %}
-<main class="gradient-light-grey-light-blue">
-	<div class="container min-vh-100">
-		<div class="row min-vh-100">
-			<div class="col-xl-3"></div>
-			<div class="col-xl-6 align-self-center">
-				<form class="custom-container" method="post">
-					<div class="text-center">
-						<img src="{{ asset('images/logo.png') }}" width="50" height="50" class="rounded" alt="logo"/>
-					</div>
+	<main class="gradient-light-grey-light-blue">
+		<div class="container min-vh-100">
+			<div class="row min-vh-100">
+				<div class="col-xl-3"></div>
+				<div class="col-xl-6 align-self-center">
+					<form class="custom-container" method="post">
+						<div class="text-center">
+							<img src="{{ asset('images/logo.png') }}" width="50" height="50" class="rounded" alt="logo"/>
+						</div>
 
-					<h1 class="text-center lobster text-black mb-3">
-						Connectez-vous
-					</h1>
-					<div class="mb-3">
-						<label for="email" class="form-label poppins light">
-							Adresse email ou pseudo
-						</label>
-                        <input type="email" class="form-control poppins" name="email" required value="{{ last_username }}" id="email" placeholder="john.doe@domaine.fr"/>
+						<h1 class="text-center lobster text-black mb-3">
+							Connectez-vous
+						</h1>
 
-					</div>
-					<div class="mb-3">
-						<label for="password" class="form-label poppins light">
-							Mot de passe
-						</label>
-						<input type="password" class="form-control poppins" name="password" required id="password" placeholder="••••••••••"/>
-					</div>
-                    {% if error %}
-                    {% if error.code == 0 %}
-                    <p class="fst-italic text-danger poppins bold tiny">Les identifiants de connexion sont incorrects.</p>
+						<div class="mb-3">
+							<label for="email" class="form-label poppins light">
+								Adresse email ou pseudo
+							</label>
+							<input type="email" class="form-control poppins" name="email" required value="{{ last_username }}" id="email" placeholder="john.doe@domaine.fr"/>
 
-                    {% endif %}
+						</div>
+						<div class="mb-3">
+							<label for="password" class="form-label poppins light">
+								Mot de passe
+							</label>
+							<input type="password" class="form-control poppins" name="password" required id="password" placeholder="••••••••••"/>
+						</div>
+						{% if error %}
+							{% if error.code == 0 %}
+								<p class="fst-italic text-danger poppins bold tiny">Les identifiants de connexion sont incorrects.</p>
 
-                    {% endif %}
+							{% endif %}
 
-					{% if error.not_activated is defined %}
-						<p class="fst-italic text-danger poppins bold tiny">Votre compte n'est pas encore activé, veuillez vérifier vos mails.</p>
-					{% endif %}
-					{% if error.missmatch is defined %}
-						
-					{% endif %}
-					<p class="fst-italic fs-6 text-muted poppins light">
-						Mot de passe oublié ?
-						<a class="text-decoration-none" href="/connexion/mot-de-passe-oublie">Réinitialisez-le</a>
-					</p>
-					<div class="text-center">
-						<input type="hidden" name="login">
-						<button class="btn btn-primary poppins bold mb-3 rounded" type="submit">
-							Connexion
-						</button>
+						{% endif %}
+
+						{% if error.not_activated is defined %}
+							<p class="fst-italic text-danger poppins bold tiny">Votre compte n'est pas encore activé, veuillez vérifier vos mails.</p>
+						{% endif %}
+						{% if error.missmatch is defined %}{% endif %}
 						<p class="fst-italic fs-6 text-muted poppins light">
-							Pas encore de compte ?
-							<a class="text-decoration-none" href="/inscription">Inscrivez-vous</a>
+							Mot de passe oublié ?
+							<a class="text-decoration-none" href="/connexion/mot-de-passe-oublie">Réinitialisez-le</a>
 						</p>
-					</div>
-                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+						<div class="text-center">
+							<input type="hidden" name="login">
+							<button class="btn btn-primary poppins bold mb-3 rounded" type="submit">
+								Connexion
+							</button>
+							<p class="fst-italic fs-6 text-muted poppins light">
+								Pas encore de compte ?
+								<a class="text-decoration-none" href="/inscription">Inscrivez-vous</a>
+							</p>
+						</div>
+						<input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 
-                    {% if app.user %}
-                        <div class="mb-3">
-                            You are logged in as
-                            {{ app.user.username }},
-                            <a href="{{ path('app_logout') }}">Logout</a>
-                        </div>
-                    {% endif %}
+						{% if app.user %}
+							<div class="mb-3">
+								You are logged in as
+								{{ app.user.username }},
+								<a href="{{ path('app_logout') }}">Logout</a>
+							</div>
+						{% endif %}
 
-				</form>
+					</form>
+				</div>
+				<div class="col-xl-3"></div>
 			</div>
-			<div class="col-xl-3"></div>
 		</div>
-	</div>
-</main>
+	</main>
 
 {% endblock %}

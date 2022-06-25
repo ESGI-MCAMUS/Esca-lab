@@ -1,6 +1,12 @@
 {
+    "bacon/bacon-qr-code": {
+        "version": "2.0.7"
+    },
     "composer/package-versions-deprecated": {
         "version": "1.11.99.4"
+    },
+    "dasprid/enum": {
+        "version": "1.0.3"
     },
     "doctrine/annotations": {
         "version": "1.13",
@@ -99,6 +105,9 @@
     },
     "egulias/email-validator": {
         "version": "3.1.2"
+    },
+    "endroid/qr-code": {
+        "version": "4.4.9"
     },
     "friendsofphp/proxy-manager-lts": {
         "version": "v1.0.5"
@@ -242,6 +251,9 @@
         "files": [
             "config/packages/sensio_framework_extra.yaml"
         ]
+    },
+    "stripe/stripe-php": {
+        "version": "v7.121.0"
     },
     "symfony/asset": {
         "version": "v5.3.4"

@@ -16,50 +16,72 @@ use App\Entity\User;
 use App\Repository\UserRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
-class UserController extends AbstractController
-{
+use Endroid\QrCode\Builder\Builder;
+use Endroid\QrCode\Encoding\Encoding;
+use Endroid\QrCode\ErrorCorrectionLevel\ErrorCorrectionLevelHigh;
+use Endroid\QrCode\Label\Alignment\LabelAlignmentCenter;
+use Endroid\QrCode\Label\Font\NotoSans;
+use Endroid\QrCode\RoundBlockSizeMode\RoundBlockSizeModeMargin;
+use Endroid\QrCode\Writer\PngWriter;
+
+class UserController extends AbstractController {
 
     private $user;
 
-    public function __construct(Security $security)
-    {
+    public function __construct(Security $security) {
         $this->user = $security->getUser();
     }
 
     #[Route('/user', name: 'user')]
-    public function index(): Response
-    {
+    public function index(): Response {
+        // Get the user 
+        if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on')
+            $url = "https://";
+        else
+            $url = "http://";
+        // Append the host(domain name, ip) to the URL.   
+        $url .= $_SERVER['HTTP_HOST'];
+        $url .= "/user/friends/add/";
+        $url .= $this->user->getId();
+        // Create QR code
+        $result = Builder::create()
+            ->writer(new PngWriter())
+            ->writerOptions([])
+            ->data($url)
+            ->encoding(new Encoding('UTF-8'))
+            ->errorCorrectionLevel(new ErrorCorrectionLevelHigh())
+            ->size(150)
+            ->margin(10)
+            ->roundBlockSizeMode(new RoundBlockSizeModeMargin())
+            ->build();
         if ($this->isGranted('ROLE_OUVREUR')) {
             $this->setInformations();
         }
         return $this->render('user/resume.html.twig', [
-            'controller_name' => 'UserController',
+            'qrcode' => $result->getDataUri()
         ]);
     }
+
     #[Route('/user/resume', name: 'resumeUser')]
-    public function resumeUser(): Response
-    {
+    public function resumeUser(): Response {
         return $this->render('user/resume.html.twig', [
             'controller_name' => 'UserController',
         ]);
     }
 
     #[Route('/user/events', name: 'eventsUser')]
-    public function eventsUser(): Response
-    {
+    public function eventsUser(): Response {
         return $this->render('user/events.html.twig', [
             'controller_name' => 'UserController',
         ]);
     }
 
     #[Route('/user/friends', name: 'friendsUser')]
-    public function friendsUser(): Response
-    {
+    public function friendsUser(): Response {
         $friends = $this->user->getFriends();
 
         return $this->render('user/friends.html.twig', [
-              'controller_name' => 'UserController'
-            , 'friends' => $friends
+            'controller_name' => 'UserController', 'friends' => $friends
         ]);
     }
 
@@ -68,8 +90,7 @@ class UserController extends AbstractController
      * des amis
      */
     #[Route('/user/friends/add', name: 'addFriendsUser')]
-    public function addFriendsUser(ManagerRegistry $doctrine, EntityManagerInterface $em, Request $request, UserRepository $userRepository): Response
-    {
+    public function addFriendsUser(ManagerRegistry $doctrine, EntityManagerInterface $em, Request $request, UserRepository $userRepository): Response {
 
         $form = $this->createForm(AddFriendType::class);
         $form->handleRequest($request);
@@ -94,7 +115,7 @@ class UserController extends AbstractController
             // we remove the users that are already friends with us
             $user_array = [];
             foreach ($liste_user as $user) {
-                if(!in_array($user->getId(), $ids_arra)) {
+                if (!in_array($user->getId(), $ids_arra)) {
                     $user_array[] = $user;
                 }
             }
@@ -109,14 +130,13 @@ class UserController extends AbstractController
     }
 
     #[Route('/user/friends/add/{userId}', name: 'addFriendsUserId', defaults: ["userId" => null], methods: ['POST'])]
-    public function addFriendsUserId(ManagerRegistry $doctrine, $userId): Response
-    {
+    public function addFriendsUserId(ManagerRegistry $doctrine, $userId): Response {
         $success = true;
-        
+
         $entityManager = $doctrine->getManager();
         $newFriend = $entityManager->getRepository(User::class)->find($userId);
-        
-        if($newFriend->getId() !== null) {
+
+        if ($newFriend->getId() !== null) {
             $this->user->addFriend($newFriend);
             $entityManager->flush();
         } else {
@@ -127,14 +147,13 @@ class UserController extends AbstractController
     }
 
     #[Route('/user/friends/remove/{userId}', name: 'removeFriendsUserId', defaults: ["userId" => null], methods: ['POST'])]
-    public function removeFriendsUserId(ManagerRegistry $doctrine, $userId): Response
-    {
+    public function removeFriendsUserId(ManagerRegistry $doctrine, $userId): Response {
         $success = true;
-        
+
         $entityManager = $doctrine->getManager();
         $newFriend = $entityManager->getRepository(User::class)->find($userId);
-        
-        if($newFriend->getId() !== null) {
+
+        if ($newFriend->getId() !== null) {
             $this->user->removeFriend($newFriend);
             $entityManager->flush();
         } else {
@@ -145,15 +164,13 @@ class UserController extends AbstractController
     }
 
     #[Route('/user/medias', name: 'mediasUser')]
-    public function mediasUser(): Response
-    {
+    public function mediasUser(): Response {
         return $this->render('user/medias.html.twig', [
             'controller_name' => 'UserController',
         ]);
     }
 
-    private function setInformations()
-    {
+    private function setInformations() {
         $waysCount = 0;
         if ($this->isGranted("ROLE_SUPER_ADMIN")) {
             $waysCount = count($this->getDoctrine()->getManager()->getRepository(\App\Entity\Route::class)->findAll());

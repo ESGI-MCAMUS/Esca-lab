@@ -43,6 +43,7 @@ class UserController extends AbstractController {
         $url .= $_SERVER['HTTP_HOST'];
         $url .= "/user/friends/add/";
         $url .= $this->user->getId();
+        $url .= "/qrcode";
         // Create QR code
         $result = Builder::create()
             ->writer(new PngWriter())
@@ -144,6 +145,28 @@ class UserController extends AbstractController {
         }
 
         return new JsonResponse(array('success' => $success));
+    }
+
+    // Route to add a friend from the QR code
+    #[Route('/user/friends/add/{userId}/qrcode', name: 'addFriendsUserIdQrCode')]
+    public function addFriendsUserIdQrCode(ManagerRegistry $doctrine, $userId): Response {
+
+        $securityContext = $this->container->get('security.authorization_checker');
+        if ($securityContext->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
+            // authenticated REMEMBERED, FULLY will imply REMEMBERED (NON anonymous)
+            $entityManager = $doctrine->getManager();
+            $newFriend = $entityManager->getRepository(User::class)->find($userId);
+
+            if ($newFriend->getId() !== null) {
+                $this->user->addFriend($newFriend);
+                $entityManager->flush();
+            }
+        } else {
+            // Redirect to the login page with redirectTo page set to the current page you are coming from
+            return $this->redirectToRoute('login', ['redirect_to' => $this->generateUrl('addFriendsUserIdQrCode', ['userId' => $userId])]);
+        }
+
+        return $this->redirectToRoute('friendsUser');
     }
 
     #[Route('/user/friends/remove/{userId}', name: 'removeFriendsUserId', defaults: ["userId" => null], methods: ['POST'])]

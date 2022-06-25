@@ -280,30 +280,67 @@ class RouteController extends AbstractController
     return new JsonResponse(['success' => $success]);
   }
 
-    #[IsGranted('ROLE_USER')]
-    #[Route('/route/{routeId}', name: 'route_display')]
-    public function route_display(ManagerRegistry $doctrine, $routeId): Response
-    {
-        $entityManager = $doctrine->getManager();
-        $route      = $entityManager->getRepository(RouteEntity::class)->find($routeId);
-        $gym        = $route->getGym();
-        $franchise  = $gym->getFranchise();
+  #[IsGranted('ROLE_USER')]
+  #[Route('/route/{routeId}', name: 'route_display')]
+  public function route_display(ManagerRegistry $doctrine, $routeId): Response
+  {
+    $entityManager = $doctrine->getManager();
+    $route      = $entityManager->getRepository(RouteEntity::class)->find($routeId);
+    $comments   = $route->getMessages();
+    $gym        = $route->getGym();
+    $franchise  = $gym->getFranchise();
 
-        $resolvedRoutes = $this->user->getRoutes();
-        $resolved = false;
-        foreach($resolvedRoutes as $key => $value) {
-            if($value->getId() === $routeId) {
-                $resolved = true;
-                break;
-            }
+    $resolvedRoutes = $this->user->getRoutes();
+    $resolved = false;
+    foreach($resolvedRoutes as $key => $value) {
+      if($value->getId() === $routeId) {
+        $resolved = true;
+        break;
+      }
+    }
+
+    return $this->render('route/index.html.twig', [
+      'user'      => $this->user,
+      'franchise' => $franchise,
+      'gym'       => $gym,
+      'route'     => $route,
+      'comments'  => $comments,
+      'resolved'  => $resolved
+      ]);
+  }
+
+  #[IsGranted('ROLE_USER')]
+  #[Route('/route/addMessage/{routeId}', name: 'route_add_message', defaults: ["routeId" => null], methods: ['POST'])]
+  public function addMessage(ManagerRegistry $doctrine, $routeId): Response
+  {
+    $success = true;
+
+    $entityManager = $doctrine->getManager();
+    $message = $entityManager->getRepository(User::class)->find($userId);
+
+    if ($resolvedRoute->getId() !== null) {
+      $this->user->addRoute($resolvedRoute);
+      $entityManager->flush();
+    } else {
+      $success = false;
+    }
+
+    return new JsonResponse(['success' => $success]);
+  }
+
+  /**
+    $success = true;
+        
+        $entityManager = $doctrine->getManager();
+        $newFriend = $entityManager->getRepository(User::class)->find($userId);
+        
+        if($newFriend->getId() !== null) {
+            $this->user->addFriend($newFriend);
+            $entityManager->flush();
+        } else {
+            $success = false;
         }
 
-        return $this->render('route/index.html.twig', [
-            'user'      => $this->user,
-            'franchise' => $franchise,
-            'gym'       => $gym,
-            'route'     => $route,
-            'resolved'  => $resolved
-        ]);
-    }
+        return new JsonResponse(array('success' => $success));
+   */
 }

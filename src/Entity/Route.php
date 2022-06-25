@@ -44,10 +44,22 @@ class Route
    */
   private $users;
 
+  /**
+   * @ORM\OneToMany(targetEntity=Message::class, mappedBy="routeId", orphanRemoval=true)
+   */
+  private $messages;
+
+  /**
+   * @ORM\OneToMany(targetEntity=Reactions::class, mappedBy="routeId", orphanRemoval=true)
+   */
+  private $reactions;
+
   public function __construct()
   {
     $this->opener = new ArrayCollection();
     $this->users = new ArrayCollection();
+    $this->messages = new ArrayCollection();
+    $this->reactions = new ArrayCollection();
   }
 
   public function getId(): ?int
@@ -131,6 +143,66 @@ class Route
   {
       if ($this->users->removeElement($user)) {
           $user->removeRoute($this);
+      }
+
+      return $this;
+  }
+
+  /**
+   * @return Collection<int, Message>
+   */
+  public function getMessages(): Collection
+  {
+      return $this->messages;
+  }
+
+  public function addMessage(Message $message): self
+  {
+      if (!$this->messages->contains($message)) {
+          $this->messages[] = $message;
+          $message->setRouteId($this);
+      }
+
+      return $this;
+  }
+
+  public function removeMessage(Message $message): self
+  {
+      if ($this->messages->removeElement($message)) {
+          // set the owning side to null (unless already changed)
+          if ($message->getRouteId() === $this) {
+              $message->setRouteId(null);
+          }
+      }
+
+      return $this;
+  }
+
+  /**
+   * @return Collection<int, Reactions>
+   */
+  public function getReactions(): Collection
+  {
+      return $this->reactions;
+  }
+
+  public function addReaction(Reactions $reaction): self
+  {
+      if (!$this->reactions->contains($reaction)) {
+          $this->reactions[] = $reaction;
+          $reaction->setRouteId($this);
+      }
+
+      return $this;
+  }
+
+  public function removeReaction(Reactions $reaction): self
+  {
+      if ($this->reactions->removeElement($reaction)) {
+          // set the owning side to null (unless already changed)
+          if ($reaction->getRouteId() === $this) {
+              $reaction->setRouteId(null);
+          }
       }
 
       return $this;

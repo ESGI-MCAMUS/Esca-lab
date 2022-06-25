@@ -118,6 +118,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $routes;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Message::class, mappedBy="userId", orphanRemoval=true)
+     */
+    private $messages;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Reactions::class, mappedBy="userId")
+     */
+    private $reactions;
+
     public function __construct()
     {
         $this->gyms = new ArrayCollection();
@@ -125,6 +135,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->users = new ArrayCollection();
         $this->events = new ArrayCollection();
         $this->routes = new ArrayCollection();
+        $this->messages = new ArrayCollection();
+        $this->reactions = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -461,6 +473,66 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function removeRoute(Route $route): self
     {
         $this->routes->removeElement($route);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Message>
+     */
+    public function getMessages(): Collection
+    {
+        return $this->messages;
+    }
+
+    public function addMessage(Message $message): self
+    {
+        if (!$this->messages->contains($message)) {
+            $this->messages[] = $message;
+            $message->setUserId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMessage(Message $message): self
+    {
+        if ($this->messages->removeElement($message)) {
+            // set the owning side to null (unless already changed)
+            if ($message->getUserId() === $this) {
+                $message->setUserId(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Reactions>
+     */
+    public function getReactions(): Collection
+    {
+        return $this->reactions;
+    }
+
+    public function addReaction(Reactions $reaction): self
+    {
+        if (!$this->reactions->contains($reaction)) {
+            $this->reactions[] = $reaction;
+            $reaction->setUserId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReaction(Reactions $reaction): self
+    {
+        if ($this->reactions->removeElement($reaction)) {
+            // set the owning side to null (unless already changed)
+            if ($reaction->getUserId() === $this) {
+                $reaction->setUserId(null);
+            }
+        }
 
         return $this;
     }

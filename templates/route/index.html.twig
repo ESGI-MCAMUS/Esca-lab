@@ -30,14 +30,21 @@
                     <div class="row align-items-center no-gutters" style="text-align: center;">
                         <div class="col"></div>
                         <div class="col-6">
-                            <h3>Chat</h3>
+                            <h3>Fil de discussion</h3>
                         </div>
                         <div class="col"></div>
                     </div>
                     <hr class="bg-danger border-2 border-top border-secondary">
-                    <div id="chat-container" class="row align-items-center no-gutters classContainerChat" style="text-align: center;max-height:60vh;overflow-y:hidden;">
+                    <div id="chat-container" class="row align-items-center no-gutters classContainerChat" style="text-align: center;max-height:60vh;overflow-y:auto;">
                         <div class="col" style="">
-                            <div id="comment-XXX"  class="row align-items-center" style="border-bottom: 1px solid lightgray;">
+                            <div id="no-comment-display"  class="row align-items-center">
+                                <div class="col-12">
+                                    <p style="text-align: center; color: darkgray">
+                                        Il n'y a pas encore de messages sur cette voie 
+                                    </p>
+                                </div>
+                            </div>
+                            {# <div id="comment-XXX"  class="row align-items-center" style="border-bottom: 1px solid lightgray;">
                                 <div class="col-2">
                                     <img class="border rounded-circle img-profile" src="{{asset('images/profiles/mistergooddeal.jpg')}}" style="width:50px;">
                                 </div>
@@ -49,8 +56,8 @@
                                 <div class="col-1">
                                     <i class="bi bi-emoji-smile"></i>
                                 </div>
-                            </div>
-                            {% for i in 0..10 %}
+                            </div> #}
+                            {# {% for i in 0..10 %}
                             <div id="comment-XXX"  class="row align-items-center" style="border-bottom: 1px solid lightgray;">
                                 <div class="col-2">
                                     <img class="border rounded-circle img-profile" src="{{asset('images/profiles/aesahaettr.gif')}}" style="width:50px;">
@@ -64,7 +71,7 @@
                                     <i class="bi bi-emoji-smile"></i>
                                 </div>
                             </div>
-                            {% endfor %}
+                            {% endfor %} #}
                         </div>
                     </div>
                     <div id="chat-message" class="row align-items-center no-gutters pt-3" style="text-align: center;border-top: 1px solid lightgray;">

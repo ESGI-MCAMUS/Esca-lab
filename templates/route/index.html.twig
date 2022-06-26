@@ -97,11 +97,18 @@
                     </div>
                     <div id="chat-message" class="row align-items-center no-gutters pt-3" style="text-align: center;border-top: 1px solid lightgray;">
                         <div class="input-group mb-3">
-                            <input id="input-message" type="text" class="form-control" placeholder="Trop facile ce bloc" aria-label="Trop facile ce bloc" aria-describedby="button-addon2">
-                            <button class="btn btn-outline-secondary" type="button" id="send-message" data-b-route="{{ route.id }}">
-                                <span id="spinner-send-message" class="spinner-border spinner-border-sm text-dark" role="status" aria-hidden="true" hidden></span>
-                                Envoyer
-                            </button>
+                            {% if route.opened == 1 %}
+                                <input id="input-message" type="text" class="form-control" placeholder="Trop facile ce bloc" aria-label="Trop facile ce bloc">
+                                <button class="btn btn-outline-secondary" type="button" id="send-message" data-b-route="{{ route.id }}">
+                                    <span id="spinner-send-message" class="spinner-border spinner-border-sm text-dark" role="status" aria-hidden="true" hidden></span>
+                                    Envoyer
+                                </button>
+                            {% else %}
+                                <input id="input-message" type="text" class="form-control" placeholder="Cette voie est fermée" aria-label="Cette voie est fermée" readonly>
+                                <button class="btn btn-outline-secondary disabled" type="button" id="send-message" data-b-route="{{ route.id }}">
+                                    Envoyer
+                                </button>
+                            {% endif %}
                         </div>
                     </div>
                 </div>

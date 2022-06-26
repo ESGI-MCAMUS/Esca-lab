@@ -1,42 +1,35 @@
 $( document ).ready(function() {
     $('#send-message').on('click', (e) => {
-        const status = e.target.classList.contains('btn-add');
         const shortId = e.target.dataset.bRoute;
-        const url_route = status ? '/route/resolved/' : '/route/unresolved/'
-        document.getElementById(e.target.id).classList.add('disabled');
-        document.getElementById('spinner-' + shortId).hidden = false;
-        // $.ajax({
-        //     method: "POST",
-        //     url: document.getElementById('url_root').value + url_route + shortId,
-        //     data: {
-        //         // ... 
-        //     }
-        // })
-        // .done(function(data) {
-        //     if(data.success) {
-        //         if(status) {
-        //             document.getElementById(e.target.id).classList.remove('btn-info', 'btn-add');
-        //             document.getElementById(e.target.id).classList.add('btn-warning', 'btn-remove');
-        //             document.getElementById(e.target.id).innerHTML = 'Je me suis trompé !';
-        //         } else {
-        //             document.getElementById(e.target.id).classList.remove('btn-warning', 'btn-remove');
-        //             document.getElementById(e.target.id).classList.add('btn-info', 'btn-add');
-        //             document.getElementById(e.target.id).innerHTML = `Je l'ai faite !`;
-        //         }
-        //     } else {
-        //         new Toast('error-route-add-' + Math.floor(Math.random() * 100), 'error', 'bi bi-exclamation-triangle', 'Il y a eu une erreur  !', false, true).show();
-        //     }
+        const url_route = `/route/addMessage/${shortId}`;
 
-        //     // Adding the spinner to the button so it is not removed when adding the conent of the button
-        //     document.getElementById(e.target.id).classList.remove('disabled');
-        //     const template= $('#templateSpan').data('t-span');
-        //     const crValues = {
-        //         '__id__':     shortId
-        //     };
-        //     const re = new RegExp(Object.keys(crValues).join('|'),'gi');
-        //     $('#btn-'+shortId).prepend(template.replace(re, function(matched){
-        //         return crValues[matched];
-        //     }));
-        // });
+        const message = document.getElementById('input-message').value.trim();
+
+        document.getElementById(e.target.id).classList.add('disabled');
+        document.getElementById('spinner-send-message').hidden = false;
+        $.ajax({
+            method: "POST",
+            url: document.getElementById('url_root').value + url_route,
+            data: {
+                message: message
+            }
+        })
+        .done(function(data) {
+            console.log(data);
+            if(data.success) {
+                document.getElementById('spinner-send-message').hidden = true;
+                document.getElementById('input-message').value = "" 
+
+                const template= $('#templateMessage').data('t-span');
+                const crValues = {
+                    '__idMessageTemplate__':        'lastMessage',
+                    '__messageContentTemplate__':   message,
+                };
+                const re = new RegExp(Object.keys(crValues).join('|'),'gi');
+                $('#messages-list').append(template.replace(re, function(matched){
+                    return crValues[matched];
+                }));
+            }
+        });
     });
 });

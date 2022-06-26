@@ -8,11 +8,35 @@
 {% block javascripts %}
 	<script src="{{ asset('js/jquery.min.js') }}"></script>
 	<script src="{{ asset('js/route/update-route-status.js') }}"></script>
+	<script src="{{ asset('js/route/send-message.js') }}"></script>
     <script src="{{ asset('js/tiny-toast-1.1.0/tiny-toast.min.js') }}"></script>
 {% endblock %}
 
 {% set templateSpan %}
 <span id="spinner-__id__" class="spinner-border spinner-border-sm text-dark" role="status" aria-hidden="true" hidden></span>
+{% endset %}
+
+{% set templateMessage %}
+<div id="comment-__idMessageTemplate__"  class="row align-items-center pt-2 pb-2" style="border-bottom: 1px solid lightgray; min-height:8vh;">
+    <div class="row">
+        <div class="col-2">
+            <img class="border rounded-circle img-profile" src="{{asset('images/profiles/' ~ app.user.picture ~ '')}}" style="width:50px;">
+        </div>
+        <div class="col-10">
+            <p style="text-align: justify;margin-bottom: 0px;">
+                <strong>{{ app.user.username }}</strong> : __messageContentTemplate__
+            </p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-2"></div>
+        <div class="col-10" style="text-align:left;">
+            <span class="badge bg-danger" style="cursor: pointer;"><i class="bi bi-heart"></i> 6</span>
+            <span class="badge text-warning" style="cursor: pointer;"><i class="bi bi-hand-thumbs-up"></i>4</span>
+            <span class="badge text-success" style="cursor: pointer;"><i class="bi bi-check-lg"></i>4</span>
+        </div>
+    </div>
+</div>
 {% endset %}
 
 {% block corps %}
@@ -36,7 +60,7 @@
                     </div>
                     <hr class="bg-danger border-2 border-top border-secondary">
                     <div id="chat-container" class="row align-items-center no-gutters classContainerChat" style="text-align: center;max-height:60vh;overflow-y:auto;">
-                        <div class="col" style="">
+                        <div class="col" id="messages-list" style="">
                             {% if comments|length == 0 %}
                                 <div id="no-comment-display"  class="row align-items-center">
                                     <div class="col-12">
@@ -47,7 +71,7 @@
                                 </div>
                             {% else %}
                                 {% for comment in comments %}
-                                    <div id="comment-XXX"  class="row align-items-center pt-2 pb-2" style="border-bottom: 1px solid lightgray; min-height:8vh;">
+                                    <div id="comment-{{ comment.id }}"  class="row align-items-center pt-2 pb-2" style="border-bottom: 1px solid lightgray; min-height:8vh;">
                                         <div class="row">
                                             <div class="col-2">
                                                 <img class="border rounded-circle img-profile" src="{{asset('images/profiles/' ~ comment.userId.picture ~ '')}}" style="width:50px;">
@@ -74,7 +98,10 @@
                     <div id="chat-message" class="row align-items-center no-gutters pt-3" style="text-align: center;border-top: 1px solid lightgray;">
                         <div class="input-group mb-3">
                             <input id="input-message" type="text" class="form-control" placeholder="Trop facile ce bloc" aria-label="Trop facile ce bloc" aria-describedby="button-addon2">
-                            <button class="btn btn-outline-secondary" type="button" id="send-message">Envoyer</button>
+                            <button class="btn btn-outline-secondary" type="button" id="send-message" data-b-route="{{ route.id }}">
+                                <span id="spinner-send-message" class="spinner-border spinner-border-sm text-dark" role="status" aria-hidden="true" hidden></span>
+                                Envoyer
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -110,12 +137,12 @@
                         <div class="col mt-2" style="text-align: center;">
                             {% if route.opened == 1 %}
                                 {% if route.id not in resolved %}
-                                    <button id="btn-{{ route.id }}" type="button" class="btn btn-info btn-add" data-b-route="{{ route.id }}">
+                                    <button id="btn-update-route" type="button" class="btn btn-info btn-add" data-b-route="{{ route.id }}">
                                         <span id="spinner-{{ route.id }}" class="spinner-border spinner-border-sm text-dark" role="status" aria-hidden="true" hidden></span>
                                         Je l'ai faite !
                                     </button>
                                 {% else %}
-                                    <button id="btn-{{ route.id }}" type="button" class="btn btn-warning btn-remove" data-b-route="{{ route.id }}">
+                                    <button id="btn-update-route" type="button" class="btn btn-warning btn-remove" data-b-route="{{ route.id }}">
                                         <span id="spinner-{{ route.id }}" class="spinner-border spinner-border-sm text-dark" role="status" aria-hidden="true" hidden></span>
                                         Je me suis trompé
                                     </button>
@@ -169,4 +196,5 @@
 
 <input type="text" id="url_root" value="{{ app.request.getSchemeAndHttpHost() }}" hidden></input>
 <input type="text" id="templateSpan" data-t-span="{{ templateSpan|escape }}" hidden>
+<input type="text" id="templateMessage" data-t-span="{{ templateMessage|escape }}" hidden>
 {% endblock %}

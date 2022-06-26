@@ -4,7 +4,8 @@ namespace App\Controller;
 
 use App\Entity\Route as RouteEntity;
 use App\Entity\Gym;
-use App\Entity\Payments;
+use App\Entity\Message;
+use App\Entity\Payments; 
 
 use App\Form\RouteType;
 
@@ -311,36 +312,33 @@ class RouteController extends AbstractController
 
   #[IsGranted('ROLE_USER')]
   #[Route('/route/addMessage/{routeId}', name: 'route_add_message', defaults: ["routeId" => null], methods: ['POST'])]
-  public function addMessage(ManagerRegistry $doctrine, $routeId): Response
+  public function addMessage(ManagerRegistry $doctrine, Request $request, $routeId): Response
   {
-    $success = true;
-
     $entityManager = $doctrine->getManager();
-    $message = $entityManager->getRepository(User::class)->find($userId);
 
-    if ($resolvedRoute->getId() !== null) {
-      $this->user->addRoute($resolvedRoute);
-      $entityManager->flush();
-    } else {
-      $success = false;
-    }
+    $ajaxParams = $request->request->all();
+
+    $messageContent = $ajaxParams['message'];
+
+    $success = true;
+    $message = new Message();
+
+    $message->setMessageContent($messageContent);
+    $message->setDateCreated(new \DateTime());
+    $message->setUserId($this->user);
+    $message->setRouteId($entityManager->getRepository(RouteEntity::class)->find($routeId));
+
+    $entityManager->persist($message);
+
+    $entityManager->flush();
+
+    // if ($resolvedRoute->getId() !== null) {
+    //   $this->user->addRoute($resolvedRoute);
+    //   $entityManager->flush();
+    // } else {
+    //   $success = false;
+    // }
 
     return new JsonResponse(['success' => $success]);
   }
-
-  /**
-    $success = true;
-        
-        $entityManager = $doctrine->getManager();
-        $newFriend = $entityManager->getRepository(User::class)->find($userId);
-        
-        if($newFriend->getId() !== null) {
-            $this->user->addFriend($newFriend);
-            $entityManager->flush();
-        } else {
-            $success = false;
-        }
-
-        return new JsonResponse(array('success' => $success));
-   */
 }

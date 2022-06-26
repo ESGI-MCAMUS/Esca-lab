@@ -1,5 +1,8 @@
 $( document ).ready(function() {
     $('#send-message').on('click', (e) => {
+        if(document.getElementById('input-message').value.trim().length === 0) {
+            return;
+        }
         const shortId = e.target.dataset.bRoute;
         const url_route = `/route/addMessage/${shortId}`;
 

@@ -4,7 +4,8 @@ namespace App\Controller;
 
 use App\Entity\Route as RouteEntity;
 use App\Entity\Gym;
-use App\Entity\Payments;
+use App\Entity\Message;
+use App\Entity\Payments; 
 
 use App\Form\RouteType;
 
@@ -280,30 +281,64 @@ class RouteController extends AbstractController
     return new JsonResponse(['success' => $success]);
   }
 
-    #[IsGranted('ROLE_USER')]
-    #[Route('/route/{routeId}', name: 'route_display')]
-    public function route_display(ManagerRegistry $doctrine, $routeId): Response
-    {
-        $entityManager = $doctrine->getManager();
-        $route      = $entityManager->getRepository(RouteEntity::class)->find($routeId);
-        $gym        = $route->getGym();
-        $franchise  = $gym->getFranchise();
+  #[IsGranted('ROLE_USER')]
+  #[Route('/route/{routeId}', name: 'route_display')]
+  public function route_display(ManagerRegistry $doctrine, $routeId): Response
+  {
+    $entityManager = $doctrine->getManager();
+    $route      = $entityManager->getRepository(RouteEntity::class)->find($routeId);
+    $comments   = $route->getMessages();
+    $gym        = $route->getGym();
+    $franchise  = $gym->getFranchise();
 
-        $resolvedRoutes = $this->user->getRoutes();
-        $resolved = false;
-        foreach($resolvedRoutes as $key => $value) {
-            if($value->getId() === $routeId) {
-                $resolved = true;
-                break;
-            }
-        }
-
-        return $this->render('route/index.html.twig', [
-            'user'      => $this->user,
-            'franchise' => $franchise,
-            'gym'       => $gym,
-            'route'     => $route,
-            'resolved'  => $resolved
-        ]);
+    $resolvedRoutes = $this->user->getRoutes();
+    $resolved = false;
+    foreach($resolvedRoutes as $key => $value) {
+      if($value->getId() === $routeId) {
+        $resolved = true;
+        break;
+      }
     }
+
+    return $this->render('route/index.html.twig', [
+      'user'      => $this->user,
+      'franchise' => $franchise,
+      'gym'       => $gym,
+      'route'     => $route,
+      'comments'  => $comments,
+      'resolved'  => $resolved
+      ]);
+  }
+
+  #[IsGranted('ROLE_USER')]
+  #[Route('/route/addMessage/{routeId}', name: 'route_add_message', defaults: ["routeId" => null], methods: ['POST'])]
+  public function addMessage(ManagerRegistry $doctrine, Request $request, $routeId): Response
+  {
+    $entityManager = $doctrine->getManager();
+
+    $ajaxParams = $request->request->all();
+
+    $messageContent = $ajaxParams['message'];
+
+    $success = true;
+    $message = new Message();
+
+    $message->setMessageContent($messageContent);
+    $message->setDateCreated(new \DateTime());
+    $message->setUserId($this->user);
+    $message->setRouteId($entityManager->getRepository(RouteEntity::class)->find($routeId));
+
+    $entityManager->persist($message);
+
+    $entityManager->flush();
+
+    // if ($resolvedRoute->getId() !== null) {
+    //   $this->user->addRoute($resolvedRoute);
+    //   $entityManager->flush();
+    // } else {
+    //   $success = false;
+    // }
+
+    return new JsonResponse(['success' => $success]);
+  }
 }

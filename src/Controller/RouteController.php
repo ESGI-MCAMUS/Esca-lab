@@ -21,6 +21,9 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
+use Symfony\Component\String\Slugger\SluggerInterface;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
+
 class RouteController extends AbstractController
 {
   private $user;
@@ -35,13 +38,31 @@ class RouteController extends AbstractController
   public function add(
     $gymId,
     EntityManagerInterface $em,
-    Request $request
+    Request
+    $request,
+    SluggerInterface $slugger
   ): Response {
     $form = $this->createForm(RouteType::class);
 
     $form->handleRequest($request);
     if ($form->isSubmitted() && $form->isValid()) {
       $route = $form->getData();
+
+      $picture = $form->get('picture')->getData();
+      if ($picture) {
+        $originalFilename = pathinfo($picture->getClientOriginalName(), PATHINFO_FILENAME);
+        $safeFilename = $slugger->slug($originalFilename);
+        $newFilename = uniqid() . '.' . $picture->guessExtension();
+        try {
+          $picture->move(
+            $this->getParameter('routes_pictures'),
+            $newFilename
+          );
+          $route->setPicture($newFilename);
+        } catch (FileException $e) {
+          $route->setPicture("");
+        }
+      }
 
       $route->setGym(
         $this->user->getGym() ??
@@ -83,7 +104,7 @@ class RouteController extends AbstractController
     }
 
     return $this->renderForm('route/add.html.twig', [
-      'form_add' => $form,
+      'form' => $form,
     ]);
   }
 

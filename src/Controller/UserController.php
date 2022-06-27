@@ -233,12 +233,14 @@ class UserController extends AbstractController {
         $waysCount = 0;
         if ($this->isGranted("ROLE_SUPER_ADMIN")) {
             $waysCount = count($this->getDoctrine()->getManager()->getRepository(\App\Entity\Route::class)->findAll());
-        } elseif ($this->isGranted("ROLE_ADMIN_FRANCHISE")) {
+        } elseif ($this->isGranted("ROLE_ADMIN_FRANCHISE") && $this->user->getFranchise() !== null) {
             foreach ($this->user->getFranchise()->getGyms() as $gym) {
                 $waysCount += count($gym->getRoutes());
             }
         } else {
-            $waysCount = count($this->user->getGym()->getRoutes());
+            if ($this->user->getGym() !== null) {
+                $waysCount = count($this->user->getGym()->getRoutes());
+            }
         }
 
         $this->get('session')->set('ways_count', $waysCount);

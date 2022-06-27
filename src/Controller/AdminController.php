@@ -24,8 +24,10 @@ use App\Form\AddFranchiseType;
 
 use Doctrine\ORM\EntityManagerInterface;
 
-class AdminController extends AbstractController
-{
+use Symfony\Component\String\Slugger\SluggerInterface;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
+
+class AdminController extends AbstractController {
   private $user;
   private $em;
 
@@ -38,8 +40,7 @@ class AdminController extends AbstractController
   }
 
   #[Route('/admin', name: 'admin')]
-  public function index(): Response
-  {
+  public function index(): Response {
     // Date of today ans date of today - 1 month
     $date1 = new DateTime();
     $date2 = new DateTime();
@@ -171,8 +172,7 @@ class AdminController extends AbstractController
    */
   #[IsGranted("ROLE_SUPER_ADMIN")]
   #[Route('/admin/utilisateurs', name: 'admin_users')]
-  public function admin_users(Request $request): Response
-  {
+  public function admin_users(Request $request): Response {
     $this->setInformations();
     $form = $this->createForm(GlobalSearchType::class);
     $form->handleRequest($request);
@@ -199,8 +199,7 @@ class AdminController extends AbstractController
 
   #[IsGranted("ROLE_SUPER_ADMIN")]
   #[Route('/admin/utilisateurs/suppression/{id}', name: 'admin_users_deletion')]
-  public function admin_users_deletion(int $id): Response
-  {
+  public function admin_users_deletion(int $id): Response {
     $user = $this->getDoctrine()
       ->getRepository(User::class)
       ->find($id);
@@ -217,8 +216,7 @@ class AdminController extends AbstractController
   }
   #[IsGranted("ROLE_SUPER_ADMIN")]
   #[Route('/admin/utilisateurs/activation/{id}', name: 'admin_users_activation')]
-  public function admin_users_activation(int $id): Response
-  {
+  public function admin_users_activation(int $id): Response {
     $user = $this->getDoctrine()
       ->getRepository(User::class)
       ->find($id);
@@ -270,8 +268,7 @@ class AdminController extends AbstractController
 
   #[IsGranted("ROLE_SUPER_ADMIN")]
   #[Route('/admin/evenements', name: 'admin_events')]
-  public function admin_events(Request $request): Response
-  {
+  public function admin_events(Request $request): Response {
     $this->setInformations();
     $form = $this->createForm(GlobalSearchType::class);
     $form->handleRequest($request);
@@ -303,8 +300,7 @@ class AdminController extends AbstractController
 
   #[IsGranted("ROLE_SUPER_ADMIN")]
   #[Route('/admin/evenements/suppression/{id}', name: 'admin_events_deletion')]
-  public function admin_events_deletion(int $id): Response
-  {
+  public function admin_events_deletion(int $id): Response {
     $event = $this->getDoctrine()
       ->getRepository(Event::class)
       ->find($id);
@@ -325,8 +321,7 @@ class AdminController extends AbstractController
 
   #[IsGranted("ROLE_SUPER_ADMIN")]
   #[Route('/admin/medias', name: 'admin_medias')]
-  public function admin_medias(Request $request): Response
-  {
+  public function admin_medias(Request $request): Response {
     $this->setInformations();
     $form = $this->createForm(GlobalSearchType::class);
     $form->handleRequest($request);
@@ -354,8 +349,7 @@ class AdminController extends AbstractController
   // Remove media
   #[IsGranted("ROLE_SUPER_ADMIN")]
   #[Route('/admin/medias/suppression/{id}', name: 'admin_medias_deletion')]
-  public function admin_medias_deletion(int $id): Response
-  {
+  public function admin_medias_deletion(int $id): Response {
     $media = $this->getDoctrine()
       ->getRepository(Media::class)
       ->find($id);
@@ -376,8 +370,7 @@ class AdminController extends AbstractController
    */
   #[IsGranted("ROLE_SUPER_ADMIN")]
   #[Route('/admin/franchises', name: 'admin_franchises')]
-  public function admin_franchises(Request $request): Response
-  {
+  public function admin_franchises(Request $request): Response {
     $this->setInformations();
     $form = $this->createForm(GlobalSearchType::class);
     $form->handleRequest($request);
@@ -405,8 +398,7 @@ class AdminController extends AbstractController
   // Delete franchise by id
   #[IsGranted("ROLE_SUPER_ADMIN")]
   #[Route('/admin/franchise/suppression/{id}', name: 'admin_franchises_deletion')]
-  public function admin_franchises_deletion(int $id): Response
-  {
+  public function admin_franchises_deletion(int $id): Response {
     $franchise = $this->getDoctrine()
       ->getRepository(Franchise::class)
       ->find($id);
@@ -421,8 +413,7 @@ class AdminController extends AbstractController
   // Add franchise
   #[IsGranted("ROLE_SUPER_ADMIN")]
   #[Route('/admin/franchises/ajouter', name: 'admin_franchises_add')]
-  public function admin_franchises_add(Request $request): Response
-  {
+  public function admin_franchises_add(Request $request, SluggerInterface $slugger): Response {
     // get all users
     $entityManager = $this->getDoctrine()->getManager();
     $users = $entityManager
@@ -436,11 +427,24 @@ class AdminController extends AbstractController
     $form->handleRequest($request);
 
     if ($form->isSubmitted() && $form->isValid()) {
+      $picture = $form->get('picture')->getData();
+      if ($picture) {
+        $originalFilename = pathinfo($picture->getClientOriginalName(), PATHINFO_FILENAME);
+        $safeFilename = $slugger->slug($originalFilename);
+        $newFilename = uniqid() . '.' . $picture->guessExtension();
+        try {
+          $picture->move(
+            $this->getParameter('franchises_pictures'),
+            $newFilename
+          );
+          $franchise->setPicture($newFilename);
+        } catch (FileException $e) {
+          $franchise->setPicture("");
+        }
+      }
       $entityManager = $this->getDoctrine()->getManager();
       $entityManager->persist($franchise);
       $entityManager->flush();
-
-      dump($franchise);
 
       $user = $this->getDoctrine()
         ->getRepository(User::class)
@@ -468,8 +472,7 @@ class AdminController extends AbstractController
    */
   #[IsGranted("ROLE_SUPER_ADMIN")]
   #[Route('/admin/salles', name: 'admin_salles')]
-  public function admin_salles(Request $request): Response
-  {
+  public function admin_salles(Request $request): Response {
     $this->setInformations();
     $form = $this->createForm(GlobalSearchType::class);
     $form->handleRequest($request);
@@ -497,8 +500,7 @@ class AdminController extends AbstractController
   // Delete gym by id
   #[IsGranted("ROLE_SUPER_ADMIN")]
   #[Route('/admin/salle/suppression/{id}', name: 'admin_salles_deletion')]
-  public function admin_salles_deletion(int $id): Response
-  {
+  public function admin_salles_deletion(int $id): Response {
     $gym = $this->getDoctrine()
       ->getRepository(Gym::class)
       ->find($id);
@@ -519,8 +521,7 @@ class AdminController extends AbstractController
    */
   #[IsGranted("ROLE_SUPER_ADMIN")]
   #[Route('/admin/voies', name: 'admin_voies')]
-  public function admin_voies(Request $request): Response
-  {
+  public function admin_voies(Request $request): Response {
     $this->setInformations();
     $form = $this->createForm(GlobalSearchType::class);
     $form->handleRequest($request);
@@ -548,8 +549,7 @@ class AdminController extends AbstractController
   // Delete voie by id
   #[IsGranted("ROLE_SUPER_ADMIN")]
   #[Route('/admin/voie/suppression/{id}', name: 'admin_voies_deletion')]
-  public function admin_voies_deletion(int $id): Response
-  {
+  public function admin_voies_deletion(int $id): Response {
     $voie = $this->getDoctrine()
       ->getRepository(RouteEntity::class)
       ->find($id);
@@ -570,8 +570,7 @@ class AdminController extends AbstractController
    */
   #[IsGranted("ROLE_SUPER_ADMIN")]
   #[Route('/admin/paiements', name: 'admin_paiements')]
-  public function admin_paiements(Request $request): Response
-  {
+  public function admin_paiements(Request $request): Response {
     $this->setInformations();
     $form = $this->createForm(GlobalSearchType::class);
     $form->handleRequest($request);
@@ -599,8 +598,7 @@ class AdminController extends AbstractController
   // Send email reminder to user
   #[IsGranted("ROLE_SUPER_ADMIN")]
   #[Route('/admin/paiement/remind/{franchise}/{user}', name: 'admin_paiement_reminder')]
-  public function admin_paiement_reminder($franchise, $user): Response
-  {
+  public function admin_paiement_reminder($franchise, $user): Response {
     $franchise = $this->getDoctrine()
       ->getRepository(Franchise::class)
       ->find($franchise);
@@ -646,8 +644,7 @@ class AdminController extends AbstractController
     return $this->redirectToRoute('admin_paiements');
   }
 
-  private function setInformations()
-  {
+  private function setInformations() {
     $entityManager = $this->getDoctrine()->getManager();
     $usersCount = count($entityManager->getRepository(User::class)->findAll());
     $eventsCount = count(

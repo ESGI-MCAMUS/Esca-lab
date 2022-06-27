@@ -2,52 +2,54 @@
 {# {% extends 'base.html.twig' %} #}
 
 {% block title %}
-    Franchises ◈ Esca'Lab
+	Franchises ◈ Esca'Lab
 {% endblock %}
 
 {% block javascripts %}
 	<script src="{{ asset('js/jquery.min.js') }}"></script>
-    <script src="{{ asset('js/user/friends.js') }}"></script>
-    <script src="{{ asset('js/tiny-toast-1.1.0/tiny-toast.min.js') }}"></script>
+	<script src="{{ asset('js/user/friends.js') }}"></script>
+	<script src="{{ asset('js/tiny-toast-1.1.0/tiny-toast.min.js') }}"></script>
 {% endblock %}
 
 {% block body %}
-<div class="container-fluid">
-	<div class="d-sm-flex align-items-center mb-4">
-		<h4 class="text-dark mb-0 poppins bold text-black" style="color: rgb(33,37,41);">
-            <a href="/franchise/all">Franchises</a> > {{ franchise_name }} ({{ gyms|length }})
-        </h4>
+	<div class="container-fluid">
+		<div class="d-sm-flex align-items-center mb-4">
+			<h4 class="text-dark mb-0 poppins bold text-black" style="color: rgb(33,37,41);">
+				<a href="/franchise/all">Franchises</a>
+				>
+				{{ franchise_name }}
+				({{ gyms|length }})
+			</h4>
+		</div>
+		<br/>
+		<div class="row">
+			{% for gym in gyms %}
+				<div id="carte-user-{{ gym.id }}" class="col-md-6 col-xl-3 mb-4">
+					<div class="card shadow border-start-warning py-2">
+						<div class="card-body">
+							<div class="row align-items-center no-gutters">
+								<div class="col"></div>
+								<div class="col">
+									<a href="/gym/{{ gym.id }}">
+										<img src="{{ asset('images/gyms/') ~ gym.picture }}" style="object-fit: cover !important" class="img-tn rounded"/>
+									</a>
+								</div>
+								<div class="col"></div>
+							</div>
+							<hr class="bg-danger border-2 border-top border-secondary">
+							<div class="row">
+								<div class="col" style="text-align: center;">
+									<a href="/gym/{{ gym.id }}" style="text-decoration: none;color: black;">
+										<h3>
+											<strong>{{ gym.name }}</strong>
+										</h3>
+									</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			{% endfor %}
+		</div>
 	</div>
-    <br/>
-	<div class="row">
-        {% for gym in gyms %}
-            <div id="carte-user-{{ gym.id }}" class="col-md-6 col-xl-3 mb-4">
-                <div class="card shadow border-start-warning py-2">
-                    <div class="card-body">
-                        <div class="row align-items-center no-gutters">
-                            <div class="col"></div>
-                            <div class="col">
-                                <a href="/gym/{{ gym.id }}">
-                                    <img src="{{ asset('images/gyms/gym-ex.svg') }}"  class="img-tn rounded" />
-                                </a>
-                            </div>
-                            <div class="col"></div>
-                        </div>
-                        <hr class="bg-danger border-2 border-top border-secondary">
-                        <div class="row">
-                            <div class="col" style="text-align: center;">
-                                <a href="/gym/{{ gym.id }}" style="text-decoration: none;color: black;">
-                                    <h3>
-                                        <strong>{{ gym.name }}</strong>
-                                    </h3>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        {% endfor %}
-    </div>
-</div>
-<input type="text" id="url_root" value="{{ app.request.getSchemeAndHttpHost() }}" hidden></input>
-{% endblock %}
+	<input type="text" id="url_root" value="{{ app.request.getSchemeAndHttpHost() }}" hidden></input>{% endblock %}

@@ -11,8 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass=GymRepository::class)
  * @ORM\Table(name="`Gym`", schema="public")
  */
-class Gym
-{
+class Gym {
   /**
    * @ORM\Id
    * @ORM\GeneratedValue
@@ -70,103 +69,91 @@ class Gym
    */
   private $events;
 
-  public function __construct()
-  {
+  /**
+   * @ORM\Column(type="string", length=255)
+   */
+  private $picture;
+
+  public function __construct() {
     $this->routes = new ArrayCollection();
     $this->openers = new ArrayCollection();
     $this->events = new ArrayCollection();
   }
 
-  public function getId(): ?int
-  {
+  public function getId(): ?int {
     return $this->id;
   }
 
-  public function setId(int $id): self
-  {
+  public function setId(int $id): self {
     $this->id = $id;
     return $this;
   }
 
-  public function getName(): ?string
-  {
+  public function getName(): ?string {
     return $this->name;
   }
 
-  public function setName(string $name): self
-  {
+  public function setName(string $name): self {
     $this->name = $name;
 
     return $this;
   }
 
-  public function getSize(): ?string
-  {
+  public function getSize(): ?string {
     return $this->size;
   }
 
-  public function setSize(?string $size): self
-  {
+  public function setSize(?string $size): self {
     $this->size = $size;
 
     return $this;
   }
 
-  public function getPc(): ?string
-  {
+  public function getPc(): ?string {
     return $this->pc;
   }
 
-  public function setPc(?string $pc): self
-  {
+  public function setPc(?string $pc): self {
     $this->pc = $pc;
 
     return $this;
   }
 
-  public function getAddress(): ?string
-  {
+  public function getAddress(): ?string {
     return $this->address;
   }
 
-  public function setAddress(?string $address): self
-  {
+  public function setAddress(?string $address): self {
     $this->address = $address;
 
     return $this;
   }
 
-  public function getCity(): ?string
-  {
+  public function getCity(): ?string {
     return $this->city;
   }
 
-  public function setCity(?string $city): self
-  {
+  public function setCity(?string $city): self {
     $this->city = $city;
 
     return $this;
   }
 
-  public function getFranchise(): ?Franchise
-  {
+  public function getFranchise(): ?Franchise {
     return $this->franchise;
   }
 
-  public function setFranchise(?Franchise $franchise): self
-  {
+  public function setFranchise(?Franchise $franchise): self {
     $this->franchise = $franchise;
 
     return $this;
   }
 
-  public function getAdmin(): ?User
-  {
+  public function getAdmin(): ?User {
     return $this->admin;
   }
 
-  public function setAdmin(?User $admin): self
-  {
+  public function setAdmin(?User $admin): self {
     $this->admin = $admin;
 
     return $this;
@@ -175,13 +162,11 @@ class Gym
   /**
    * @return Collection|Route[]
    */
-  public function getRoutes(): Collection
-  {
+  public function getRoutes(): Collection {
     return $this->routes;
   }
 
-  public function addRoute(Route $route): self
-  {
+  public function addRoute(Route $route): self {
     if (!$this->routes->contains($route)) {
       $this->routes[] = $route;
       $route->setGym($this);
@@ -190,8 +175,7 @@ class Gym
     return $this;
   }
 
-  public function removeRoute(Route $route): self
-  {
+  public function removeRoute(Route $route): self {
     if ($this->routes->removeElement($route)) {
       // set the owning side to null (unless already changed)
       if ($route->getGym() === $this) {
@@ -205,13 +189,11 @@ class Gym
   /**
    * @return Collection|User[]
    */
-  public function getOpeners(): Collection
-  {
+  public function getOpeners(): Collection {
     return $this->openers;
   }
 
-  public function addOpener(User $opener): self
-  {
+  public function addOpener(User $opener): self {
     if (!$this->openers->contains($opener)) {
       $this->openers[] = $opener;
       $opener->setGym($this);
@@ -220,8 +202,7 @@ class Gym
     return $this;
   }
 
-  public function removeOpener(User $opener): self
-  {
+  public function removeOpener(User $opener): self {
     if ($this->openers->removeElement($opener)) {
       // set the owning side to null (unless already changed)
       if ($opener->getGym() === $this) {
@@ -235,13 +216,11 @@ class Gym
   /**
    * @return Collection<int, Event>
    */
-  public function getEvents(): Collection
-  {
+  public function getEvents(): Collection {
     return $this->events;
   }
 
-  public function addEvent(Event $event): self
-  {
+  public function addEvent(Event $event): self {
     if (!$this->events->contains($event)) {
       $this->events[] = $event;
       $event->setGym($this);
@@ -250,14 +229,23 @@ class Gym
     return $this;
   }
 
-  public function removeEvent(Event $event): self
-  {
+  public function removeEvent(Event $event): self {
     if ($this->events->removeElement($event)) {
       // set the owning side to null (unless already changed)
       if ($event->getGym() === $this) {
         $event->setGym(null);
       }
     }
+
+    return $this;
+  }
+
+  public function getPicture(): ?string {
+    return $this->picture;
+  }
+
+  public function setPicture(string $picture): self {
+    $this->picture = $picture;
 
     return $this;
   }

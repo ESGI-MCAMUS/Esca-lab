@@ -57,7 +57,7 @@
 								<span style="padding-left: 5px;">KPIs</span>
 							</a>
 						</li>
-						{% if is_granted('ROLE_ADMIN_FRANCHISE') %}
+                        {% if is_granted('ROLE_ADMIN_FRANCHISE') and app.user.franchise != null %}
 							<li class="nav-item">
 								<a class="nav-link poppins regular" href="{{ path('franchise_gyms') }}" style="padding: 10px;color: rgb(33,37,41);">
 									<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewbox="0 0 16 16" class="bi bi-building">
@@ -72,6 +72,7 @@
 								</a>
 							</li>
 						{% endif %}
+                        {% if app.user.gym != null or app.user.franchise != null %}
 						<li class="nav-item">
 							<a class="nav-link poppins regular" href="{{ "ROLE_ADMIN_FRANCHISE" in app.user.roles ? path('franchise_employees') : path('gym_employees') }}" style="height: auto;padding: 10px;color: rgb(33,37,41);">
 								<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewbox="0 0 16 16" class="bi bi-people">
@@ -84,6 +85,7 @@
 								</span>
 							</a>
 						</li>
+                        {% endif %}
 						{% if is_granted('ROLE_ADMIN_SALLE') and "ROLE_ADMIN_FRANCHISE" not in app.user.roles %}
 							<li class="nav-item">
 								<a class="nav-link poppins regular" href="{{ path('gym_routes') }}" style="padding: 10px;color: rgb(33,37,41);">
@@ -118,10 +120,10 @@
 							</a>
 						</li>
 					</ul>
-					{% if
-            is_granted('ROLE_ADMIN_FRANCHISE')
-            or is_granted('ROLE_ADMIN_SALLE')
-              or is_granted('ROLE_SUPER_ADMIN') %}
+                  {% if
+                    (is_granted('ROLE_ADMIN_FRANCHISE') and app.user.franchise != null)
+                    or (is_granted('ROLE_ADMIN_SALLE') and app.user.gym != null)
+                    or is_granted('ROLE_SUPER_ADMIN') %}
 						<hr style="height: 2px;color: #fff;width: 90%;margin: 0;border-radius: 50px;transform: scale(1);background: #ffffff;"/>
 						<ul class="navbar-nav text-light" id="accordionSidebar-2">
 							<li class="nav-item">

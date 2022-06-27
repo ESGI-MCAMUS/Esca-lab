@@ -14,10 +14,8 @@ use App\Entity\Franchise;
 use App\Entity\Route;
 use Doctrine\ORM\EntityManager;
 
-class UserFixtures extends Fixture
-{
-  public function load(ObjectManager $manager): void
-  {
+class UserFixtures extends Fixture {
+  public function load(ObjectManager $manager): void {
     $generator = Factory::create('fr_FR');
     for ($i = 0; $i < 100; $i++) {
       $user = new User();
@@ -115,13 +113,13 @@ class UserFixtures extends Fixture
   }
 
   // Create Franchise
-  public function generateFranchise(EntityManager $em)
-  {
+  public function generateFranchise(EntityManager $em) {
     $generator = Factory::create('fr_FR');
     for ($i = 0; $i < 10; $i++) {
       $franchise = new Franchise();
       $franchise->setAdmin($generator->numberBetween(1, 100));
       $franchise->setName($generator->company);
+      $franchise->setPicture("default.png");
       $em->persist($franchise);
       $this->generateGym($em, $franchise);
       $this->generatePayments($em, $franchise);
@@ -130,8 +128,7 @@ class UserFixtures extends Fixture
   }
 
   // Generate fake payments
-  public function generatePayments(EntityManager $em, Franchise $franchise)
-  {
+  public function generatePayments(EntityManager $em, Franchise $franchise) {
     $generator = Factory::create('fr_FR');
     for ($i = 0; $i < $generator->numberBetween(10, 50); $i++) {
       $type = $generator->randomElement(['route', 'gym']);
@@ -152,8 +149,7 @@ class UserFixtures extends Fixture
   }
 
   // Create Gyms
-  public function generateGym(EntityManager $em, Franchise $franchise)
-  {
+  public function generateGym(EntityManager $em, Franchise $franchise) {
     $generator = Factory::create('fr_FR');
     for ($i = 0; $i < $generator->numberBetween(3, 10); $i++) {
       $gym = new Gym();
@@ -164,6 +160,7 @@ class UserFixtures extends Fixture
       $gym->setCity($generator->city);
       $gym->setSize($generator->numberBetween(250, 10000));
       $gym->setFranchise($franchise);
+      $gym->setPicture("default.png");
       $em->persist($gym);
       $this->generateEvents($em, $gym);
       $this->generateRoute($em, $gym);
@@ -171,14 +168,15 @@ class UserFixtures extends Fixture
     $em->flush();
   }
 
-  public function generateRoute(EntityManager $em, Gym $gym)
-  {
+  public function generateRoute(EntityManager $em, Gym $gym) {
     $generator = Factory::create('fr_FR');
-    $difficulty = ["1", "2", "3", "4", "5a", "5b", "5c",
+    $difficulty = [
+      "1", "2", "3", "4", "5a", "5b", "5c",
       "6a", "6a+", "6b", "6b+", "6c", "6c+",
       "7a", "7a+", "7b", "7b+", "7c", "7c+",
       "8a", "8a+", "8b", "8b+", "8c", "8c+",
-      "9a", "9a+", "9b", "9b+", "9c"];
+      "9a", "9a+", "9b", "9b+", "9c"
+    ];
     for ($i = 0; $i < $generator->numberBetween(3, 10); $i++) {
       $route = new Route();
       $route->setId($i + 1);
@@ -191,8 +189,7 @@ class UserFixtures extends Fixture
   }
 
   // Generate events
-  public function generateEvents(EntityManager $em, Gym $gym)
-  {
+  public function generateEvents(EntityManager $em, Gym $gym) {
     $generator = Factory::create('fr_FR');
     for ($i = 0; $i < $generator->numberBetween(1, 10); $i++) {
       $event = new Event();
@@ -210,8 +207,7 @@ class UserFixtures extends Fixture
   }
 
   // Generate medias
-  public function generateMedias(EntityManager $em, User $user)
-  {
+  public function generateMedias(EntityManager $em, User $user) {
     $generator = Factory::create('fr_FR');
     for ($i = 0; $i < $generator->numberBetween(0, 10); $i++) {
       $media = new Media();

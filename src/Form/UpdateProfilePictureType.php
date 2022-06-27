@@ -15,6 +15,7 @@ class UpdateProfilePictureType extends AbstractType {
     $builder->add('profile_picture', FileType::class, [
       'mapped' => false,
       'label_attr' => ['class' => 'form-label'],
+      'label' => "",
       'attr' => [
         'class' => 'form-control poppins',
       ],

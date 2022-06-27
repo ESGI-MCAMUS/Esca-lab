@@ -5,6 +5,9 @@
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
   users_pp: "%kernel.project_dir%/public/images/profiles"
+  franchises_pictures: "%kernel.project_dir%/public/images/franchises"
+  gyms_pictures: "%kernel.project_dir%/public/images/gyms"
+  routes_pictures: "%kernel.project_dir%/public/images/routes"
 
 services:
   # default configuration for services in *this* file

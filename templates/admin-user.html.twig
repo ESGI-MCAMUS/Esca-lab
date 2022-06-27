@@ -86,7 +86,7 @@
 							</a>
 						</li>
                         {% endif %}
-						{% if is_granted('ROLE_ADMIN_SALLE') and "ROLE_ADMIN_FRANCHISE" not in app.user.roles %}
+						{% if is_granted('ROLE_ADMIN_SALLE') and "ROLE_ADMIN_FRANCHISE" not in app.user.roles and app.user.gym != null %}
 							<li class="nav-item">
 								<a class="nav-link poppins regular" href="{{ path('gym_routes') }}" style="padding: 10px;color: rgb(33,37,41);">
 									<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewbox="0 0 16 16" class="bi bi-bricks">

@@ -16,28 +16,30 @@
 <span id="spinner-__id__" class="spinner-border spinner-border-sm text-dark" role="status" aria-hidden="true" hidden></span>
 {% endset %}
 
-{% set templateMessage %}
-<div id="comment-__idMessageTemplate__"  class="row align-items-center pt-2 pb-2" style="border-bottom: 1px solid lightgray; min-height:8vh;">
-    <div class="row">
-        <div class="col-2">
-            <img class="border rounded-circle img-profile" src="{{asset('images/profiles/' ~ app.user.picture ~ '')}}" style="width:50px;">
+{% if app.user.id is defined and app.user.id != 0 %}
+    {% set templateMessage %}
+    <div id="comment-__idMessageTemplate__"  class="row align-items-center pt-2 pb-2" style="border-bottom: 1px solid lightgray; min-height:8vh;">
+        <div class="row">
+            <div class="col-2">
+                <img class="border rounded-circle img-profile" src="{{asset('images/profiles/' ~ app.user.picture ~ '')}}" style="width:50px;">
+            </div>
+            <div class="col-10">
+                <p style="text-align: justify;margin-bottom: 0px;">
+                    <strong>{{ app.user.username }}</strong> : __messageContentTemplate__
+                </p>
+            </div>
         </div>
-        <div class="col-10">
-            <p style="text-align: justify;margin-bottom: 0px;">
-                <strong>{{ app.user.username }}</strong> : __messageContentTemplate__
-            </p>
+        <div class="row">
+            <div class="col-2"></div>
+            <div class="col-10" style="text-align:left;">
+                <span class="badge bg-danger" style="cursor: pointer;"><i class="bi bi-heart"></i> 6</span>
+                <span class="badge text-warning" style="cursor: pointer;"><i class="bi bi-hand-thumbs-up"></i>4</span>
+                <span class="badge text-success" style="cursor: pointer;"><i class="bi bi-check-lg"></i>4</span>
+            </div>
         </div>
     </div>
-    <div class="row">
-        <div class="col-2"></div>
-        <div class="col-10" style="text-align:left;">
-            <span class="badge bg-danger" style="cursor: pointer;"><i class="bi bi-heart"></i> 6</span>
-            <span class="badge text-warning" style="cursor: pointer;"><i class="bi bi-hand-thumbs-up"></i>4</span>
-            <span class="badge text-success" style="cursor: pointer;"><i class="bi bi-check-lg"></i>4</span>
-        </div>
-    </div>
-</div>
-{% endset %}
+    {% endset %}
+{% endif %}
 
 {% block body %}
 <div class="container-fluid">
@@ -139,27 +141,29 @@
                             </p>
                         </div>
                     </div>
-                    {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
                     <div class="row">
                         <div class="col mt-2" style="text-align: center;">
-                            {% if route.opened == 1 %}
-                                {% if route.id not in resolved %}
-                                    <button id="btn-update-route" type="button" class="btn btn-info btn-add" data-b-route="{{ route.id }}">
-                                        <span id="spinner-{{ route.id }}" class="spinner-border spinner-border-sm text-dark" role="status" aria-hidden="true" hidden></span>
-                                        Je l'ai faite !
-                                    </button>
+                            {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+                                {% if route.opened == 1 %}
+                                    {% if route.id not in resolved %}
+                                        <button id="btn-update-route" type="button" class="btn btn-info btn-add" data-b-route="{{ route.id }}">
+                                            <span id="spinner-{{ route.id }}" class="spinner-border spinner-border-sm text-dark" role="status" aria-hidden="true" hidden></span>
+                                            Je l'ai faite !
+                                        </button>
+                                    {% else %}
+                                        <button id="btn-update-route" type="button" class="btn btn-warning btn-remove" data-b-route="{{ route.id }}">
+                                            <span id="spinner-{{ route.id }}" class="spinner-border spinner-border-sm text-dark" role="status" aria-hidden="true" hidden></span>
+                                            Je me suis trompé
+                                        </button>
+                                    {% endif %}
                                 {% else %}
-                                    <button id="btn-update-route" type="button" class="btn btn-warning btn-remove" data-b-route="{{ route.id }}">
-                                        <span id="spinner-{{ route.id }}" class="spinner-border spinner-border-sm text-dark" role="status" aria-hidden="true" hidden></span>
-                                        Je me suis trompé
-                                    </button>
+                                    <button type="button" class="btn btn-secondary disabled">Trop tard</button>
                                 {% endif %}
                             {% else %}
-                                <button type="button" class="btn btn-secondary disabled">Trop tard</button>
+                                <a href="/connexion" class="btn btn-outline-secondary" tabindex="-1" role="button" aria-disabled="true">Se connecter</a>
                             {% endif %}
                         </div>
                     </div>
-                    {% endif %}
                 </div>
             </div>
         </div>
@@ -203,7 +207,10 @@
 
 <input type="text" id="url_root" value="{{ app.request.getSchemeAndHttpHost() }}" hidden></input>
 <input type="text" id="templateSpan" data-t-span="{{ templateSpan|escape }}" hidden>
-<input type="text" id="templateMessage" data-t-span="{{ templateMessage|escape }}" hidden>
+
+{% if app.user.id is defined and app.user.id != 0 %}
+    <input type="text" id="templateMessage" data-t-span="{{ templateMessage|escape }}" hidden>
+{% endif %}
 
 <link rel="stylesheet" href="{{asset('bootstrap/home/css/bootstrap.min.css')}}">
 {% endblock %}

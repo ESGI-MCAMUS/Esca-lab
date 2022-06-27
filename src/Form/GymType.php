@@ -11,8 +11,10 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 
-class GymType extends AbstractType
-{
+use Symfony\Component\Validator\Constraints\File;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
+
+class GymType extends AbstractType {
     public function buildForm(
         FormBuilderInterface $builder,
         array $options
@@ -59,14 +61,29 @@ class GymType extends AbstractType
                     'placeholder' => 'Paris',
                 ],
             ])
+            ->add('picture', FileType::class, [
+                'mapped' => false,
+                'label_attr' => ['class' => 'form-label'],
+                'label' => "Photo de la salle",
+                'attr' => [
+                    'class' => 'form-control poppins',
+                ],
+                'constraints' => [
+                    new File([
+                        'mimeTypes' => [
+                            'image/*',
+                        ],
+                        'mimeTypesMessage' => 'Ce fichier n\'est pas une image',
+                    ])
+                ],
+            ])
             ->add('save', SubmitType::class, [
                 'label' => 'Enregistrer',
                 'attr' => ['class' => 'btn btn-primary'],
             ]);
     }
 
-    public function configureOptions(OptionsResolver $resolver): void
-    {
+    public function configureOptions(OptionsResolver $resolver): void {
         $resolver->setDefaults([
             'data_class' => Gym::class,
         ]);

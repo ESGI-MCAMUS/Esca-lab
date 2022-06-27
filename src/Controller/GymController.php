@@ -15,29 +15,46 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Security;
 
+use Symfony\Component\String\Slugger\SluggerInterface;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
+
 #[IsGranted('ROLE_ADMIN_SALLE')]
-class GymController extends AbstractController
-{
+class GymController extends AbstractController {
   private $user;
 
-  public function __construct(Security $security)
-  {
+  public function __construct(Security $security) {
     $this->user = $security->getUser();
   }
 
   #[Route('/gym/add', name: 'gym_add')]
-  public function add(EntityManagerInterface $em, Request $request): Response
-  {
+  public function add(EntityManagerInterface $em, Request $request, SluggerInterface $slugger): Response {
     $form = $this->createForm(GymType::class);
 
     $form->handleRequest($request);
     if ($form->isSubmitted() && $form->isValid()) {
       $gym = $form->getData();
 
+      $picture = $form->get('picture')->getData();
+      if ($picture) {
+        $originalFilename = pathinfo($picture->getClientOriginalName(), PATHINFO_FILENAME);
+        $safeFilename = $slugger->slug($originalFilename);
+        $newFilename = uniqid() . '.' . $picture->guessExtension();
+        try {
+          $picture->move(
+            $this->getParameter('gyms_pictures'),
+            $newFilename
+          );
+          $gym->setPicture($newFilename);
+        } catch (FileException $e) {
+          $gym->setPicture("");
+        }
+      }
+
       $gym->setFranchise($this->user->getFranchise());
 
       $em->persist($form->getData());
       $em->flush();
+
 
       // Create a payment for the gym
       $payment = new Payments();
@@ -93,8 +110,7 @@ class GymController extends AbstractController
   }
 
   #[Route('/gym/remove/{id}', name: 'gym_remove')]
-  public function remove($id, EntityManagerInterface $em)
-  {
+  public function remove($id, EntityManagerInterface $em) {
     $repo = $this->getDoctrine()->getRepository(Gym::class);
 
     $gym = $repo->findOneBy(['id' => $id]);

@@ -10,10 +10,8 @@ use Symfony\Component\Mailer\Mailer;
 use Symfony\Component\Mailer\Transport;
 use Symfony\Component\Routing\Annotation\Route;
 
-class MailerController extends AbstractController
-{
-  public function sendEmailOTP($to, $otp, $firstname)
-  {
+class MailerController extends AbstractController {
+  public function sendEmailOTP($to, $otp, $firstname) {
     $html =
       '<div style="font-family: Helvetica,Arial,sans-serif;min-width:1000px;overflow:auto;line-height:2">
   <div style="margin:50px auto;width:70%;padding:20px 0">
@@ -31,7 +29,6 @@ class MailerController extends AbstractController
         : 'http://') .
       $_SERVER["SERVER_NAME"] .
       ':' .
-      $_SERVER["SERVER_PORT"] .
       '/inscription/otp?email=' .
       $to .
       '&otp=' .
@@ -66,8 +63,7 @@ class MailerController extends AbstractController
     }
   }
 
-  public function sendPaymentReminderEmail($to, $firstname, $payments)
-  {
+  public function sendPaymentReminderEmail($to, $firstname, $payments) {
     // Process payments
     $total = 0;
     $paymentsHTML = "<li>";
@@ -75,15 +71,15 @@ class MailerController extends AbstractController
       $total += $payment->getAmount();
       $paymentsHTML .=
         '<li> ' . $payment->getType() === "gym"
-          ? "Salle"
-          : "Voie" .
-            ' - ' .
-            $payment->getAmount() / 100 .
-            '€ - ' .
-            ($payment->getStatus() === "pending"
-              ? "En attente de paiement"
-              : "Paiement refusé") .
-            '
+        ? "Salle"
+        : "Voie" .
+        ' - ' .
+        $payment->getAmount() / 100 .
+        '€ - ' .
+        ($payment->getStatus() === "pending"
+          ? "En attente de paiement"
+          : "Paiement refusé") .
+        '
       </li><li>';
     }
     $total = $total / 100;
@@ -112,7 +108,6 @@ class MailerController extends AbstractController
         : 'http://') .
       $_SERVER["SERVER_NAME"] .
       ':' .
-      $_SERVER["SERVER_PORT"] .
       '/franchise/paiements" style="text-decoration: none; color: white;">R&eacute;gler mes dettes</a>
         </h2> 
         <p style="font-size: 0.9em;">L\'&Eacute;quipe Esca\'Lab</p> 

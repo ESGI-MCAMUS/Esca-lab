@@ -4,6 +4,43 @@
 Inscription ◈ Esca'Lab
 {% endblock %}
 
+{% block nav %}
+<nav id="mainNav" class="navbar navbar-light navbar-expand-lg fixed-top">
+	<div class="container">
+		<a class="navbar-brand" href="/">Esca'Lab</a>
+		<button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+			<i class="fa fa-bars"></i>
+		</button>
+		<div id="navbarResponsive" class="collapse navbar-collapse">
+			<ul class="navbar-nav ms-auto">
+				<li class="nav-item">
+					<a class="nav-link" href="/">Accueil</a>
+				</li>
+				{% if app.user.id is defined and app.user.id != 0 %}
+					<li class="nav-item" style="display: inline-block">
+						<a class="nav-link" href="/user">Mon compte</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="/logout">Se déconnecter</a>
+					</li>
+					<li class="nav-item">
+						<img class="border rounded-circle img-profile" width="30px" height="30px" style="" src="{{asset('images/profiles/') ~ app.user.picture}}">
+					</li>
+				{% else %}
+					<li class="nav-item">
+						<a class="nav-link" href="/connexion">Se connecter</a>
+					</li>
+					<div class="d-none d-sm-block topbar-divider"></div>
+					<li class="nav-item">
+						<a class="nav-link" href="/inscription">S&#39;inscrire</a>
+					</li>
+				{% endif %}
+			</ul>
+		</div>
+	</div>
+</nav>
+{% endblock %}
+
 {% block body %}
 <main class="gradient-light-grey-light-blue">
 <div class="container min-vh-100">
@@ -77,6 +114,26 @@ Inscription ◈ Esca'Lab
         </div>
         <div class="col-xl-3"></div>
     </div>
+    <div class="row">
+		<div class="col-md-10 col-lg-8 mx-auto" style="text-align: center;">
+			<ul class="list-inline text-center">
+				<li class="list-inline-item">
+					<span class="">
+						<i class="bi bi-twitter"></i>
+					<span>
+				</li>
+				<li class="list-inline-item">
+					<span class="fa-stack fa-lg">
+						<i class="bi bi-facebook"></i>
+					</span>
+				</li>
+			</ul>
+			<p class="text-muted copyright">Copyright © Esca'Lab 2022</p>
+		</div>
+	</div>
 </div>
 </main>
+{% endblock %}
+
+{% block footer %}
 {% endblock %}

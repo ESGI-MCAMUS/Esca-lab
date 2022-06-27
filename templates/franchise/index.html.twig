@@ -6,125 +6,129 @@
 
 {% block body %}
 
-                    <div class="d-sm-flex justify-content-between align-items-center mb-4">
-                        <h3 class="text-dark mb-0 poppins bold text-black" style="color: rgb(33,37,41);">KPIs</h3>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-7 col-xl-8">
-                            <div class="card shadow mb-4">
-                                <div class="card-header d-flex justify-content-between align-items-center">
-                                    <h6 class="text-primary fw-bold m-0 text-black poppins">Salles ouvertes (6 dernier jours)</h6>
-                                </div>
-                                <div class="card-body">
-                                    <div class="chart-area">
-                                        <canvas data-bss-chart="{&quot;type&quot;:&quot;line&quot;,&quot;data&quot;:{&quot;labels&quot;:[&quot;Lun&quot;,&quot;Mar&quot;,&quot;Mer&quot;,&quot;Jeu&quot;,&quot;Ven&quot;,&quot;Sam&quot;],&quot;datasets&quot;:[{&quot;label&quot;:&quot;Earnings&quot;,&quot;fill&quot;:true,&quot;data&quot;:[&quot;5&quot;,&quot;10&quot;,&quot;7&quot;,&quot;6&quot;,&quot;14&quot;,&quot;12&quot;],&quot;backgroundColor&quot;:&quot;rgba(78, 115, 223, 0.05)&quot;,&quot;borderColor&quot;:&quot;rgba(78, 115, 223, 1)&quot;}]},&quot;options&quot;:{&quot;maintainAspectRatio&quot;:false,&quot;legend&quot;:{&quot;display&quot;:false,&quot;labels&quot;:{&quot;fontStyle&quot;:&quot;normal&quot;}},&quot;title&quot;:{&quot;fontStyle&quot;:&quot;normal&quot;,&quot;display&quot;:false},&quot;scales&quot;:{&quot;xAxes&quot;:[{&quot;gridLines&quot;:{&quot;color&quot;:&quot;rgb(234, 236, 244)&quot;,&quot;zeroLineColor&quot;:&quot;rgb(234, 236, 244)&quot;,&quot;drawBorder&quot;:false,&quot;drawTicks&quot;:false,&quot;borderDash&quot;:[&quot;2&quot;],&quot;zeroLineBorderDash&quot;:[&quot;2&quot;],&quot;drawOnChartArea&quot;:false},&quot;ticks&quot;:{&quot;fontColor&quot;:&quot;#858796&quot;,&quot;fontStyle&quot;:&quot;normal&quot;,&quot;padding&quot;:20}}],&quot;yAxes&quot;:[{&quot;gridLines&quot;:{&quot;color&quot;:&quot;rgb(234, 236, 244)&quot;,&quot;zeroLineColor&quot;:&quot;rgb(234, 236, 244)&quot;,&quot;drawBorder&quot;:false,&quot;drawTicks&quot;:false,&quot;borderDash&quot;:[&quot;2&quot;],&quot;zeroLineBorderDash&quot;:[&quot;2&quot;]},&quot;ticks&quot;:{&quot;fontColor&quot;:&quot;#858796&quot;,&quot;fontStyle&quot;:&quot;normal&quot;,&quot;padding&quot;:20}}]}}}"></canvas>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-5 col-xl-4">
-                            <div class="card shadow mb-4">
-                                <div class="card-header d-flex justify-content-between align-items-center">
-                                    <h6 class="text-primary fw-bold m-0 text-black poppins">Voies ouvertes / fermées</h6>
-                                </div>
-                                <div class="card-body">
-                                    <div class="chart-area">
-                                        <canvas data-bss-chart="{&quot;type&quot;:&quot;doughnut&quot;,&quot;data&quot;:{&quot;labels&quot;:[&quot;Ouvertes&quot;,&quot;Fermée&quot;],&quot;datasets&quot;:[{&quot;label&quot;:&quot;Voies ouvertes&quot;,&quot;backgroundColor&quot;:[&quot;#4e73df&quot;,&quot;#1cc88a&quot;],&quot;borderColor&quot;:[&quot;#ffffff&quot;,&quot;#ffffff&quot;],&quot;data&quot;:[&quot;{{ app.session.get('opened_ways') }}&quot;,&quot;{{ app.session.get('ways_count') - app.session.get('opened_ways') }}&quot;]}]},&quot;options&quot;:{&quot;maintainAspectRatio&quot;:false,&quot;legend&quot;:{&quot;display&quot;:false,&quot;labels&quot;:{&quot;fontStyle&quot;:&quot;normal&quot;}},&quot;title&quot;:{&quot;fontStyle&quot;:&quot;normal&quot;,&quot;display&quot;:false}}}"></canvas>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6 col-xl-3 mb-4">
-                            <div class="card shadow border-start-primary py-2">
-                                <div class="card-body">
-                                    <div class="row align-items-center no-gutters">
-                                        <div class="col me-2">
-                                            <div class="text-uppercase text-primary fw-bold text-xs mb-1">
-                                                <span class="text-primary poppins">Voies ouvertes</span>
-                                            </div>
-                                            <div class="text-dark fw-bold h5 mb-0 poppins">
-                                                <span>{{ app.session.get('opened_ways') }}</span>
-                                            </div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" viewbox="0 0 16 16" class="bi bi-bricks fa-2x" style="color: var(--bs-blue);">
-                                                <path d="M0 .5A.5.5 0 0 1 .5 0h15a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-.5.5H14v2h1.5a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-.5.5H14v2h1.5a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-.5.5H.5a.5.5 0 0 1-.5-.5v-3a.5.5 0 0 1 .5-.5H2v-2H.5a.5.5 0 0 1-.5-.5v-3A.5.5 0 0 1 .5 6H2V4H.5a.5.5 0 0 1-.5-.5v-3zM3 4v2h4.5V4H3zm5.5 0v2H13V4H8.5zM3 10v2h4.5v-2H3zm5.5 0v2H13v-2H8.5zM1 1v2h3.5V1H1zm4.5 0v2h5V1h-5zm6 0v2H15V1h-3.5zM1 7v2h3.5V7H1zm4.5 0v2h5V7h-5zm6 0v2H15V7h-3.5zM1 13v2h3.5v-2H1zm4.5 0v2h5v-2h-5zm6 0v2H15v-2h-3.5z"></path>
-                                            </svg>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6 col-xl-3 mb-4">
-                            <div class="card shadow border-start-success py-2">
-                                <div class="card-body">
-                                    <div class="row align-items-center no-gutters">
-                                        <div class="col me-2">
-                                            <div class="text-uppercase text-success fw-bold text-xs mb-1">
-                                                <span class="text-primary poppins">Salles ouvertes</span>
-                                            </div>
-                                            <div class="text-dark fw-bold h5 mb-0 poppins">
-                                                <span>{% if (app.user.franchise != null) %}{{ app.user.franchise.gyms|length }}{% else %}0{% endif %}</span>
-                                            </div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" viewbox="0 0 16 16" class="bi bi-building fa-2x" style="color: var(--bs-blue);">
-                                                <path fill-rule="evenodd" d="M14.763.075A.5.5 0 0 1 15 .5v15a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5V14h-1v1.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V10a.5.5 0 0 1 .342-.474L6 7.64V4.5a.5.5 0 0 1 .276-.447l8-4a.5.5 0 0 1 .487.022zM6 8.694 1 10.36V15h5V8.694zM7 15h2v-1.5a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 .5.5V15h2V1.309l-7 3.5V15z"></path>
-                                                <path d="M2 11h1v1H2v-1zm2 0h1v1H4v-1zm-2 2h1v1H2v-1zm2 0h1v1H4v-1zm4-4h1v1H8V9zm2 0h1v1h-1V9zm-2 2h1v1H8v-1zm2 0h1v1h-1v-1zm2-2h1v1h-1V9zm0 2h1v1h-1v-1zM8 7h1v1H8V7zm2 0h1v1h-1V7zm2 0h1v1h-1V7zM8 5h1v1H8V5zm2 0h1v1h-1V5zm2 0h1v1h-1V5zm0-2h1v1h-1V3z"></path>
-                                            </svg>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6 col-xl-3 mb-4">
-                            <div class="card shadow border-start-info py-2">
-                                <div class="card-body">
-                                    <div class="row align-items-center no-gutters">
-                                        <div class="col me-2">
-                                            <div class="text-uppercase text-info fw-bold text-xs mb-1">
-                                                <span class="text-primary poppins">Paiements mensuels</span>
-                                            </div>
-                                            <div class="row g-0 align-items-center">
-                                                <div class="col-auto">
-                                                    <div class="text-dark fw-bold h5 mb-0 me-3 poppins">
-                                                        <span>14</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" viewbox="0 0 16 16" class="bi bi-images fa-2x" style="color: var(--bs-blue);">
-                                                <path d="M4.502 9a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"></path>
-                                                <path d="M14.002 13a2 2 0 0 1-2 2h-10a2 2 0 0 1-2-2V5A2 2 0 0 1 2 3a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v8a2 2 0 0 1-1.998 2zM14 2H4a1 1 0 0 0-1 1h9.002a2 2 0 0 1 2 2v7A1 1 0 0 0 15 11V3a1 1 0 0 0-1-1zM2.002 4a1 1 0 0 0-1 1v8l2.646-2.354a.5.5 0 0 1 .63-.062l2.66 1.773 3.71-3.71a.5.5 0 0 1 .577-.094l1.777 1.947V5a1 1 0 0 0-1-1h-10z"></path>
-                                            </svg>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6 col-xl-3 mb-4">
-                            <div class="card shadow border-start-warning py-2">
-                                <div class="card-body">
-                                    <div class="row align-items-center no-gutters">
-                                        <div class="col me-2">
-                                            <div class="text-uppercase text-warning fw-bold text-xs mb-1">
-                                                <span class="text-primary poppins">Évènements mensuels</span>
-                                            </div>
-                                            <div class="text-dark fw-bold h5 mb-0 poppins">
-                                                <span>3</span>
-                                            </div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <img width="40" height="40" class="blue-svg" src="/images/calendars/{{month}}.svg">
+	<div class="d-sm-flex justify-content-between align-items-center mb-4">
+		<h3 class="text-dark mb-0 poppins bold text-black" style="color: rgb(33,37,41);">KPIs</h3>
+	</div>
+	<div class="row">
+		<div class="col-lg-7 col-xl-8">
+			<div class="card shadow mb-4">
+				<div class="card-header d-flex justify-content-between align-items-center">
+					<h6 class="text-primary fw-bold m-0 text-black poppins">Salles ouvertes (6 dernier jours)</h6>
+				</div>
+				<div class="card-body">
+					<div class="chart-area">
+						<canvas data-bss-chart="{&quot;type&quot;:&quot;line&quot;,&quot;data&quot;:{&quot;labels&quot;:[&quot;Lun&quot;,&quot;Mar&quot;,&quot;Mer&quot;,&quot;Jeu&quot;,&quot;Ven&quot;,&quot;Sam&quot;],&quot;datasets&quot;:[{&quot;label&quot;:&quot;Earnings&quot;,&quot;fill&quot;:true,&quot;data&quot;:[&quot;5&quot;,&quot;10&quot;,&quot;7&quot;,&quot;6&quot;,&quot;14&quot;,&quot;12&quot;],&quot;backgroundColor&quot;:&quot;rgba(78, 115, 223, 0.05)&quot;,&quot;borderColor&quot;:&quot;rgba(78, 115, 223, 1)&quot;}]},&quot;options&quot;:{&quot;maintainAspectRatio&quot;:false,&quot;legend&quot;:{&quot;display&quot;:false,&quot;labels&quot;:{&quot;fontStyle&quot;:&quot;normal&quot;}},&quot;title&quot;:{&quot;fontStyle&quot;:&quot;normal&quot;,&quot;display&quot;:false},&quot;scales&quot;:{&quot;xAxes&quot;:[{&quot;gridLines&quot;:{&quot;color&quot;:&quot;rgb(234, 236, 244)&quot;,&quot;zeroLineColor&quot;:&quot;rgb(234, 236, 244)&quot;,&quot;drawBorder&quot;:false,&quot;drawTicks&quot;:false,&quot;borderDash&quot;:[&quot;2&quot;],&quot;zeroLineBorderDash&quot;:[&quot;2&quot;],&quot;drawOnChartArea&quot;:false},&quot;ticks&quot;:{&quot;fontColor&quot;:&quot;#858796&quot;,&quot;fontStyle&quot;:&quot;normal&quot;,&quot;padding&quot;:20}}],&quot;yAxes&quot;:[{&quot;gridLines&quot;:{&quot;color&quot;:&quot;rgb(234, 236, 244)&quot;,&quot;zeroLineColor&quot;:&quot;rgb(234, 236, 244)&quot;,&quot;drawBorder&quot;:false,&quot;drawTicks&quot;:false,&quot;borderDash&quot;:[&quot;2&quot;],&quot;zeroLineBorderDash&quot;:[&quot;2&quot;]},&quot;ticks&quot;:{&quot;fontColor&quot;:&quot;#858796&quot;,&quot;fontStyle&quot;:&quot;normal&quot;,&quot;padding&quot;:20}}]}}}"></canvas>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-5 col-xl-4">
+			<div class="card shadow mb-4">
+				<div class="card-header d-flex justify-content-between align-items-center">
+					<h6 class="text-primary fw-bold m-0 text-black poppins">Voies ouvertes / fermées</h6>
+				</div>
+				<div class="card-body">
+					<div class="chart-area">
+						<canvas data-bss-chart="{&quot;type&quot;:&quot;doughnut&quot;,&quot;data&quot;:{&quot;labels&quot;:[&quot;Ouvertes&quot;,&quot;Fermée&quot;],&quot;datasets&quot;:[{&quot;label&quot;:&quot;Voies ouvertes&quot;,&quot;backgroundColor&quot;:[&quot;#4e73df&quot;,&quot;#1cc88a&quot;],&quot;borderColor&quot;:[&quot;#ffffff&quot;,&quot;#ffffff&quot;],&quot;data&quot;:[&quot;{{ app.session.get('opened_ways') }}&quot;,&quot;{{ app.session.get('ways_count') - app.session.get('opened_ways') }}&quot;]}]},&quot;options&quot;:{&quot;maintainAspectRatio&quot;:false,&quot;legend&quot;:{&quot;display&quot;:false,&quot;labels&quot;:{&quot;fontStyle&quot;:&quot;normal&quot;}},&quot;title&quot;:{&quot;fontStyle&quot;:&quot;normal&quot;,&quot;display&quot;:false}}}"></canvas>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-6 col-xl-3 mb-4">
+			<div class="card shadow border-start-primary py-2">
+				<div class="card-body">
+					<div class="row align-items-center no-gutters">
+						<div class="col me-2">
+							<div class="text-uppercase text-primary fw-bold text-xs mb-1">
+								<span class="text-primary poppins">Voies ouvertes</span>
+							</div>
+							<div class="text-dark fw-bold h5 mb-0 poppins">
+								<span>{{ app.session.get('opened_ways') }}</span>
+							</div>
+						</div>
+						<div class="col-auto">
+							<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" viewbox="0 0 16 16" class="bi bi-bricks fa-2x" style="color: var(--bs-blue);">
+								<path d="M0 .5A.5.5 0 0 1 .5 0h15a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-.5.5H14v2h1.5a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-.5.5H14v2h1.5a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-.5.5H.5a.5.5 0 0 1-.5-.5v-3a.5.5 0 0 1 .5-.5H2v-2H.5a.5.5 0 0 1-.5-.5v-3A.5.5 0 0 1 .5 6H2V4H.5a.5.5 0 0 1-.5-.5v-3zM3 4v2h4.5V4H3zm5.5 0v2H13V4H8.5zM3 10v2h4.5v-2H3zm5.5 0v2H13v-2H8.5zM1 1v2h3.5V1H1zm4.5 0v2h5V1h-5zm6 0v2H15V1h-3.5zM1 7v2h3.5V7H1zm4.5 0v2h5V7h-5zm6 0v2H15V7h-3.5zM1 13v2h3.5v-2H1zm4.5 0v2h5v-2h-5zm6 0v2H15v-2h-3.5z"></path>
+							</svg>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-6 col-xl-3 mb-4">
+			<div class="card shadow border-start-success py-2">
+				<div class="card-body">
+					<div class="row align-items-center no-gutters">
+						<div class="col me-2">
+							<div class="text-uppercase text-success fw-bold text-xs mb-1">
+								<span class="text-primary poppins">Salles ouvertes</span>
+							</div>
+							<div class="text-dark fw-bold h5 mb-0 poppins">
+								<span>
+									{% if (app.user.franchise != null) %}
+										{{ app.user.franchise.gyms|length }}{% else %}0
+									{% endif %}
+								</span>
+							</div>
+						</div>
+						<div class="col-auto">
+							<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" viewbox="0 0 16 16" class="bi bi-building fa-2x" style="color: var(--bs-blue);">
+								<path fill-rule="evenodd" d="M14.763.075A.5.5 0 0 1 15 .5v15a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5V14h-1v1.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V10a.5.5 0 0 1 .342-.474L6 7.64V4.5a.5.5 0 0 1 .276-.447l8-4a.5.5 0 0 1 .487.022zM6 8.694 1 10.36V15h5V8.694zM7 15h2v-1.5a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 .5.5V15h2V1.309l-7 3.5V15z"></path>
+								<path d="M2 11h1v1H2v-1zm2 0h1v1H4v-1zm-2 2h1v1H2v-1zm2 0h1v1H4v-1zm4-4h1v1H8V9zm2 0h1v1h-1V9zm-2 2h1v1H8v-1zm2 0h1v1h-1v-1zm2-2h1v1h-1V9zm0 2h1v1h-1v-1zM8 7h1v1H8V7zm2 0h1v1h-1V7zm2 0h1v1h-1V7zM8 5h1v1H8V5zm2 0h1v1h-1V5zm2 0h1v1h-1V5zm0-2h1v1h-1V3z"></path>
+							</svg>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-6 col-xl-3 mb-4">
+			<div class="card shadow border-start-info py-2">
+				<div class="card-body">
+					<div class="row align-items-center no-gutters">
+						<div class="col me-2">
+							<div class="text-uppercase text-info fw-bold text-xs mb-1">
+								<span class="text-primary poppins">Paiements mensuels</span>
+							</div>
+							<div class="row g-0 align-items-center">
+								<div class="col-auto">
+									<div class="text-dark fw-bold h5 mb-0 me-3 poppins">
+										<span>14</span>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-auto">
+							<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" viewbox="0 0 16 16" class="bi bi-images fa-2x" style="color: var(--bs-blue);">
+								<path d="M4.502 9a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"></path>
+								<path d="M14.002 13a2 2 0 0 1-2 2h-10a2 2 0 0 1-2-2V5A2 2 0 0 1 2 3a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v8a2 2 0 0 1-1.998 2zM14 2H4a1 1 0 0 0-1 1h9.002a2 2 0 0 1 2 2v7A1 1 0 0 0 15 11V3a1 1 0 0 0-1-1zM2.002 4a1 1 0 0 0-1 1v8l2.646-2.354a.5.5 0 0 1 .63-.062l2.66 1.773 3.71-3.71a.5.5 0 0 1 .577-.094l1.777 1.947V5a1 1 0 0 0-1-1h-10z"></path>
+							</svg>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-6 col-xl-3 mb-4">
+			<div class="card shadow border-start-warning py-2">
+				<div class="card-body">
+					<div class="row align-items-center no-gutters">
+						<div class="col me-2">
+							<div class="text-uppercase text-warning fw-bold text-xs mb-1">
+								<span class="text-primary poppins">Évènements mensuels</span>
+							</div>
+							<div class="text-dark fw-bold h5 mb-0 poppins">
+								<span>3</span>
+							</div>
+						</div>
+						<div class="col-auto">
+							<img width="40" height="40" class="blue-svg" src="/images/calendars/{{month}}.svg">
 
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-               
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
 {% endblock %}

@@ -13,19 +13,16 @@ use Symfony\Component\Security\Core\Security;
 use App\Form\GlobalSearchType;
 use Symfony\Component\HttpFoundation\Request;
 
-class PaymentsController extends AbstractController
-{
+class PaymentsController extends AbstractController {
   private $user;
 
-  public function __construct(Security $security)
-  {
+  public function __construct(Security $security) {
     $this->user = $security->getUser();
   }
 
   #[IsGranted("ROLE_ADMIN_FRANCHISE")]
   #[Route('/franchise/paiements', name: 'app_payments')]
-  public function showPayments(Request $request): Response
-  {
+  public function showPayments(Request $request): Response {
     $this->setInformations();
     $form = $this->createForm(GlobalSearchType::class);
     $form->handleRequest($request);
@@ -63,8 +60,7 @@ class PaymentsController extends AbstractController
 
   #[IsGranted("ROLE_ADMIN_FRANCHISE")]
   #[Route('/franchise/checkout/{id}', name: 'app_init_payment')]
-  public function initPayment($id)
-  {
+  public function initPayment($id) {
     \Stripe\Stripe::setApiKey($_SERVER['STRIPE_API_KEY']);
 
     $token = $this->uuidv4();
@@ -79,8 +75,12 @@ class PaymentsController extends AbstractController
     $entityManager->persist($payment);
     $entityManager->flush();
 
+    if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on')
+      $protocol = "https://";
+    else
+      $protocol = "http://";
     $URL_SITE =
-      'http://' . $_SERVER['SERVER_NAME'] . ':' . $_SERVER['SERVER_PORT'];
+      $protocol . $_SERVER['SERVER_NAME'];
 
     $checkout_session = \Stripe\Checkout\Session::create([
       'payment_method_types' => ['card'],
@@ -91,9 +91,9 @@ class PaymentsController extends AbstractController
             'unit_amount' => $payment->getAmount(),
             'product_data' => [
               'name' =>
-                $payment->getType() === "gym"
-                  ? "Paiement pour une salle"
-                  : "Paiement pour une voie",
+              $payment->getType() === "gym"
+                ? "Paiement pour une salle"
+                : "Paiement pour une voie",
               'images' => ["https://i.imgur.com/khcgl8T.png"],
             ],
           ],
@@ -102,17 +102,16 @@ class PaymentsController extends AbstractController
       ],
       'mode' => 'payment',
       'success_url' =>
-        $URL_SITE . '/franchise/checkout/success/' . $id . '/' . $token,
+      $URL_SITE . '/franchise/checkout/success/' . $id . '/' . $token,
       'cancel_url' =>
-        $URL_SITE . '/franchise/checkout/failed/' . $id . '/' . $token,
+      $URL_SITE . '/franchise/checkout/failed/' . $id . '/' . $token,
     ]);
     return $this->redirect($checkout_session->url, 303);
   }
 
   #[IsGranted("ROLE_ADMIN_FRANCHISE")]
   #[Route('/franchise/checkout/success/{id}/{token}', name: 'app_success_payment')]
-  public function successPayment($id, $token)
-  {
+  public function successPayment($id, $token) {
     $repo = $this->getDoctrine()
       ->getManager()
       ->getRepository(Payments::class);
@@ -147,8 +146,7 @@ class PaymentsController extends AbstractController
 
   #[IsGranted("ROLE_ADMIN_FRANCHISE")]
   #[Route('/franchise/checkout/failed/{id}/{token}', name: 'app_failed_payment')]
-  public function failedPayment($id, $token)
-  {
+  public function failedPayment($id, $token) {
     $repo = $this->getDoctrine()
       ->getManager()
       ->getRepository(Payments::class);
@@ -185,8 +183,7 @@ class PaymentsController extends AbstractController
     return $this->redirectToRoute('app_payments');
   }
 
-  private function setInformations()
-  {
+  private function setInformations() {
     $repo = $this->getDoctrine()
       ->getManager()
       ->getRepository(User::class);
@@ -214,8 +211,7 @@ class PaymentsController extends AbstractController
     $this->get('session')->set('payments', $total_payments);
   }
 
-  private function uuidv4()
-  {
+  private function uuidv4() {
     return sprintf(
       '%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
       mt_rand(0, 0xffff),

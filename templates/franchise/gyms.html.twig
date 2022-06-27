@@ -5,19 +5,92 @@
 {% endblock %}
 
 {% block body %}
-	<div class="d-sm-flex justify-content-start align-items-center mb-4">
-		<h3 class="text-dark mb-0 me-2 poppins bold text-black" style="color: rgb(33,37,41);">
-			Salles
-		</h3>
-		<a href="{{ path('gym_add') }}">
-			<button type="button" class="btn btn-success ms-2">+ Ajouter</button>
-		</a>
-	</div>
-	<div class="row justify-content-around align-items-center">
-		{% for gym in gyms %}
-			<div class="col col-3">
-				<div class="card">
 					<img class="card-img-top" height="150px" src="{{ asset('images/gyms/') ~ gym.picture }}" style="object-fit: cover" alt="{{gym.name}}_picture">
+  <div class="d-sm-flex justify-content-start align-items-center mb-4">
+    <h3 class="text-dark mb-0 me-2 poppins bold text-black"
+      style="color: rgb(33,37,41);">
+      {% if (app.user.franchise != null) %}
+      Salles
+    </h3>
+    <a href="{{ path('gym_add') }}">
+      <button type="button" class="btn btn-success ms-2">+ Ajouter</button>
+    </a>
+    {% else %}
+    Vous n'êtes pas encore associé à une franchise.
+    {% endif %}
+  </div>
+  <div class="row justify-content-around align-items-center">
+    {% for gym in gyms %}
+      <div class="col col-3">
+        <div class="card">
+          <div class="card-header">
+            <div class="row align-items-center justify-content-between">
+              <h5 class="card-title col-5 mb-0">
+                {{ gym.name|capitalize }}
+              </h5>
+              <div class="col-7 text-end">
+                <a href="{{
+                  path(
+                    'gym_edit',
+                    {
+                      id: gym.id
+                    }
+                  )
+                  }}">
+                  <button type="button" class="btn btn-warning">✏️</button>
+                </a>
+                <button class="btn btn-danger"
+                  data-href="{{
+                  path(
+                    'gym_remove',
+                    {
+                      id: gym.id
+                    }
+                  )
+                  }}"
+                  data-bs-toggle="modal"
+                  data-bs-target="#confirm-delete">
+                  🗑
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="row justify-content-start align-items-center mb-2">
+              <div class="col-12">
+                <h6>
+                  Nom : {{ gym.name }}
+                </h6>
+              </div>
+              <div class="col-12">
+                <h6>
+                  Adresse : {{ gym.address }}, {{ gym.pc }} {{ gym.city }}
+                </h6>
+              </div>
+              <div class="col-12">
+                <h6>
+                  Taille : {{ gym.size }} m&sup2
+                </h6>
+              </div>
+            </div>
+          </div>
+          <div class="card-footer">
+            <a href="{{
+              path(
+                'gym_routes_franchise',
+                {
+                  id: gym.id
+                }
+              )
+              }}">
+              <button type="button" class="btn btn-outline-primary">
+                Voies
+              </button>
+            </a>
+          </div>
+        </div>
+      </div>
+    {% else %}
 
 
 					<div class="card-header">

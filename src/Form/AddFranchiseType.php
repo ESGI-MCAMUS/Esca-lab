@@ -41,6 +41,7 @@ class AddFranchiseType extends AbstractType
         'attr' => [
           'class' => 'form-control poppins',
           'placeholder' => 'Franchise & Co.',
+          'required' => true,
         ],
       ]);
   }

@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Gym;
 use App\Entity\Payments;
 use App\Entity\Route as RouteEntity;
+use App\Entity\User;
 use App\Form\GymType;
 use App\Form\RouteType;
 use Doctrine\ORM\EntityManagerInterface;
@@ -116,6 +117,15 @@ class GymController extends AbstractController {
     $gym = $repo->findOneBy(['id' => $id]);
 
     if ($this->user->getFranchise()->getId() == $gym->getFranchise()->getId()) {
+      $repoEmployees = $this->getDoctrine()->getRepository(User::class);
+      $employees = $repoEmployees->findBy(['gym' => $gym]);
+
+      foreach ($employees as $employee) {
+        $employee->setGym(null);
+        $employee->setRoles(["ROLE_USER"]);
+        $em->persist($employee);
+      }
+
       $em->remove($gym);
       $em->flush();
     } else {

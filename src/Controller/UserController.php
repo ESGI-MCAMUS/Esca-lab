@@ -13,16 +13,20 @@ use Symfony\Component\Security\Core\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 use App\Entity\User;
+use App\Form\UpdateProfilePictureType;
 use App\Repository\UserRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 use Endroid\QrCode\Builder\Builder;
 use Endroid\QrCode\Encoding\Encoding;
 use Endroid\QrCode\ErrorCorrectionLevel\ErrorCorrectionLevelHigh;
-use Endroid\QrCode\Label\Alignment\LabelAlignmentCenter;
-use Endroid\QrCode\Label\Font\NotoSans;
 use Endroid\QrCode\RoundBlockSizeMode\RoundBlockSizeModeMargin;
 use Endroid\QrCode\Writer\PngWriter;
+
+use Symfony\Component\String\Slugger\SluggerInterface;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
+
+
 
 class UserController extends AbstractController {
 
@@ -33,8 +37,39 @@ class UserController extends AbstractController {
     }
 
     #[Route('/user', name: 'user')]
-    public function index(): Response {
-        // Get the user 
+    public function index(Request $request, SluggerInterface $slugger): Response {
+
+        $user = new User();
+        $form = $this->createForm(UpdateProfilePictureType::class, $user);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            /** @var UploadedFile $brochureFile */
+            $profilePicture = $form->get('profile_picture')->getData();
+            if ($profilePicture) {
+                $originalFilename = pathinfo($profilePicture->getClientOriginalName(), PATHINFO_FILENAME);
+                $safeFilename = $slugger->slug($originalFilename);
+                $newFilename = $safeFilename . '-' . uniqid() . '.' . $profilePicture->guessExtension();
+                try {
+                    $profilePicture->move(
+                        $this->getParameter('users_pp'),
+                        $newFilename
+                    );
+                    $this->user->setPicture($newFilename);
+                } catch (FileException $e) {
+                    $this->user->setPicture("");
+                }
+                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager->persist($this->user);
+                $entityManager->flush();
+            }
+
+            // ... persist the $product variable or any other work
+
+            return $this->redirectToRoute('user');
+        }
+
+
         if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on')
             $url = "https://";
         else
@@ -58,8 +93,9 @@ class UserController extends AbstractController {
         if ($this->isGranted('ROLE_OUVREUR')) {
             $this->setInformations();
         }
-        return $this->render('user/resume.html.twig', [
-            'qrcode' => $result->getDataUri()
+        return $this->renderForm('user/resume.html.twig', [
+            'qrcode' => $result->getDataUri(),
+            'form' => $form,
         ]);
     }
 

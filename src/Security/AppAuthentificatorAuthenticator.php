@@ -16,21 +16,18 @@ use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 use Symfony\Component\Security\Http\Authenticator\Passport\PassportInterface;
 use Symfony\Component\Security\Http\Util\TargetPathTrait;
 
-class AppAuthentificatorAuthenticator extends AbstractLoginFormAuthenticator
-{
+class AppAuthentificatorAuthenticator extends AbstractLoginFormAuthenticator {
     use TargetPathTrait;
 
     public const LOGIN_ROUTE = 'login';
 
     private UrlGeneratorInterface $urlGenerator;
 
-    public function __construct(UrlGeneratorInterface $urlGenerator)
-    {
+    public function __construct(UrlGeneratorInterface $urlGenerator) {
         $this->urlGenerator = $urlGenerator;
     }
 
-    public function authenticate(Request $request): PassportInterface
-    {
+    public function authenticate(Request $request): PassportInterface {
         $email = $request->request->get('email', '');
 
         $request->getSession()->set(Security::LAST_USERNAME, $email);
@@ -52,15 +49,11 @@ class AppAuthentificatorAuthenticator extends AbstractLoginFormAuthenticator
         TokenInterface $token,
         string $firewallName
     ): ?Response {
-        if (
-            $targetPath = $this->getTargetPath(
-                $request->getSession(),
-                $firewallName
-            )
-        ) {
-            return new RedirectResponse(
-                $this->urlGenerator->generate('accueil')
-            );
+        // If the param redirect_to is set, redirect to this path.
+        // Otherwise redirect to the homepage.
+        $redirectTo = $request->query->get('redirect_to');
+        if ($redirectTo) {
+            return new RedirectResponse($redirectTo);
         }
 
         $roles = $token->getUser()->getRoles();
@@ -87,8 +80,7 @@ class AppAuthentificatorAuthenticator extends AbstractLoginFormAuthenticator
         );
     }
 
-    protected function getLoginUrl(Request $request): string
-    {
+    protected function getLoginUrl(Request $request): string {
         return $this->urlGenerator->generate(self::LOGIN_ROUTE);
     }
 }

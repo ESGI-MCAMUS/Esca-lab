@@ -1,5 +1,5 @@
 $( document ).ready(function() {
-    $('.btn').on('click', (e) => {
+    $('#btn-update-route').on('click', (e) => {
         const status = e.target.classList.contains('btn-add');
         const shortId = e.target.dataset.bRoute;
         const url_route = status ? '/route/resolved/' : '/route/unresolved/'

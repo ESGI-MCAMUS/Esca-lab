@@ -31,10 +31,13 @@ class GymUserController extends AbstractController
 
         $routes = $gym->getRoutes();
 
-        $resolved = $this->user->getRoutes();
         $id_resolved = [];
-        foreach($resolved as $key => $value) {
-            $id_resolved[] = $value->getId();
+        $securityContext = $this->container->get('security.authorization_checker');
+        if ($securityContext->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
+            $resolved = $this->user->getRoutes();
+            foreach($resolved as $key => $value) {
+                $id_resolved[] = $value->getId();
+            }      
         }
 
         return $this->render('gym_user/index.html.twig', [

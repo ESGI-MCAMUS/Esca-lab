@@ -1,90 +1,23 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello AccueilController!{% endblock %}
+{% block title %}Esca'Lab!
+{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-     /* Hide scrollbar for Chrome, Safari and Opera */
-    .classContainerChat::-webkit-scrollbar {
-        display: none;
-    }
-
-    /* Hide scrollbar for IE, Edge and Firefox */
-    .classContainerChat {
-        -ms-overflow-style: none;  /* IE and Edge */
-        scrollbar-width: none;  /* Firefox */
-    } 
-</style>
-
-<body id="page-top">
-    <div id="wrapper">
-        <div id="content-wrapper" class="d-flex flex-column">
-            <div id="content">
-                <nav class="navbar navbar-light navbar-expand bg-white shadow mb-4 topbar static-top">
-                    <div class="container-fluid"><button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle me-3" type="button"><i class="fas fa-bars"></i></button>
-                        <ul class="navbar-nav flex-nowrap ms-auto">
-                            <li class="nav-item dropdown d-sm-none no-arrow"><a class="dropdown-toggle nav-link" aria-expanded="false" data-bs-toggle="dropdown" href="#"><i class="fas fa-search"></i></a>
-                                <div class="dropdown-menu dropdown-menu-end p-3 animated--grow-in" aria-labelledby="searchDropdown">
-                                    <form class="me-auto navbar-search w-100">
-                                        <div class="input-group"><input class="bg-light form-control border-0 small" type="text" placeholder="Search for ..." />
-                                            <div class="input-group-append"><button class="btn btn-primary py-0" type="button"><i class="fas fa-search"></i></button></div>
-                                        </div>
-                                    </form>
-                                </div>
-                            </li>
-                            <div class="d-none d-sm-block topbar-divider"></div>                            
-                            <li class="nav-item dropdown no-arrow">
-                                {% if app.user.id is defined and app.user.id != 0 %}
-                                    <div class="nav-item">
-									<a href="/user" class="nav-link poppins">
-										<span class="d-none d-lg-inline me-2 text-gray-600 small">
-											{{app.user.username}}
-										</span>
-										{# <img class="border rounded-circle img-profile" src="{{asset('images/profiles/') ~ app.user.picture}}"> #}
-									</a>
-								</div>
-                                {% else %}
-                                    <li class="nav-item"><a class="nav-link" href="/connexion">Se connecter</a></li>
-                                        <div class="d-none d-sm-block topbar-divider"></div>
-                                    <li class="nav-item"><a class="nav-link" href="/inscription">S&#39;inscrire</a></li>
-                                {% endif %}
-                            </li>
-                        </ul>
-                    </div>
-                </nav>
-                <div class="container-fluid">
-                    <div class="d-sm-flex justify-content-between align-items-center mb-4">
-                        {% block corps %}
-                            <div class="row">
-                                <div class="col-lg-4">
-                                    <a class="btn btn-primary disabled" href="#" role="button">TBD</a>
-                                </div>
-                                <div class="col-lg-4">
-                                    <a class="btn btn-primary" href="/franchise/all" role="button">Voir les franchises</a>
-                                </div>
-                                <div class="col-lg-4">
-                                    {% if app.user.id is defined and app.user.id != 0 %}
-                                        <a class="btn btn-primary" href="/user" role="button">Acceder a mon profil</a>
-                                    {% endif %}
-                                </div>
-                            </div>
-                        {% endblock %}
+	<body>
+		<div class="container">
+			<div class="row">
+				<div class="col-md-10 col-lg-8">
+					<div class="post-preview">
+						<a href="/franchise/all">
+							<h2 class="post-title">Trouvez des salles d'escalade</h2>
+							<h3 class="post-subtitle">Parcourrez la liste des différentes salles d'escalade partenaire de notre site</h3>
+						</a>
 					</div>
-                </div>
-            </div>
-            <footer class="bg-white sticky-footer">
-                <div class="container my-auto">
-                    <div class="text-center my-auto copyright"><span>Copyright © Escalab 2021</span></div>
-                </div>
-            </footer>
-        </div><a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a>
-    </div>
-
-    <script src="{{asset('bootstrap/js/bootstrap.min.js')}}"></script>
-    <script src="{{asset('js/theme.js')}}"></script>
-</body>
-
-
+					<hr/>
+				</div>
+			</div>
+		</div>
+		<script src="{{asset('js/home.js')}}"></script>
+	</body>
 {% endblock %}

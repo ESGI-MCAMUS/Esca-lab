@@ -1,4 +1,5 @@
-{% extends 'accueil/index.html.twig' %}
+{# {% extends 'accueil/index.html.twig' %} #}
+{% extends 'base.html.twig' %}
 
 {% block title %}
     Franchises ◈ Esca'Lab
@@ -14,7 +15,7 @@
 <span id="spinner-__id__" class="spinner-border spinner-border-sm text-dark" role="status" aria-hidden="true" hidden></span>
 {% endset %}
 
-{% block corps %}
+{% block body %}
 <div class="container-fluid">
 	<div class="d-sm-flex align-items-center mb-4">
 		<h4 class="text-dark mb-0 poppins bold text-black" style="color: rgb(33,37,41);">
@@ -47,7 +48,7 @@
                             </div>
                             <div class="col me-3" style="text-align: right;">
                                 <p>
-                                    Difficultée : <strong>{{ getDiff(route.difficulty) }}</strong>
+                                    Difficultée : <strong>{{ route.difficulty }}</strong>
                                 </p>
                             </div>
                         </div>
@@ -56,12 +57,12 @@
                                 <div class="col mt-2" style="text-align: center;">
                                     {% if route.opened == 1 %}
                                         {% if route.id not in resolved %}
-                                            <button id="btn-{{ route.id }}" type="button" class="btn btn-info btn-add" data-b-route="{{ route.id }}">
+                                            <button id="btn-update-route" type="button" class="btn btn-info btn-add" data-b-route="{{ route.id }}">
                                                 <span id="spinner-{{ route.id }}" class="spinner-border spinner-border-sm text-dark" role="status" aria-hidden="true" hidden></span>
                                                 Je l'ai faite !
                                             </button>
                                         {% else %}
-                                            <button id="btn-{{ route.id }}" type="button" class="btn btn-warning btn-remove" data-b-route="{{ route.id }}">
+                                            <button id="btn-update-route" type="button" class="btn btn-warning btn-remove" data-b-route="{{ route.id }}">
                                                 <span id="spinner-{{ route.id }}" class="spinner-border spinner-border-sm text-dark" role="status" aria-hidden="true" hidden></span>
                                                 Je me suis trompé
                                             </button>

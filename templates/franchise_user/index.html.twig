@@ -27,7 +27,7 @@
 							<div class="row align-items-center no-gutters">
 								<div class="col"></div>
 								<div class="col">
-									<a href="/franchise/{{ franchise.id }}/gyms">
+									<a href="{{ path('list_gyms_franchise', {id: franchise.id}) }}">
 										<img src="{{ asset('images/franchises/') ~ franchise.picture }}" class="img-tn rounded"/>
 
 									</a>
@@ -37,7 +37,7 @@
 							<hr class="bg-danger border-2 border-top border-secondary">
 							<div class="row">
 								<div class="col" style="text-align: center;">
-									<a href="/franchise/{{ franchise.id }}/gyms" style="text-decoration: none;color: black;">
+									<a href="{{ path('list_gyms_franchise', {id: franchise.id}) }}" style="text-decoration: none;color: black;">
 										<h3>
 											<strong>{{ franchise.name }}
 												({{ franchise.gyms|length }})</strong>

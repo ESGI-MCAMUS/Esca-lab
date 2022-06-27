@@ -175,9 +175,7 @@ class PaymentsController extends AbstractController {
         'failed_token',
         'Quelque chose s\'est mal passé lors de la vérification du paiement n°' .
           $id .
-          '. <a href="/franchise/checkout/' .
-          $id .
-          '">Cliquez ici</a> pour réessayer.'
+          '. <a href="'. $this->generateUrl("app_init_payment", ["id" => $id]) .'">Cliquez ici</a> pour réessayer.'
       );
     }
     return $this->redirectToRoute('app_payments');

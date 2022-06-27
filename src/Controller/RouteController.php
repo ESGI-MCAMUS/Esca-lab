@@ -281,7 +281,7 @@ class RouteController extends AbstractController
     return new JsonResponse(['success' => $success]);
   }
 
-  #[IsGranted('ROLE_USER')]
+  // #[IsGranted('ROLE_USER')]
   #[Route('/route/{routeId}', name: 'route_display')]
   public function route_display(ManagerRegistry $doctrine, $routeId): Response
   {
@@ -291,12 +291,15 @@ class RouteController extends AbstractController
     $gym        = $route->getGym();
     $franchise  = $gym->getFranchise();
 
-    $resolvedRoutes = $this->user->getRoutes();
     $resolved = false;
-    foreach($resolvedRoutes as $key => $value) {
-      if($value->getId() === $routeId) {
-        $resolved = true;
-        break;
+    $securityContext = $this->container->get('security.authorization_checker');
+    if ($securityContext->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
+      $resolvedRoutes = $this->user->getRoutes();
+      foreach($resolvedRoutes as $key => $value) {
+        if($value->getId() === $routeId) {
+          $resolved = true;
+          break;
+        }
       }
     }
 

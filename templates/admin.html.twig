@@ -1,424 +1,321 @@
 <!DOCTYPE html>
 <html lang="fr">
-  <head>
-    <meta charset="UTF-8" />
-    <title>
-      {% block title %}
-        Esca'Lab
-      {% endblock %}
-    </title>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}" />
+	<head>
+		<meta charset="UTF-8"/>
+		<title>
+			{% block title %}
+				Esca'Lab
+			{% endblock %}
+		</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1"/>
+		<link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}"/>
+		<link
+		rel="stylesheet" href="{{ asset('css/profile_picture.css') }}"/>
 
-    {# Run `composer require symfony/webpack-encore-bundle`
-  and uncomment the following Encore helpers to start using Symfony UX #}
-    {% block stylesheets %}
-      {# {{ encore_entry_link_tags('app') }} #}
 
-      <link rel="stylesheet"
-        href="{{ asset('bootstrap/css/bootstrap.min.css') }}" />
+		{# Run `composer require symfony/webpack-encore-bundle`
+		  and uncomment the following Encore helpers to start using Symfony UX #}
+		{% block stylesheets %}
+			{# {{ encore_entry_link_tags('app') }} #}
 
-      <link rel="stylesheet" href="{{ asset('css/main.css') }}" />
-      <link rel="stylesheet" href="{{ asset('css/rating.css') }}" />
+			<link rel="stylesheet" href="{{ asset('bootstrap/css/bootstrap.min.css') }}"/>
 
-      <link rel="stylesheet"
-        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.1/font/bootstrap-icons.css" />
-    {% endblock %}
+			<link rel="stylesheet" href="{{ asset('css/main.css') }}"/>
+			<link rel="stylesheet" href="{{ asset('css/rating.css') }}"/>
 
-    {% block javascripts %}
-      {# {{ encore_entry_script_tags('app') }} #}
-      <script src="{{ asset('bootstrap/js/bootstrap.min.js') }}"></script>
-      <script src="{{ asset('js/chart.min.js') }}"></script>
-      <script src="{{ asset('js/bs-init.js') }}"></script>
-      <script src="{{ asset('js/theme.js') }}"></script>
-    {% endblock %}
-  </head>
+			<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.1/font/bootstrap-icons.css"/>
+		{% endblock %}
 
-  <body id="page-top">
-    <div id="wrapper">
-      <nav class="navbar navbar-dark shadow-sm align-items-start sidebar sidebar-dark accordion bg-gradient-primary p-0"
-        style="background: #ffffff;opacity: 1;">
-        <div class="container-fluid d-flex flex-column p-0">
-          <a class="navbar-brand d-flex justify-content-center align-items-center sidebar-brand m-0"
-            href="#">
-            <div class="sidebar-brand-icon">
-              <img width="50"
-                height="50"
-                src="{{ asset('images/logo.png') }}" />
-            </div>
-            <div class="sidebar-brand-text mx-3 poppins">
-              <span style="color: #212529;">Escalab</span>
-            </div>
-          </a>
-          <hr class="sidebar-divider my-0"
-            style="width: 0;border-radius: 50px;border-width: 0px;" />
-          <ul class="navbar-nav text-light"
-            id="accordionSidebar"
-            style="height: auto;margin: 0;padding: 0;">
-            {% if is_granted('ROLE_SUPER_ADMIN') %}
-              <li class="nav-item">
-                <a class="nav-link active"
-                  href="/admin"
-                  style="padding: 10px;color: rgb(33,37,41);">
-                  <svg xmlns="http://www.w3.org/2000/svg"
-                    width="1em"
-                    height="1em"
-                    fill="currentColor"
-                    viewbox="0 0 16 16"
-                    class="bi bi-bar-chart-line">
-                    <path d="M11 2a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v12h.5a.5.5 0 0 1 0 1H.5a.5.5 0 0 1 0-1H1v-3a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3h1V7a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v7h1V2zm1 12h2V2h-2v12zm-3 0V7H7v7h2zm-5 0v-3H2v3h2z"></path>
-                  </svg>
-                  <span style="padding-left: 5px;">KPIs</span>
-                </a>
-              </li>
-            {% endif %}
-            {% if
+		{% block javascripts %}
+			{# {{ encore_entry_script_tags('app') }} #}
+			<script src="{{ asset('bootstrap/js/bootstrap.min.js') }}"></script>
+			<script src="{{ asset('js/chart.min.js') }}"></script>
+			<script src="{{ asset('js/bs-init.js') }}"></script>
+			<script src="{{ asset('js/theme.js') }}"></script>
+		{% endblock %}
+	</head>
+
+	<body id="page-top">
+		<div id="wrapper">
+			<nav class="navbar navbar-dark shadow-sm align-items-start sidebar sidebar-dark accordion bg-gradient-primary p-0" style="background: #ffffff;opacity: 1;">
+				<div class="container-fluid d-flex flex-column p-0">
+					<a class="navbar-brand d-flex justify-content-center align-items-center sidebar-brand m-0" href="#">
+						<div class="sidebar-brand-icon">
+							<img width="50" height="50" src="{{ asset('images/logo.png') }}"/>
+						</div>
+						<div class="sidebar-brand-text mx-3 poppins">
+							<span style="color: #212529;">Escalab</span>
+						</div>
+					</a>
+					<hr class="sidebar-divider my-0" style="width: 0;border-radius: 50px;border-width: 0px;"/>
+					<ul class="navbar-nav text-light" id="accordionSidebar" style="height: auto;margin: 0;padding: 0;">
+						{% if is_granted('ROLE_SUPER_ADMIN') %}
+							<li class="nav-item">
+								<a class="nav-link active" href="/admin" style="padding: 10px;color: rgb(33,37,41);">
+									<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewbox="0 0 16 16" class="bi bi-bar-chart-line">
+										<path d="M11 2a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v12h.5a.5.5 0 0 1 0 1H.5a.5.5 0 0 1 0-1H1v-3a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3h1V7a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v7h1V2zm1 12h2V2h-2v12zm-3 0V7H7v7h2zm-5 0v-3H2v3h2z"></path>
+									</svg>
+									<span style="padding-left: 5px;">KPIs</span>
+								</a>
+							</li>
+						{% endif %}
+						{% if
               is_granted('ROLE_ADMIN_SALLE')
                 or is_granted('ROLE_ADMIN_FRANCHISE')
                 or is_granted('ROLE_SUPER_ADMIN') %}
-              <li class="nav-item">
-                <a class="nav-link poppins regular"
-                  href="/admin/evenements"
-                  style="padding: 10px;color: rgb(33,37,41);">
-                  <svg xmlns="http://www.w3.org/2000/svg"
-                    width="1em"
-                    height="1em"
-                    fill="currentColor"
-                    viewbox="0 0 16 16"
-                    class="bi bi-calendar-plus">
-                    <path d="M8 7a.5.5 0 0 1 .5.5V9H10a.5.5 0 0 1 0 1H8.5v1.5a.5.5 0 0 1-1 0V10H6a.5.5 0 0 1 0-1h1.5V7.5A.5.5 0 0 1 8 7z"></path>
-                    <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z"></path>
-                  </svg>
-                  <span style="padding-left: 5px;">
-                    Évènements
-                  </span><span class="badge bg-primary poppins"
-                    style="margin-left: 5px;">
-                    {{ app.session.get('events_count') }}
-                  </span>
-                </a>
-              </li>
-            {% endif %}
-            {% if is_granted('ROLE_SUPER_ADMIN') %}
-              <li class="nav-item">
-                <a class="nav-link poppins regular"
-                  href="/admin/utilisateurs"
-                  style="padding: 10px;color: rgb(33,37,41);">
-                  <svg xmlns="http://www.w3.org/2000/svg"
-                    width="1em"
-                    height="1em"
-                    fill="currentColor"
-                    viewbox="0 0 16 16"
-                    class="bi bi-people">
-                    <path d="M15 14s1 0 1-1-1-4-5-4-5 3-5 4 1 1 1 1h8zm-7.978-1A.261.261 0 0 1 7 12.996c.001-.264.167-1.03.76-1.72C8.312 10.629 9.282 10 11 10c1.717 0 2.687.63 3.24 1.276.593.69.758 1.457.76 1.72l-.008.002a.274.274 0 0 1-.014.002H7.022zM11 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm3-2a3 3 0 1 1-6 0 3 3 0 0 1 6 0zM6.936 9.28a5.88 5.88 0 0 0-1.23-.247A7.35 7.35 0 0 0 5 9c-4 0-5 3-5 4 0 .667.333 1 1 1h4.216A2.238 2.238 0 0 1 5 13c0-1.01.377-2.042 1.09-2.904.243-.294.526-.569.846-.816zM4.92 10A5.493 5.493 0 0 0 4 13H1c0-.26.164-1.03.76-1.724.545-.636 1.492-1.256 3.16-1.275zM1.5 5.5a3 3 0 1 1 6 0 3 3 0 0 1-6 0zm3-2a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"></path>
-                  </svg>
-                  <span style="padding-left: 5px;">
-                    Utilisateurs
-                  </span><span class="badge bg-primary poppins"
-                    style="margin-left: 5px;">
-                    {{ app.session.get('users_count') }}
-                  </span>
-                </a>
-              </li>
-            {% endif %}
-            {% if
+							<li class="nav-item">
+								<a class="nav-link poppins regular" href="/admin/evenements" style="padding: 10px;color: rgb(33,37,41);">
+									<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewbox="0 0 16 16" class="bi bi-calendar-plus">
+										<path d="M8 7a.5.5 0 0 1 .5.5V9H10a.5.5 0 0 1 0 1H8.5v1.5a.5.5 0 0 1-1 0V10H6a.5.5 0 0 1 0-1h1.5V7.5A.5.5 0 0 1 8 7z"></path>
+										<path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z"></path>
+									</svg>
+									<span style="padding-left: 5px;">
+										Évènements
+									</span>
+									<span class="badge bg-primary poppins" style="margin-left: 5px;">
+										{{ app.session.get('events_count') }}
+									</span>
+								</a>
+							</li>
+						{% endif %}
+						{% if is_granted('ROLE_SUPER_ADMIN') %}
+							<li class="nav-item">
+								<a class="nav-link poppins regular" href="/admin/utilisateurs" style="padding: 10px;color: rgb(33,37,41);">
+									<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewbox="0 0 16 16" class="bi bi-people">
+										<path d="M15 14s1 0 1-1-1-4-5-4-5 3-5 4 1 1 1 1h8zm-7.978-1A.261.261 0 0 1 7 12.996c.001-.264.167-1.03.76-1.72C8.312 10.629 9.282 10 11 10c1.717 0 2.687.63 3.24 1.276.593.69.758 1.457.76 1.72l-.008.002a.274.274 0 0 1-.014.002H7.022zM11 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm3-2a3 3 0 1 1-6 0 3 3 0 0 1 6 0zM6.936 9.28a5.88 5.88 0 0 0-1.23-.247A7.35 7.35 0 0 0 5 9c-4 0-5 3-5 4 0 .667.333 1 1 1h4.216A2.238 2.238 0 0 1 5 13c0-1.01.377-2.042 1.09-2.904.243-.294.526-.569.846-.816zM4.92 10A5.493 5.493 0 0 0 4 13H1c0-.26.164-1.03.76-1.724.545-.636 1.492-1.256 3.16-1.275zM1.5 5.5a3 3 0 1 1 6 0 3 3 0 0 1-6 0zm3-2a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"></path>
+									</svg>
+									<span style="padding-left: 5px;">
+										Utilisateurs
+									</span>
+									<span class="badge bg-primary poppins" style="margin-left: 5px;">
+										{{ app.session.get('users_count') }}
+									</span>
+								</a>
+							</li>
+						{% endif %}
+						{% if
               is_granted('ROLE_ADMIN_SALLE')
                 or is_granted('ROLE_ADMIN_FRANCHISE')
                 or is_granted('ROLE_SUPER_ADMIN') %}
-              <li class="nav-item">
-                <a class="nav-link poppins regular"
-                  href="/admin/medias"
-                  style="padding: 10px;color: rgb(33,37,41);">
-                  <svg xmlns="http://www.w3.org/2000/svg"
-                    width="1em"
-                    height="1em"
-                    fill="currentColor"
-                    viewbox="0 0 16 16"
-                    class="bi bi-image">
-                    <path d="M6.002 5.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"></path>
-                    <path d="M2.002 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2h-12zm12 1a1 1 0 0 1 1 1v6.5l-3.777-1.947a.5.5 0 0 0-.577.093l-3.71 3.71-2.66-1.772a.5.5 0 0 0-.63.062L1.002 12V3a1 1 0 0 1 1-1h12z"></path>
-                  </svg>
-                  <span style="padding-left: 5px;">
-                    Médias
-                  </span><span class="badge bg-primary poppins"
-                    style="margin-left: 5px;">
-                    {{ app.session.get('medias_count') }}
-                  </span>
-                </a>
-              </li>
-            {% endif %}
-          </ul>
-          <hr style="height: 2px;color: #fff;width: 90%;margin: 0;border-radius: 50px;transform: scale(1);background: #ffffff;" />
-          <ul class="navbar-nav text-light" id="accordionSidebar-1">
-            {% if
+							<li class="nav-item">
+								<a class="nav-link poppins regular" href="/admin/medias" style="padding: 10px;color: rgb(33,37,41);">
+									<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewbox="0 0 16 16" class="bi bi-image">
+										<path d="M6.002 5.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"></path>
+										<path d="M2.002 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2h-12zm12 1a1 1 0 0 1 1 1v6.5l-3.777-1.947a.5.5 0 0 0-.577.093l-3.71 3.71-2.66-1.772a.5.5 0 0 0-.63.062L1.002 12V3a1 1 0 0 1 1-1h12z"></path>
+									</svg>
+									<span style="padding-left: 5px;">
+										Médias
+									</span>
+									<span class="badge bg-primary poppins" style="margin-left: 5px;">
+										{{ app.session.get('medias_count') }}
+									</span>
+								</a>
+							</li>
+						{% endif %}
+					</ul>
+					<hr style="height: 2px;color: #fff;width: 90%;margin: 0;border-radius: 50px;transform: scale(1);background: #ffffff;"/>
+					<ul class="navbar-nav text-light" id="accordionSidebar-1">
+						{% if
               is_granted('ROLE_ADMIN_FRANCHISE')
                 or is_granted('ROLE_SUPER_ADMIN') %}
-              <li class="nav-item">
-                <a class="nav-link poppins regular"
-                  href="/admin/franchises"
-                  style="height: auto;padding: 10px;color: rgb(33,37,41);">
-                  <svg xmlns="http://www.w3.org/2000/svg"
-                    width="1em"
-                    height="1em"
-                    fill="currentColor"
-                    viewbox="0 0 16 16"
-                    class="bi bi-briefcase">
-                    <path d="M6.5 1A1.5 1.5 0 0 0 5 2.5V3H1.5A1.5 1.5 0 0 0 0 4.5v8A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-8A1.5 1.5 0 0 0 14.5 3H11v-.5A1.5 1.5 0 0 0 9.5 1h-3zm0 1h3a.5.5 0 0 1 .5.5V3H6v-.5a.5.5 0 0 1 .5-.5zm1.886 6.914L15 7.151V12.5a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5V7.15l6.614 1.764a1.5 1.5 0 0 0 .772 0zM1.5 4h13a.5.5 0 0 1 .5.5v1.616L8.129 7.948a.5.5 0 0 1-.258 0L1 6.116V4.5a.5.5 0 0 1 .5-.5z"></path>
-                  </svg>
-                  <span style="padding-left: 5px;">
-                    Franchises<span class="badge bg-primary poppins" style="margin-left: 5px;">{{
+							<li class="nav-item">
+								<a class="nav-link poppins regular" href="/admin/franchises" style="height: auto;padding: 10px;color: rgb(33,37,41);">
+									<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewbox="0 0 16 16" class="bi bi-briefcase">
+										<path d="M6.5 1A1.5 1.5 0 0 0 5 2.5V3H1.5A1.5 1.5 0 0 0 0 4.5v8A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-8A1.5 1.5 0 0 0 14.5 3H11v-.5A1.5 1.5 0 0 0 9.5 1h-3zm0 1h3a.5.5 0 0 1 .5.5V3H6v-.5a.5.5 0 0 1 .5-.5zm1.886 6.914L15 7.151V12.5a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5V7.15l6.614 1.764a1.5 1.5 0 0 0 .772 0zM1.5 4h13a.5.5 0 0 1 .5.5v1.616L8.129 7.948a.5.5 0 0 1-.258 0L1 6.116V4.5a.5.5 0 0 1 .5-.5z"></path>
+									</svg>
+									<span style="padding-left: 5px;">
+										Franchises<span class="badge bg-primary poppins" style="margin-left: 5px;">{{
                         app.session.get('franchises_count')
                       }}</span>
-                  </span>
-                </a>
-              </li>
-            {% endif %}
-            {% if is_granted('ROLE_ADMIN_FRANCHISE')
+									</span>
+								</a>
+							</li>
+						{% endif %}
+						{% if is_granted('ROLE_ADMIN_FRANCHISE')
                 or is_granted('ROLE_SUPER_ADMIN') %}
-              <li class="nav-item">
-                <a class="nav-link poppins regular"
-                  href="/admin/salles"
-                  style="padding: 10px;color: rgb(33,37,41);">
-                  <svg xmlns="http://www.w3.org/2000/svg"
-                    width="1em"
-                    height="1em"
-                    fill="currentColor"
-                    viewbox="0 0 16 16"
-                    class="bi bi-building">
-                    <path fill-rule="evenodd"
-                      d="M14.763.075A.5.5 0 0 1 15 .5v15a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5V14h-1v1.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V10a.5.5 0 0 1 .342-.474L6 7.64V4.5a.5.5 0 0 1 .276-.447l8-4a.5.5 0 0 1 .487.022zM6 8.694 1 10.36V15h5V8.694zM7 15h2v-1.5a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 .5.5V15h2V1.309l-7 3.5V15z"></path>
-                    <path d="M2 11h1v1H2v-1zm2 0h1v1H4v-1zm-2 2h1v1H2v-1zm2 0h1v1H4v-1zm4-4h1v1H8V9zm2 0h1v1h-1V9zm-2 2h1v1H8v-1zm2 0h1v1h-1v-1zm2-2h1v1h-1V9zm0 2h1v1h-1v-1zM8 7h1v1H8V7zm2 0h1v1h-1V7zm2 0h1v1h-1V7zM8 5h1v1H8V5zm2 0h1v1h-1V5zm2 0h1v1h-1V5zm0-2h1v1h-1V3z"></path>
-                  </svg>
-                  <span style="padding-left: 5px;">
-                    Salles<span class="badge bg-primary poppins" style="margin-left: 5px;">{{
+							<li class="nav-item">
+								<a class="nav-link poppins regular" href="/admin/salles" style="padding: 10px;color: rgb(33,37,41);">
+									<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewbox="0 0 16 16" class="bi bi-building">
+										<path fill-rule="evenodd" d="M14.763.075A.5.5 0 0 1 15 .5v15a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5V14h-1v1.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V10a.5.5 0 0 1 .342-.474L6 7.64V4.5a.5.5 0 0 1 .276-.447l8-4a.5.5 0 0 1 .487.022zM6 8.694 1 10.36V15h5V8.694zM7 15h2v-1.5a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 .5.5V15h2V1.309l-7 3.5V15z"></path>
+										<path d="M2 11h1v1H2v-1zm2 0h1v1H4v-1zm-2 2h1v1H2v-1zm2 0h1v1H4v-1zm4-4h1v1H8V9zm2 0h1v1h-1V9zm-2 2h1v1H8v-1zm2 0h1v1h-1v-1zm2-2h1v1h-1V9zm0 2h1v1h-1v-1zM8 7h1v1H8V7zm2 0h1v1h-1V7zm2 0h1v1h-1V7zM8 5h1v1H8V5zm2 0h1v1h-1V5zm2 0h1v1h-1V5zm0-2h1v1h-1V3z"></path>
+									</svg>
+									<span style="padding-left: 5px;">
+										Salles<span class="badge bg-primary poppins" style="margin-left: 5px;">{{
                         app.session.get('gyms_count')
                       }}</span>
-                  </span>
-                </a>
-              </li>
-            {% endif %}
-            {% if
+									</span>
+								</a>
+							</li>
+						{% endif %}
+						{% if
               is_granted('ROLE_OUVREUR')
                 or is_granted('ROLE_ADMIN_SALLE')
                 or is_granted('ROLE_ADMIN_FRANCHISE')
                 or is_granted('ROLE_SUPER_ADMIN') %}
-              <li class="nav-item">
-                <a class="nav-link poppins regular"
-                  href="/admin/voies"
-                  style="padding: 10px;color: rgb(33,37,41);">
-                  <svg xmlns="http://www.w3.org/2000/svg"
-                    width="1em"
-                    height="1em"
-                    fill="currentColor"
-                    viewbox="0 0 16 16"
-                    class="bi bi-bricks">
-                    <path d="M0 .5A.5.5 0 0 1 .5 0h15a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-.5.5H14v2h1.5a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-.5.5H14v2h1.5a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-.5.5H.5a.5.5 0 0 1-.5-.5v-3a.5.5 0 0 1 .5-.5H2v-2H.5a.5.5 0 0 1-.5-.5v-3A.5.5 0 0 1 .5 6H2V4H.5a.5.5 0 0 1-.5-.5v-3zM3 4v2h4.5V4H3zm5.5 0v2H13V4H8.5zM3 10v2h4.5v-2H3zm5.5 0v2H13v-2H8.5zM1 1v2h3.5V1H1zm4.5 0v2h5V1h-5zm6 0v2H15V1h-3.5zM1 7v2h3.5V7H1zm4.5 0v2h5V7h-5zm6 0v2H15V7h-3.5zM1 13v2h3.5v-2H1zm4.5 0v2h5v-2h-5zm6 0v2H15v-2h-3.5z"></path>
-                  </svg>
-                  <span style="padding-left: 5px;">
-                    Voies<span class="badge bg-primary poppins" style="margin-left: 5px;">{{
+							<li class="nav-item">
+								<a class="nav-link poppins regular" href="/admin/voies" style="padding: 10px;color: rgb(33,37,41);">
+									<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewbox="0 0 16 16" class="bi bi-bricks">
+										<path d="M0 .5A.5.5 0 0 1 .5 0h15a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-.5.5H14v2h1.5a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-.5.5H14v2h1.5a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-.5.5H.5a.5.5 0 0 1-.5-.5v-3a.5.5 0 0 1 .5-.5H2v-2H.5a.5.5 0 0 1-.5-.5v-3A.5.5 0 0 1 .5 6H2V4H.5a.5.5 0 0 1-.5-.5v-3zM3 4v2h4.5V4H3zm5.5 0v2H13V4H8.5zM3 10v2h4.5v-2H3zm5.5 0v2H13v-2H8.5zM1 1v2h3.5V1H1zm4.5 0v2h5V1h-5zm6 0v2H15V1h-3.5zM1 7v2h3.5V7H1zm4.5 0v2h5V7h-5zm6 0v2H15V7h-3.5zM1 13v2h3.5v-2H1zm4.5 0v2h5v-2h-5zm6 0v2H15v-2h-3.5z"></path>
+									</svg>
+									<span style="padding-left: 5px;">
+										Voies<span class="badge bg-primary poppins" style="margin-left: 5px;">{{
                         app.session.get('routes_count')
                       }}</span>
-                  </span>
-                </a>
-              </li>
-            {% endif %}
-          </ul>
-          {% if
+									</span>
+								</a>
+							</li>
+						{% endif %}
+					</ul>
+					{% if
             is_granted('ROLE_ADMIN_FRANCHISE')
               or is_granted('ROLE_SUPER_ADMIN') %}
-            <hr style="height: 2px;color: #fff;width: 90%;margin: 0;border-radius: 50px;transform: scale(1);background: #ffffff;" />
-            <ul class="navbar-nav text-light" id="accordionSidebar-2">
-              <li class="nav-item">
-                <a class="nav-link poppins regular"
-                  href="/admin/paiements"
-                  style="padding: 10px;color: rgb(33,37,41);">
-                  <svg xmlns="http://www.w3.org/2000/svg"
-                    width="1em"
-                    height="1em"
-                    fill="currentColor"
-                    viewbox="0 0 16 16"
-                    class="bi bi-piggy-bank">
-                    <path d="M5 6.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0zm1.138-1.496A6.613 6.613 0 0 1 7.964 4.5c.666 0 1.303.097 1.893.273a.5.5 0 0 0 .286-.958A7.602 7.602 0 0 0 7.964 3.5c-.734 0-1.441.103-2.102.292a.5.5 0 1 0 .276.962z"></path>
-                    <path fill-rule="evenodd"
-                      d="M7.964 1.527c-2.977 0-5.571 1.704-6.32 4.125h-.55A1 1 0 0 0 .11 6.824l.254 1.46a1.5 1.5 0 0 0 1.478 1.243h.263c.3.513.688.978 1.145 1.382l-.729 2.477a.5.5 0 0 0 .48.641h2a.5.5 0 0 0 .471-.332l.482-1.351c.635.173 1.31.267 2.011.267.707 0 1.388-.095 2.028-.272l.543 1.372a.5.5 0 0 0 .465.316h2a.5.5 0 0 0 .478-.645l-.761-2.506C13.81 9.895 14.5 8.559 14.5 7.069c0-.145-.007-.29-.02-.431.261-.11.508-.266.705-.444.315.306.815.306.815-.417 0 .223-.5.223-.461-.026a.95.95 0 0 0 .09-.255.7.7 0 0 0-.202-.645.58.58 0 0 0-.707-.098.735.735 0 0 0-.375.562c-.024.243.082.48.32.654a2.112 2.112 0 0 1-.259.153c-.534-2.664-3.284-4.595-6.442-4.595zM2.516 6.26c.455-2.066 2.667-3.733 5.448-3.733 3.146 0 5.536 2.114 5.536 4.542 0 1.254-.624 2.41-1.67 3.248a.5.5 0 0 0-.165.535l.66 2.175h-.985l-.59-1.487a.5.5 0 0 0-.629-.288c-.661.23-1.39.359-2.157.359a6.558 6.558 0 0 1-2.157-.359.5.5 0 0 0-.635.304l-.525 1.471h-.979l.633-2.15a.5.5 0 0 0-.17-.534 4.649 4.649 0 0 1-1.284-1.541.5.5 0 0 0-.446-.275h-.56a.5.5 0 0 1-.492-.414l-.254-1.46h.933a.5.5 0 0 0 .488-.393zm12.621-.857a.565.565 0 0 1-.098.21.704.704 0 0 1-.044-.025c-.146-.09-.157-.175-.152-.223a.236.236 0 0 1 .117-.173c.049-.027.08-.021.113.012a.202.202 0 0 1 .064.199z"></path>
-                  </svg>
-                  <span style="padding-left: 5px;">
-                    Paiements<span class="badge bg-primary poppins bg-danger" style="margin-left: 5px;">{{
+						<hr style="height: 2px;color: #fff;width: 90%;margin: 0;border-radius: 50px;transform: scale(1);background: #ffffff;"/>
+						<ul class="navbar-nav text-light" id="accordionSidebar-2">
+							<li class="nav-item">
+								<a class="nav-link poppins regular" href="/admin/paiements" style="padding: 10px;color: rgb(33,37,41);">
+									<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewbox="0 0 16 16" class="bi bi-piggy-bank">
+										<path d="M5 6.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0zm1.138-1.496A6.613 6.613 0 0 1 7.964 4.5c.666 0 1.303.097 1.893.273a.5.5 0 0 0 .286-.958A7.602 7.602 0 0 0 7.964 3.5c-.734 0-1.441.103-2.102.292a.5.5 0 1 0 .276.962z"></path>
+										<path fill-rule="evenodd" d="M7.964 1.527c-2.977 0-5.571 1.704-6.32 4.125h-.55A1 1 0 0 0 .11 6.824l.254 1.46a1.5 1.5 0 0 0 1.478 1.243h.263c.3.513.688.978 1.145 1.382l-.729 2.477a.5.5 0 0 0 .48.641h2a.5.5 0 0 0 .471-.332l.482-1.351c.635.173 1.31.267 2.011.267.707 0 1.388-.095 2.028-.272l.543 1.372a.5.5 0 0 0 .465.316h2a.5.5 0 0 0 .478-.645l-.761-2.506C13.81 9.895 14.5 8.559 14.5 7.069c0-.145-.007-.29-.02-.431.261-.11.508-.266.705-.444.315.306.815.306.815-.417 0 .223-.5.223-.461-.026a.95.95 0 0 0 .09-.255.7.7 0 0 0-.202-.645.58.58 0 0 0-.707-.098.735.735 0 0 0-.375.562c-.024.243.082.48.32.654a2.112 2.112 0 0 1-.259.153c-.534-2.664-3.284-4.595-6.442-4.595zM2.516 6.26c.455-2.066 2.667-3.733 5.448-3.733 3.146 0 5.536 2.114 5.536 4.542 0 1.254-.624 2.41-1.67 3.248a.5.5 0 0 0-.165.535l.66 2.175h-.985l-.59-1.487a.5.5 0 0 0-.629-.288c-.661.23-1.39.359-2.157.359a6.558 6.558 0 0 1-2.157-.359.5.5 0 0 0-.635.304l-.525 1.471h-.979l.633-2.15a.5.5 0 0 0-.17-.534 4.649 4.649 0 0 1-1.284-1.541.5.5 0 0 0-.446-.275h-.56a.5.5 0 0 1-.492-.414l-.254-1.46h.933a.5.5 0 0 0 .488-.393zm12.621-.857a.565.565 0 0 1-.098.21.704.704 0 0 1-.044-.025c-.146-.09-.157-.175-.152-.223a.236.236 0 0 1 .117-.173c.049-.027.08-.021.113.012a.202.202 0 0 1 .064.199z"></path>
+									</svg>
+									<span style="padding-left: 5px;">
+										Paiements<span class="badge bg-primary poppins bg-danger" style="margin-left: 5px;">{{
                         app.session.get('payments_count')
                       }}</span>
-                  </span>
-                </a>
-              </li>
-            </ul>
-          {% endif %}
-        </div>
-      </nav>
-      <div class="d-flex flex-column" id="content-wrapper">
-        <div id="content">
-          <nav class="navbar navbar-light navbar-expand bg-white shadow mb-4 topbar static-top">
-            <div class="container-fluid">
-              <button class="btn btn-link d-md-none rounded-circle me-3"
-                id="sidebarToggleTop"
-                type="button">
-                <i class="fas fa-bars"></i>
-              </button>
-              <ul class="navbar-nav flex-nowrap ms-auto">
-                <li class="nav-item dropdown d-sm-none no-arrow">
-                  <a class="dropdown-toggle nav-link"
-                    aria-expanded="false"
-                    data-bs-toggle="dropdown"
-                    href="#">
-                    <i class="fas fa-search"></i>
-                  </a>
-                  <div class="dropdown-menu dropdown-menu-end p-3 animated--grow-in"
-                    aria-labelledby="searchDropdown">
-                    <form class="me-auto navbar-search w-100">
-                      <div class="input-group">
-                        <input class="bg-light form-control border-0 small"
-                          type="text"
-                          placeholder="Search for ..." />
-                        <div class="input-group-append">
-                          <button class="btn btn-primary py-0" type="button">
-                            <i class="fas fa-search"></i>
-                          </button>
-                        </div>
-                      </div>
-                    </form>
-                  </div>
-                </li>
-                <li class="nav-item dropdown no-arrow mx-1">
-                  <div class="nav-item dropdown no-arrow">
-                    <a class="dropdown-toggle nav-link"
-                      aria-expanded="false"
-                      data-bs-toggle="dropdown"
-                      href="#">
-                      <span class="badge bg-danger badge-counter">3+</span>
-                      <i class="bi bi-bell-fill fa-fw"></i>
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-end dropdown-list animated--grow-in">
-                      <h6 class="dropdown-header poppins">
-                        Mes notifications
-                      </h6>
-                      <a class="dropdown-item d-flex align-items-center"
-                        href="#">
-                        <div class="me-3">
-                          <div class="bg-primary icon-circle">
-                            <i class="fas fa-file-alt text-white"></i>
-                          </div>
-                        </div>
-                        <div>
-                          <span class="small text-gray-500">
-                            December 12, 2019
-                          </span>
-                          <p>
-                            A new monthly report is ready to download!
-                          </p>
-                        </div>
-                      </a>
-                      <a class="dropdown-item d-flex align-items-center"
-                        href="#">
-                        <div class="me-3">
-                          <div class="bg-success icon-circle">
-                            <i class="fas fa-donate text-white"></i>
-                          </div>
-                        </div>
-                        <div>
-                          <span class="small text-gray-500">
-                            December 7, 2019
-                          </span>
-                          <p>
-                            $290.29 has been deposited into your account!
-                          </p>
-                        </div>
-                      </a>
-                      <a class="dropdown-item d-flex align-items-center"
-                        href="#">
-                        <div class="me-3">
-                          <div class="bg-warning icon-circle">
-                            <i class="fas fa-exclamation-triangle text-white">
-
-                            </i>
-                          </div>
-                        </div>
-                        <div>
-                          <span class="small text-gray-500">
-                            December 2, 2019
-                          </span>
-                          <p>
-                            Spending Alert: We've noticed unusually high
-                            spending for your account.
-                          </p>
-                        </div>
-                      </a>
-                      <a class="dropdown-item text-center small text-gray-500"
-                        href="#">
-                        Show All Alerts
-                      </a>
-                    </div>
-                  </div>
-                </li>
-                <div class="d-none d-sm-block topbar-divider"></div>
-                <li class="nav-item dropdown no-arrow">
-                  <div class="nav-item dropdown no-arrow">
-                    <a class="dropdown-toggle nav-link poppins"
-                      aria-expanded="false"
-                      data-bs-toggle="dropdown"
-                      href="#">
-                      <span class="d-none d-lg-inline me-2 text-gray-600 small">
-                        {{ app.user.username }}
-                      </span><img class="border rounded-circle img-profile"
-                        src="{{
-                        asset('images/profiles/')
-                          ~ app.user.picture
-                        }}" />
-                    </a>
-                    <div class="dropdown-menu shadow dropdown-menu-end animated--grow-in">
-                      <a class="dropdown-item poppins" href="/user">
-                        <svg xmlns="http://www.w3.org/2000/svg"
-                          width="1em"
-                          height="1em"
-                          fill="black"
-                          viewbox="0 0 16 16"
-                          class="bi bi-person fa-sm fa-fw me-2 text-gray-400">
-                          <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"></path>
-                        </svg>&nbsp;Mon profil
-                      </a>
-                      <div class="dropdown-divider"></div>
-                      <a class="dropdown-item poppins" href="{{ path('app_logout') }}">
-                        <svg xmlns="http://www.w3.org/2000/svg"
-                          width="1em"
-                          height="1em"
-                          fill="black"
-                          viewbox="0 0 16 16"
-                          class="bi bi-box-arrow-right fa-sm fa-fw me-2 text-gray-400">
-                          <path fill-rule="evenodd"
-                            d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0v2z"></path>
-                          <path fill-rule="evenodd"
-                            d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z"></path>
-                        </svg>&nbsp;Se déconnecter
-                      </a>
-                    </div>
-                  </div>
-                </li>
-              </ul>
-            </div>
-          </nav>
-          <div class="container-fluid">
-            {% block body %}
-
-            {% endblock %}
-          </div>
-        </div>
-        <footer class="bg-white shadow sticky-footer" style="z-index: 2">
-          <div class="container my-auto">
-            <div class="text-center my-auto copyright poppins">
-              <span>Copyright © Escalab 2021</span>
-            </div>
-          </div>
-        </footer>
-      </div>
-      <a class="border rounded d-inline scroll-to-top" href="#page-top">
-        <i class="fas fa-angle-up"></i>
-      </a>
-    </div>
-  </body>
-</html>
+									</span>
+								</a>
+							</li>
+						</ul>
+					{% endif %}
+				</div>
+			</nav>
+			<div class="d-flex flex-column" id="content-wrapper">
+				<div id="content">
+					<nav class="navbar navbar-light navbar-expand bg-white shadow mb-4 topbar static-top">
+						<div class="container-fluid">
+							<button class="btn btn-link d-md-none rounded-circle me-3" id="sidebarToggleTop" type="button">
+								<i class="fas fa-bars"></i>
+							</button>
+							<ul class="navbar-nav flex-nowrap ms-auto">
+								<li class="nav-item dropdown d-sm-none no-arrow">
+									<a class="dropdown-toggle nav-link" aria-expanded="false" data-bs-toggle="dropdown" href="#">
+										<i class="fas fa-search"></i>
+									</a>
+									<div class="dropdown-menu dropdown-menu-end p-3 animated--grow-in" aria-labelledby="searchDropdown">
+										<form class="me-auto navbar-search w-100">
+											<div class="input-group">
+												<input class="bg-light form-control border-0 small" type="text" placeholder="Search for ..."/>
+												<div class="input-group-append">
+													<button class="btn btn-primary py-0" type="button">
+														<i class="fas fa-search"></i>
+													</button>
+												</div>
+											</div>
+										</form>
+									</div>
+								</li>
+								<li class="nav-item dropdown no-arrow mx-1">
+									<div class="nav-item dropdown no-arrow">
+										<a class="dropdown-toggle nav-link" aria-expanded="false" data-bs-toggle="dropdown" href="#">
+											<span class="badge bg-danger badge-counter">3+</span>
+											<i class="bi bi-bell-fill fa-fw"></i>
+										</a>
+										<div class="dropdown-menu dropdown-menu-end dropdown-list animated--grow-in">
+											<h6 class="dropdown-header poppins">
+												Mes notifications
+											</h6>
+											<a class="dropdown-item d-flex align-items-center" href="#">
+												<div class="me-3">
+													<div class="bg-primary icon-circle">
+														<i class="fas fa-file-alt text-white"></i>
+													</div>
+												</div>
+												<div>
+													<span class="small text-gray-500">
+														December 12, 2019
+													</span>
+													<p>
+														A new monthly report is ready to download!
+													</p>
+												</div>
+											</a>
+											<a class="dropdown-item d-flex align-items-center" href="#">
+												<div class="me-3">
+													<div class="bg-success icon-circle">
+														<i class="fas fa-donate text-white"></i>
+													</div>
+												</div>
+												<div>
+													<span class="small text-gray-500">
+														December 7, 2019
+													</span>
+													<p>
+														$290.29 has been deposited into your account!
+													</p>
+												</div>
+											</a>
+											<a class="dropdown-item d-flex align-items-center" href="#">
+												<div class="me-3">
+													<div class="bg-warning icon-circle">
+														<i class="fas fa-exclamation-triangle text-white"></i>
+													</div>
+												</div>
+												<div>
+													<span class="small text-gray-500">
+														December 2, 2019
+													</span>
+													<p>
+														Spending Alert: We've noticed unusually high
+														                            spending for your account.
+													</p>
+												</div>
+											</a>
+											<a class="dropdown-item text-center small text-gray-500" href="#">
+												Show All Alerts
+											</a>
+										</div>
+									</div>
+								</li>
+								<div class="d-none d-sm-block topbar-divider"></div>
+								<li class="nav-item dropdown no-arrow">
+									<div class="nav-item dropdown no-arrow">
+										<a class="dropdown-toggle nav-link poppins" aria-expanded="false" data-bs-toggle="dropdown" href="#">
+											<span class="d-none d-lg-inline me-2 text-gray-600 small">
+												{{ app.user.username }}
+											</span><img class="border rounded-circle img-profile" src="{{ asset('images/profiles/') ~ app.user.picture }}"/>
+										</a>
+										<div class="dropdown-menu shadow dropdown-menu-end animated--grow-in">
+											<a class="dropdown-item poppins" href="/user">
+												<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="black" viewbox="0 0 16 16" class="bi bi-person fa-sm fa-fw me-2 text-gray-400">
+													<path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"></path>
+												</svg>&nbsp;Mon profil
+											</a>
+											<div class="dropdown-divider"></div>
+											<a class="dropdown-item poppins" href="{{ path('app_logout') }}">
+												<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="black" viewbox="0 0 16 16" class="bi bi-box-arrow-right fa-sm fa-fw me-2 text-gray-400">
+													<path fill-rule="evenodd" d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0v2z"></path>
+													<path fill-rule="evenodd" d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z"></path>
+												</svg>&nbsp;Se déconnecter
+											</a>
+										</div>
+									</div>
+								</li>
+							</ul>
+						</div>
+					</nav>
+					<div class="container-fluid"> {% block body %}{% endblock %}
+						</div>
+					</div>
+					<footer class="bg-white shadow sticky-footer" style="z-index: 2">
+						<div class="container my-auto">
+							<div class="text-center my-auto copyright poppins">
+								<span>Copyright © Escalab 2021</span>
+							</div>
+						</div>
+					</footer>
+				</div>
+				<a class="border rounded d-inline scroll-to-top" href="#page-top">
+					<i class="fas fa-angle-up"></i>
+				</a>
+			</div>
+		</body>
+	</html>

@@ -119,6 +119,7 @@ class UserFixtures extends Fixture {
       $franchise = new Franchise();
       $franchise->setAdmin($generator->numberBetween(1, 100));
       $franchise->setName($generator->company);
+      $franchise->setPicture("default.png");
       $em->persist($franchise);
       $this->generateGym($em, $franchise);
       $this->generatePayments($em, $franchise);

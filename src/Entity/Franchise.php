@@ -11,8 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass=FranchiseRepository::class)
  * @ORM\Table(name="`Franchise`", schema="public")
  */
-class Franchise
-{
+class Franchise {
   /**
    * @var int
    *
@@ -50,31 +49,31 @@ class Franchise
    */
   private $payments;
 
-  public function __construct()
-  {
+  /**
+   * @ORM\Column(type="string", length=255)
+   */
+  private $picture;
+
+  public function __construct() {
     $this->users = new ArrayCollection();
     $this->gyms = new ArrayCollection();
     $this->payments = new ArrayCollection();
   }
 
-  public function getId(): ?int
-  {
+  public function getId(): ?int {
     return $this->id;
   }
 
-  public function setId(int $id): self
-  {
+  public function setId(int $id): self {
     $this->id = $id;
     return $this;
   }
 
-  public function getAdmin(): ?int
-  {
+  public function getAdmin(): ?int {
     return $this->admin;
   }
 
-  public function setAdmin(?int $admin): self
-  {
+  public function setAdmin(?int $admin): self {
     $this->admin = $admin;
 
     return $this;
@@ -83,13 +82,11 @@ class Franchise
   /**
    * @return Collection|User[]
    */
-  public function getUsers(): Collection
-  {
+  public function getUsers(): Collection {
     return $this->users;
   }
 
-  public function addUser(User $user): self
-  {
+  public function addUser(User $user): self {
     if (!$this->users->contains($user)) {
       $this->users[] = $user;
       $user->setFranchise($this);
@@ -98,8 +95,7 @@ class Franchise
     return $this;
   }
 
-  public function removeUser(User $user): self
-  {
+  public function removeUser(User $user): self {
     if ($this->users->removeElement($user)) {
       // set the owning side to null (unless already changed)
       if ($user->getFranchise() === $this) {
@@ -110,13 +106,11 @@ class Franchise
     return $this;
   }
 
-  public function getName(): ?string
-  {
+  public function getName(): ?string {
     return $this->name;
   }
 
-  public function setName(string $name): self
-  {
+  public function setName(string $name): self {
     $this->name = $name;
 
     return $this;
@@ -125,13 +119,11 @@ class Franchise
   /**
    * @return Collection|Gym[]
    */
-  public function getGyms(): Collection
-  {
+  public function getGyms(): Collection {
     return $this->gyms;
   }
 
-  public function addGym(Gym $gym): self
-  {
+  public function addGym(Gym $gym): self {
     if (!$this->gyms->contains($gym)) {
       $this->gyms[] = $gym;
       $gym->setFranchise($this);
@@ -140,8 +132,7 @@ class Franchise
     return $this;
   }
 
-  public function removeGym(Gym $gym): self
-  {
+  public function removeGym(Gym $gym): self {
     if ($this->gyms->removeElement($gym)) {
       // set the owning side to null (unless already changed)
       if ($gym->getFranchise() === $this) {
@@ -150,21 +141,18 @@ class Franchise
     }
   }
 
-  public function getNumberOfGyms(): int
-  {
+  public function getNumberOfGyms(): int {
     return sizeof($this->gyms);
   }
 
   /**
    * @return Collection<int, Payments>
    */
-  public function getPayments(): Collection
-  {
+  public function getPayments(): Collection {
     return $this->payments;
   }
 
-  public function addPayment(Payments $payment): self
-  {
+  public function addPayment(Payments $payment): self {
     if (!$this->payments->contains($payment)) {
       $this->payments[] = $payment;
       $payment->setFranchise($this);
@@ -173,14 +161,23 @@ class Franchise
     return $this;
   }
 
-  public function removePayment(Payments $payment): self
-  {
+  public function removePayment(Payments $payment): self {
     if ($this->payments->removeElement($payment)) {
       // set the owning side to null (unless already changed)
       if ($payment->getFranchise() === $this) {
         $payment->setFranchise(null);
       }
     }
+
+    return $this;
+  }
+
+  public function getPicture(): ?string {
+    return $this->picture;
+  }
+
+  public function setPicture(string $picture): self {
+    $this->picture = $picture;
 
     return $this;
   }

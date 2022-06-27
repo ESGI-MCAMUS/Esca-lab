@@ -1,5 +1,5 @@
-{% extends 'accueil/index.html.twig' %}
-{# {% extends 'base.html.twig' %} #}
+{# {% extends 'accueil/index.html.twig' %} #}
+{% extends 'base.html.twig' %}
 
 {% block title %}
         Esca'Lab - Franchises
@@ -39,7 +39,7 @@
 </div>
 {% endset %}
 
-{% block corps %}
+{% block body %}
 <div class="container-fluid">
 	<div class="d-sm-flex align-items-center mb-4">
 		<h4 class="text-dark mb-0 poppins bold text-black" style="color: rgb(33,37,41);">
@@ -204,4 +204,6 @@
 <input type="text" id="url_root" value="{{ app.request.getSchemeAndHttpHost() }}" hidden></input>
 <input type="text" id="templateSpan" data-t-span="{{ templateSpan|escape }}" hidden>
 <input type="text" id="templateMessage" data-t-span="{{ templateMessage|escape }}" hidden>
+
+<link rel="stylesheet" href="{{asset('bootstrap/home/css/bootstrap.min.css')}}">
 {% endblock %}

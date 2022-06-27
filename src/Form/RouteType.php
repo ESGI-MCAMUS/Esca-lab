@@ -7,6 +7,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\ChoiceList\ChoiceList;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -22,13 +23,22 @@ class RouteType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('name')
+            ->add('name', TextType::class, [
+                'label' => 'Nom de la route',
+                'label_attr' => ['class' => 'form-label poppins light'],
+                'attr' => [
+                    'class' => 'form-control poppins',
+                    'placeholder' => 'Ma Super Route',
+                    'required' => true,
+                ],
+            ])
             ->add('difficulty', ChoiceType::class, [
+                'label' => 'Difficulté',
                 'choices' => $this->difficulty,
             ])
             ->add('save', SubmitType::class, [
-                'label' => 'Save !',
-                'attr' => ['class' => "btn btn-primary"]
+                'label' => 'Enregistrer',
+                'attr' => ['class' => "btn btn-primary"],
             ])
         ;
     }

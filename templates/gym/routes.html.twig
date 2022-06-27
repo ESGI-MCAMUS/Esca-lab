@@ -7,7 +7,7 @@
 {% block body %}
                     <div class="d-sm-flex justify-content-start align-items-center mb-4">
                         <h3 class="text-dark mb-0 me-2 poppins bold text-black" style="color: rgb(33,37,41);">Routes</h3>
-                        <a href="{% if "ROLE_ADMIN_FRANCHISE" in app.user.roles %}{{ path('route_add', {gymId: app.request.get('id')}) }}{% else %}{{ path('route_add') }}{% endif %}"><button type="button" class="btn btn-success ms-2">+ Add New</button></a>
+                        <a href="{% if "ROLE_ADMIN_FRANCHISE" in app.user.roles %}{{ path('route_add', {gymId: app.request.get('id')}) }}{% else %}{{ path('route_add') }}{% endif %}"><button type="button" class="btn btn-success ms-2">+ Ajouter</button></a>
                     </div>
                     <div class="row justify-content-around align-items-center">
                         {% for route in routes %}
@@ -19,11 +19,11 @@
                                             <div class="col-7 text-end">
                                                 {% if route.opened > 0 %}
                                                     <a href="{{ path('route_open', {id: route.id, state: "false"}) }}">
-                                                        <button type="button" class="btn btn-danger">Close</button>
+                                                        <button type="button" class="btn btn-danger">Fermer</button>
                                                     </a>
                                                 {% else %}
                                                     <a href="{{ path('route_open', {id: route.id, state: "true"}) }}">
-                                                        <button type="button" class="btn btn-success">Open</button>
+                                                        <button type="button" class="btn btn-success">Ouvrir</button>
                                                     </a>
                                                 {% endif %}
                                                 <a href="{% if "ROLE_ADMIN_FRANCHISE" in app.user.roles %}{{ path('route_edit', {id: route.id, gymId: app.request.get('id')}) }}{% else %}{{ path('route_edit', {id: route.id}) }}{% endif %}">

@@ -14,7 +14,7 @@
 			<div class="row">
 				<div class="col-md-6 text-nowrap">
 					{% if is_granted('ROLE_ADMIN_SALLE') and "ROLE_ADMIN_FRANCHISE" not in app.user.roles and "ROLE_SUPER_ADMIN" not in app.user.roles %}
-						<a href="{{ path('gym_events_add') }}"><button type="button" class="btn btn-success ms-2">+ Add New</button></a>
+						<a href="{{ path('gym_events_add') }}"><button type="button" class="btn btn-success ms-2">+ Ajouter</button></a>
 					{% endif %}
 				</div>
 				<div class="col-md-6">

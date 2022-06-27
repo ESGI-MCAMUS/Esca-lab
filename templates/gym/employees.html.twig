@@ -10,7 +10,7 @@
                 <h3 class="text-dark mb-0 poppins bold text-black" style="color: rgb(33,37,41);">Employés de
                     <i>{{ app.user.gym.name }}</i></h3>
                 {% if "ROLE_ADMIN_FRANCHISE" not in app.user.roles %}
-                    <a href="{{ path('add_gym_employee') }}"><button type="button" class="btn btn-success ms-2">+ Add New</button></a>
+                    <a href="{{ path('add_gym_employee') }}"><button type="button" class="btn btn-success ms-2">+ Ajouter</button></a>
                 {% endif %}
             </div>
             <div class="row">

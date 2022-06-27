@@ -24,6 +24,7 @@ class GymType extends AbstractType
                 'attr' => [
                     'class' => 'form-control poppins',
                     'placeholder' => 'Ma Super Salle',
+                    'required' => true,
                 ],
             ])
             ->add('size', NumberType::class, [
@@ -42,7 +43,7 @@ class GymType extends AbstractType
                     'placeholder' => '38 rue des Jeuneurs',
                 ],
             ])
-            ->add('pc', NumberType::class, [
+            ->add('pc', TextType::class, [
                 'label' => 'Code postal de la salle',
                 'label_attr' => ['class' => 'form-label poppins light'],
                 'attr' => [
@@ -59,7 +60,7 @@ class GymType extends AbstractType
                 ],
             ])
             ->add('save', SubmitType::class, [
-                'label' => 'Ajouter la salle',
+                'label' => 'Enregistrer',
                 'attr' => ['class' => 'btn btn-primary'],
             ]);
     }

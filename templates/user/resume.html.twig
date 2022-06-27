@@ -20,6 +20,36 @@
 						</div>
 					</div>
 				</div>
+				{# Photo de profil #}
+				<div class="card shadow border-start-primary py-2">
+					<div class="card-body">
+						<div class="row align-items-center no-gutters">
+							<div class="col md-6">
+								<div class="text-uppercase text-primary fw-bold text-xs mb-1">
+									<span style="font-size: 15px;" class="text-primary poppins">Photo de profil</span>
+								</div>
+							</div>
+							<div class="col md-6">
+								<div class="row align-items-center no-gutters">
+									<div class="col md-6">
+										<img class="border rounded-circle img-profile" src="{{ asset('images/profiles/') ~ app.user.picture }}" width="60px" height="60px"/>
+										{{ form_start(form) }}
+
+										{{ form_row(form.profile_picture) }}
+										<br>
+										<button type="submit" class="btn btn-primary btn-sm fluid">Modifier</button>
+
+										{{ form_end(form) }}
+
+
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<br>
+
 			</div>
 			<div
 				class="col-lg-5 col-xl-4">
@@ -42,7 +72,7 @@
 						</div>
 					</div>
 				</div>
-				<bR>
+				<br>
 				{# Total Number of finished route #}
 				<div class="card shadow border-start-primary py-2">
 					<div class="card-body">

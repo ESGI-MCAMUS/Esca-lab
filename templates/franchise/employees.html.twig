@@ -10,7 +10,7 @@
       style="color: rgb(33,37,41);">Employés de
         <i>{{ app.user.franchise.name }}</i>
         {% if is_granted('ROLE_ADMIN_FRANCHISE') %}
-            <a href="{{ path('add_franchise_employee') }}"><button type="button" class="btn btn-success ms-2">+ Add New</button></a>
+            <a href="{{ path('add_franchise_employee') }}"><button type="button" class="btn btn-success ms-2">+ Ajouter</button></a>
         {% endif %}
     </h3>
 </div>
@@ -22,6 +22,7 @@
                     <th>Nom complet</th>
                     <th>Email</th>
                     <th>Date de naissance</th>
+                    <th>Salle</th>
                     <th>Role(s)</th>
                     <th>Actions</th>
                 </tr>
@@ -36,6 +37,7 @@
                         employee.lastname }}</td>
                     <td>{{ employee.email }}</td>
                     <td>{{ employee.birthdate|date('d/m/Y') }}</td>
+                    <td>{{ employee.gym.name }}</td>
                     <td>
                         <div class="form-check">
                             <input id="roleCheck"

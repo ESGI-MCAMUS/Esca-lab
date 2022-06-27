@@ -41,6 +41,9 @@ class FranchiseAdminController extends AbstractController
   #[Route('/franchise/employees', name: 'franchise_employees')]
   public function employees(): Response
   {
+      if ($this->user->getFranchise() == null) {
+          return $this->redirectToRoute('franchise_kpi');
+      }
     $this->setInformations();
     $repo = $this->getDoctrine()
       ->getManager()
@@ -57,6 +60,10 @@ class FranchiseAdminController extends AbstractController
     #[IsGranted('ROLE_ADMIN_FRANCHISE')]
     #[Route('/franchise/employees/add', name: 'add_franchise_employee')]
     public function addEmployee(Request $request, EntityManagerInterface $em) {
+
+        if ($this->user->getFranchise() == null) {
+            return $this->redirectToRoute('franchise_kpi');
+        }
 
         $this->setInformations();
         $form = $this->createForm(EmployeeType::class);
@@ -101,6 +108,10 @@ class FranchiseAdminController extends AbstractController
     #[Route('/franchise/employees/add/{userId}', name: 'add_franchise_employee_id', defaults: ["userId" => null], methods: ['POST'])]
     public function addEmployeeUserId(\Doctrine\Persistence\ManagerRegistry $doctrine, $userId, Request $request): Response
     {
+
+        if ($this->user->getFranchise() == null) {
+            return $this->redirectToRoute('franchise_kpi');
+        }
         $success = true;
 
         $entityManager = $doctrine->getManager();
@@ -124,6 +135,11 @@ class FranchiseAdminController extends AbstractController
   #[Route('/franchise/employees/edit/{id}/{check}', name: 'edit_franchise_employee')]
   public function editEmployee($id, $check = 'user')
   {
+
+      if ($this->user->getFranchise() == null) {
+          return $this->redirectToRoute('franchise_kpi');
+      }
+
     $repo = $this->getDoctrine()
       ->getManager()
       ->getRepository(User::class);
@@ -176,7 +192,12 @@ class FranchiseAdminController extends AbstractController
   #[Route('/franchise/employees/remove/{id}', name: 'remove_franchise_employee')]
   public function removeEmployee($id)
   {
-    $repo = $this->getDoctrine()
+
+      if ($this->user->getFranchise() == null) {
+          return $this->redirectToRoute('franchise_kpi');
+      }
+
+      $repo = $this->getDoctrine()
       ->getManager()
       ->getRepository(User::class);
     $employee = $repo->find($id);
@@ -201,7 +222,12 @@ class FranchiseAdminController extends AbstractController
   #[Route('/franchise/salles', name: 'franchise_gyms')]
   public function routes(): Response
   {
-    $this->setInformations();
+
+      if ($this->user->getFranchise() == null) {
+          return $this->redirectToRoute('franchise_kpi');
+      }
+
+      $this->setInformations();
     $gyms = $this->user->getFranchise()->getGyms();
     return $this->render('franchise/gyms.html.twig', [
       'gyms' => $gyms,
@@ -213,31 +239,40 @@ class FranchiseAdminController extends AbstractController
         $repo = $this->getDoctrine()
             ->getManager()
             ->getRepository(User::class);
-        $employeesCount = count(
-            $repo->findBy([
-                'franchise' => $this->user->getFranchise()->getId(),
-            ])
-        );
-        $gyms = $this->user->getFranchise()->getGyms();
+
+        $employeesCount = 0;
+        $gymsCount = 0;
         $waysCount = 0;
         $openedWays = 0;
-        foreach ($gyms as $gym) {
-            $waysCount += count($gym->getRoutes());
-            $openedWays += count($gym->getRoutes()->filter(function ($element) {
-                return $element->getOpened() > 0;
-            }));
-        }
-        $gymsCount = count($gyms);
-
-        $payment_repo = $this->getDoctrine()
-            ->getManager()
-            ->getRepository(Payments::class);
-        $payments = $payment_repo->findBy([
-            'franchise' => $this->user->getFranchise()->getId(),
-        ]);
         $total_payments = 0;
-        foreach ($payments as $payment) {
-            $payment->getStatus() !== "success" ? $total_payments++ : $total_payments;
+
+        if ($this->user->getFranchise() !== null) {
+            $employeesCount = count(
+                $repo->findBy([
+                    'franchise' => $this->user->getFranchise()->getId(),
+                ])
+            );
+            $gyms = $this->user->getFranchise()->getGyms();
+            $waysCount = 0;
+            $openedWays = 0;
+            foreach ($gyms as $gym) {
+                $waysCount += count($gym->getRoutes());
+                $openedWays += count($gym->getRoutes()->filter(function ($element) {
+                    return $element->getOpened() > 0;
+                }));
+            }
+            $gymsCount = count($gyms);
+
+            $payment_repo = $this->getDoctrine()
+                ->getManager()
+                ->getRepository(Payments::class);
+            $payments = $payment_repo->findBy([
+                'franchise' => $this->user->getFranchise()->getId(),
+            ]);
+            $total_payments = 0;
+            foreach ($payments as $payment) {
+                $payment->getStatus() !== "success" ? $total_payments++ : $total_payments;
+            }
         }
 
         $this->get('session')->set('employees_count', $employeesCount);

@@ -147,7 +147,7 @@
                         <div class="col mt-2" style="text-align: center;">
                             {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
                                 {% if route.opened == 1 %}
-                                    {% if route.id not in resolved %}
+                                    {% if resolved == 0 %}
                                         <button id="btn-update-route" type="button" class="btn btn-info btn-add" data-b-route="{{ route.id }}">
                                             <span id="spinner-{{ route.id }}" class="spinner-border spinner-border-sm text-dark" role="status" aria-hidden="true" hidden></span>
                                             Je l'ai faite !
@@ -183,7 +183,7 @@
                     <div class="row align-items-center no-gutters" style="text-align: center;">
                         <div class="col"></div>
                         <div class="col-6">
-                            <p class="lead">A été reussie {{ route.users|length }} fois</p>
+                            <p class="lead">A été reussie <strong id="times-route-solved">{{ route.users|length }}</strong> fois</p>
                         </div>
                         <div class="col"></div>
                     </div>

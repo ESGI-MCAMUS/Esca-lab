@@ -8,11 +8,15 @@
   <div class="d-sm-flex justify-content-start align-items-center mb-4">
     <h3 class="text-dark mb-0 me-2 poppins bold text-black"
       style="color: rgb(33,37,41);">
+      {% if (app.user.franchise != null) %}
       Salles
     </h3>
     <a href="{{ path('gym_add') }}">
       <button type="button" class="btn btn-success ms-2">+ Ajouter</button>
     </a>
+    {% else %}
+    Vous n'êtes pas encore associé à une franchise.
+    {% endif %}
   </div>
   <div class="row justify-content-around align-items-center">
     {% for gym in gyms %}

@@ -5,7 +5,19 @@
 {% endblock %}
 
 {% block body %}
-  {{ form_start(form_add) }}
+<h3 class="text-dark mb-0 poppins bold text-black">
+	Salles
+</h3>
+<br>
+<div class="card shadow">
+	<div class="card-header py-3">
+		<p class="text-primary m-0 fw-bold poppins">Ajout d'une salle</p>
+	</div>
 
-  {{ form_end(form_add) }}
+	<div class="card-body">
+{{ form_start(form_add) }}
+
+{{ form_end(form_add) }}</div>
+
+</div>
 {% endblock %}

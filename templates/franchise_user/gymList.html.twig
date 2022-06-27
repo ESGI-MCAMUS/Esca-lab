@@ -15,7 +15,7 @@
 	<div class="container-fluid">
 		<div class="d-sm-flex align-items-center mb-4">
 			<h4 class="text-dark mb-0 poppins bold text-black" style="color: rgb(33,37,41);">
-				<a href="/franchise/all">Franchises</a>
+				<a href="{{ path('index') }}">Franchises</a>
 				>
 				{{ franchise_name }}
 				({{ gyms|length }})
@@ -30,7 +30,7 @@
 							<div class="row align-items-center no-gutters">
 								<div class="col"></div>
 								<div class="col">
-									<a href="/gym/{{ gym.id }}">
+									<a href="{{ path('gym', {id: gym.id}) }}">
 										<img src="{{ asset('images/gyms/') ~ gym.picture }}" style="object-fit: cover !important" class="img-tn rounded"/>
 									</a>
 								</div>
@@ -39,7 +39,7 @@
 							<hr class="bg-danger border-2 border-top border-secondary">
 							<div class="row">
 								<div class="col" style="text-align: center;">
-									<a href="/gym/{{ gym.id }}" style="text-decoration: none;color: black;">
+									<a href="{{ path('gym', {id: gym.id}) }}" style="text-decoration: none;color: black;">
 										<h3>
 											<strong>{{ gym.name }}</strong>
 										</h3>

@@ -317,7 +317,7 @@ class RouteController extends AbstractController
     if ($securityContext->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
       $resolvedRoutes = $this->user->getRoutes();
       foreach($resolvedRoutes as $key => $value) {
-        if($value->getId() === $routeId) {
+        if($value->getId() === intval($routeId)) {
           $resolved = true;
           break;
         }

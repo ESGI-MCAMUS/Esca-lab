@@ -23,6 +23,10 @@ $( document ).ready(function() {
                 document.getElementById('spinner-send-message').hidden = true;
                 document.getElementById('input-message').value = "" 
 
+                if(document.getElementById('no-comment-display')) {
+                    document.getElementById('no-comment-display').remove();
+                }
+
                 const template= $('#templateMessage').data('t-span');
                 const crValues = {
                     '__idMessageTemplate__':        'lastMessage',

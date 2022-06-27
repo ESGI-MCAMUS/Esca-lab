@@ -43,6 +43,17 @@ class GymAdminController extends AbstractController
     #[Route('/gym/voies', name: 'gym_routes')]
     public function routes(): Response
     {
+        if (($this->user->getGym() == null && ($this->isGranted('ROLE_ADMIN_SALLE') || $this->isGranted('ROLE_OUVREUR')))
+            || ($this->user->getFranchise() == null && $this->isGranted('ROLE_ADMIN_FRANCHISE'))) {
+            switch ($this->user->getRole()) {
+                case 'ROLE_ADMIN_SALLE':
+                    return $this->redirectToRoute('gym_kpi');
+                case 'ROLE_OUVREUR':
+                    return $this->redirectToRoute('accueil');
+                case 'ROLE_ADMIN_FRANCHISE':
+                    return $this->redirectToRoute('franchise_kpi');
+            }
+        }
         $this->setInformations();
         $routes = $this->user->getGym()->getRoutes();
         return $this->render('gym/routes.html.twig', [
@@ -54,6 +65,9 @@ class GymAdminController extends AbstractController
     #[Route('/gym/voies/{id}', name: 'gym_routes_franchise', defaults: ["id" => null])]
     public function routesByFranchise($id): Response
     {
+        if ($this->user->getFranchise() == null) {
+            return $this->redirectToRoute('franchise_kpi');
+        }
         $repo = $this->getDoctrine()
             ->getManager()
             ->getRepository(Gym::class);
@@ -71,6 +85,9 @@ class GymAdminController extends AbstractController
     #[Route('/gym/employees', name: 'gym_employees')]
     public function employees(): Response
     {
+        if ($this->user->getGym() == null) {
+            return $this->redirectToRoute('gym_kpi');
+        }
         $this->setInformations();
         $repo = $this->getDoctrine()
             ->getManager()
@@ -85,6 +102,10 @@ class GymAdminController extends AbstractController
     #[IsGranted('ROLE_ADMIN_SALLE')]
     #[Route('/gym/employees/add', name: 'add_gym_employee')]
     public function addEmployee(Request $request, EntityManagerInterface $em) {
+
+        if ($this->user->getGym() == null) {
+            return $this->redirectToRoute('gym_kpi');
+        }
 
         $this->setInformations();
         $form = $this->createForm(EmployeeType::class);
@@ -127,6 +148,9 @@ class GymAdminController extends AbstractController
     #[Route('/gym/employees/add/{userId}', name: 'add_gym_employee_id', defaults: ["userId" => null], methods: ['POST'])]
     public function addEmployeeUserId(ManagerRegistry $doctrine, $userId): Response
     {
+        if ($this->user->getGym() == null) {
+            return $this->redirectToRoute('gym_kpi');
+        }
         $success = true;
 
         $entityManager = $doctrine->getManager();
@@ -149,6 +173,9 @@ class GymAdminController extends AbstractController
     #[Route('/gym/employees/edit/{id}/{check}', name: 'edit_gym_employee')]
     public function editEmployee($id, $check = 'user')
     {
+        if ($this->user->getGym() == null) {
+            return $this->redirectToRoute('gym_kpi');
+        }
         $repo = $this->getDoctrine()
             ->getManager()
             ->getRepository(User::class);
@@ -190,6 +217,9 @@ class GymAdminController extends AbstractController
     #[Route('/gym/employees/remove/{id}', name: 'remove_gym_employee')]
     public function removeEmployee($id)
     {
+        if ($this->user->getGym() == null) {
+            return $this->redirectToRoute('gym_kpi');
+        }
         $repo = $this->getDoctrine()
             ->getManager()
             ->getRepository(User::class);
@@ -217,6 +247,9 @@ class GymAdminController extends AbstractController
     #[Route('/gym/evenements', name: 'gym_events')]
     public function admin_events(Request $request): Response
     {
+        if ($this->user->getGym() == null) {
+            return $this->redirectToRoute('gym_kpi');
+        }
         $this->setInformations();
         $form = $this->createForm(GlobalSearchType::class);
         $form->handleRequest($request);
@@ -245,6 +278,9 @@ class GymAdminController extends AbstractController
     #[Route('/gym/evenements/ajout', name: 'gym_events_add')]
     public function admin_events_add(Request $request, EntityManagerInterface $em): Response
     {
+        if ($this->user->getGym() == null) {
+            return $this->redirectToRoute('gym_kpi');
+        }
         $this->setInformations();
         $form = $this->createForm(EventType::class);
         $form->handleRequest($request);
@@ -268,6 +304,9 @@ class GymAdminController extends AbstractController
     #[Route('/gym/evenements/edition/{id}', name: 'gym_events_edit')]
     public function admin_events_edit($id, Request $request, EntityManagerInterface $em): Response
     {
+        if ($this->user->getGym() == null) {
+            return $this->redirectToRoute('gym_kpi');
+        }
         $this->setInformations();
 
         $repo = $this->getDoctrine()->getRepository(Event::class);
@@ -301,6 +340,9 @@ class GymAdminController extends AbstractController
     #[Route('/gym/evenements/suppression/{id}', name: 'gym_events_deletion')]
     public function admin_events_deletion(int $id): Response
     {
+        if ($this->user->getGym() == null) {
+            return $this->redirectToRoute('gym_kpi');
+        }
         $event = $this->getDoctrine()
             ->getRepository(Event::class)
             ->findOneBy(['id' => $id, 'gym' => $this->user->getGym()->getId()]);
@@ -320,20 +362,26 @@ class GymAdminController extends AbstractController
 
     private function setInformations()
     {
-        $repo = $this->getDoctrine()
-            ->getManager()
-            ->getRepository(User::class);
-        $employeesCount = count(
-            $repo->findBy([
-                'gym' => $this->user->getGym()->getId(),
-            ])
-        );
-        $ways = $this->user->getGym()->getRoutes();
+        $employeesCount = 0;
+        $waysCount = 0;
+        $openedWays = 0;
 
-        $waysCount = count($ways);
-        $openedWays = count($ways->filter(function ($element) {
-            return $element->getOpened() > 0;
-        }));
+        if ($this->user->getGym() != null) {
+            $repo = $this->getDoctrine()
+                ->getManager()
+                ->getRepository(User::class);
+            $employeesCount = count(
+                $repo->findBy([
+                    'gym' => $this->user->getGym()->getId(),
+                ])
+            );
+            $ways = $this->user->getGym()->getRoutes();
+
+            $waysCount = count($ways);
+            $openedWays = count($ways->filter(function ($element) {
+                return $element->getOpened() > 0;
+            }));
+        }
 
         $this->get('session')->set('employees_count', $employeesCount);
         $this->get('session')->set('ways_count', $waysCount);

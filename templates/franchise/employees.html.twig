@@ -22,6 +22,7 @@
                     <th>Nom complet</th>
                     <th>Email</th>
                     <th>Date de naissance</th>
+                    <th>Salle</th>
                     <th>Role(s)</th>
                     <th>Actions</th>
                 </tr>
@@ -36,6 +37,7 @@
                         employee.lastname }}</td>
                     <td>{{ employee.email }}</td>
                     <td>{{ employee.birthdate|date('d/m/Y') }}</td>
+                    <td>{{ employee.gym.name }}</td>
                     <td>
                         <div class="form-check">
                             <input id="roleCheck"

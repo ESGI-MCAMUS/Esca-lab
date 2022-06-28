@@ -17,7 +17,12 @@
         {% endif %}
     </h3>
 </div>
-<div class="row">
+<div class="card shadow">
+	<div class="card-header py-3">
+		<p class="text-primary m-0 fw-bold poppins">Liste des employés</p>
+	</div>
+
+	<div class="card-body">
     <div class="table table-responsive mt-2">
         <table class="table my-0">
             <thead>
@@ -146,6 +151,7 @@
             btn.href = e.relatedTarget.getAttribute('data-href');
             return false;
         });
-    </script>
+    </script></div>
 </div>
+
 {% endblock %}

@@ -44,7 +44,6 @@ class Payments
 
     /**
      * @ORM\ManyToOne(targetEntity=Franchise::class, inversedBy="payments")
-     * @ORM\JoinColumn(nullable=false)
      */
     private $franchise;
 
@@ -52,6 +51,11 @@ class Payments
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $token;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Gym::class, inversedBy="payments")
+     */
+    private $gym;
 
     public function getId(): ?int
     {
@@ -138,6 +142,18 @@ class Payments
     public function setToken(?string $token): self
     {
         $this->token = $token;
+
+        return $this;
+    }
+
+    public function getGym(): ?Gym
+    {
+        return $this->gym;
+    }
+
+    public function setGym(?Gym $gym): self
+    {
+        $this->gym = $gym;
 
         return $this;
     }

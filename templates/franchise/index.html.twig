@@ -3,6 +3,22 @@
 {% block title %}Franchise Admin ◈ Esca'Lab
 {% endblock %}
 
+{% block javascripts %}
+	<script>
+		const labels = {{ gyms_per_month|keys|json_encode|raw }};
+		const values = [];
+		{% for value in gyms_per_month %}
+		values.push({{ value|json_encode|raw }});
+		{% endfor %}
+	</script>
+	<script src="{{asset('bootstrap/js/bootstrap.min.js')}}"></script>
+	<script src="{{asset('js/chart.min.js')}}"></script>
+	<script src="{{asset('js/jquery.min.js')}}"></script>
+	<script src="{{asset('js/bs-init.js')}}"></script>
+	<script src="{{asset('js/theme.js')}}"></script>
+	<script src="{{asset('js/tiny-toast-1.1.0/tiny-toast.min.js')}}"></script>
+	<script src="{{asset('js/lineChart.js')}}"></script>
+{% endblock %}
 
 {% block body %}
 
@@ -17,7 +33,7 @@
 				</div>
 				<div class="card-body">
 					<div class="chart-area">
-						<canvas data-bss-chart="{&quot;type&quot;:&quot;line&quot;,&quot;data&quot;:{&quot;labels&quot;:[&quot;Lun&quot;,&quot;Mar&quot;,&quot;Mer&quot;,&quot;Jeu&quot;,&quot;Ven&quot;,&quot;Sam&quot;],&quot;datasets&quot;:[{&quot;label&quot;:&quot;Earnings&quot;,&quot;fill&quot;:true,&quot;data&quot;:[&quot;5&quot;,&quot;10&quot;,&quot;7&quot;,&quot;6&quot;,&quot;14&quot;,&quot;12&quot;],&quot;backgroundColor&quot;:&quot;rgba(78, 115, 223, 0.05)&quot;,&quot;borderColor&quot;:&quot;rgba(78, 115, 223, 1)&quot;}]},&quot;options&quot;:{&quot;maintainAspectRatio&quot;:false,&quot;legend&quot;:{&quot;display&quot;:false,&quot;labels&quot;:{&quot;fontStyle&quot;:&quot;normal&quot;}},&quot;title&quot;:{&quot;fontStyle&quot;:&quot;normal&quot;,&quot;display&quot;:false},&quot;scales&quot;:{&quot;xAxes&quot;:[{&quot;gridLines&quot;:{&quot;color&quot;:&quot;rgb(234, 236, 244)&quot;,&quot;zeroLineColor&quot;:&quot;rgb(234, 236, 244)&quot;,&quot;drawBorder&quot;:false,&quot;drawTicks&quot;:false,&quot;borderDash&quot;:[&quot;2&quot;],&quot;zeroLineBorderDash&quot;:[&quot;2&quot;],&quot;drawOnChartArea&quot;:false},&quot;ticks&quot;:{&quot;fontColor&quot;:&quot;#858796&quot;,&quot;fontStyle&quot;:&quot;normal&quot;,&quot;padding&quot;:20}}],&quot;yAxes&quot;:[{&quot;gridLines&quot;:{&quot;color&quot;:&quot;rgb(234, 236, 244)&quot;,&quot;zeroLineColor&quot;:&quot;rgb(234, 236, 244)&quot;,&quot;drawBorder&quot;:false,&quot;drawTicks&quot;:false,&quot;borderDash&quot;:[&quot;2&quot;],&quot;zeroLineBorderDash&quot;:[&quot;2&quot;]},&quot;ticks&quot;:{&quot;fontColor&quot;:&quot;#858796&quot;,&quot;fontStyle&quot;:&quot;normal&quot;,&quot;padding&quot;:20}}]}}}"></canvas>
+						<canvas id="lineChart"></canvas>
 					</div>
 				</div>
 			</div>

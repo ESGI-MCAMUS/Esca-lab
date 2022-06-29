@@ -35,8 +35,22 @@ class GymAdminController extends AbstractController
     {
         $this->setInformations();
 
+        $waysPerMonth = [];
+        $ways = $this->user->getGym()->getRoutes();
+
+        for ($i= 6; $i >= 0; $i--) {
+            $waysPerMonth[date('F', strtotime("-$i month"))] = 0;
+        }
+
+        foreach ($ways as $way) {
+            if (array_key_exists($way->getCreatedAt()->format('F'), $waysPerMonth)) {
+                $waysPerMonth[$way->getCreatedAt()->format('F')]++;
+            }
+        }
+
         return $this->render('gym/index.html.twig', [
             'month' => date_format(new DateTime(), 'n'),
+            'ways_per_month' => $waysPerMonth,
         ]);
     }
 

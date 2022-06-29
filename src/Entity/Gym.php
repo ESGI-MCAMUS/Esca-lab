@@ -79,6 +79,11 @@ class Gym {
    */
   private $payments;
 
+  /**
+   * @ORM\Column(type="datetime", options={"default": "CURRENT_TIMESTAMP"})
+   */
+  private $created_at;
+
   public function __construct() {
     $this->routes = new ArrayCollection();
     $this->openers = new ArrayCollection();
@@ -282,6 +287,18 @@ class Gym {
               $payment->setGym(null);
           }
       }
+
+      return $this;
+  }
+
+  public function getCreatedAt(): ?\DateTimeInterface
+  {
+      return $this->created_at;
+  }
+
+  public function setCreatedAt(\DateTimeInterface $created_at): self
+  {
+      $this->created_at = $created_at;
 
       return $this;
   }

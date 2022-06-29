@@ -28,7 +28,7 @@
                                                 {% endif %}
                                                 <a href="{% if "ROLE_ADMIN_FRANCHISE" in app.user.roles %}{{ path('route_edit', {id: route.id, gymId: app.request.get('id')}) }}{% else %}{{ path('route_edit', {id: route.id}) }}{% endif %}">
                                                     <button type="button" class="btn btn-warning">
-                                                        🚧
+                                                        ✏️
                                                     </button>
                                                 </a>
                                                 <button class="btn btn-danger" data-href="{{ path('route_remove', {id: route.id}) }}" data-bs-toggle="modal" data-bs-target="#confirm-delete">

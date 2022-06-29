@@ -11,6 +11,9 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Validator\Constraints\File;
+
 class RouteType extends AbstractType
 {
 
@@ -35,10 +38,27 @@ class RouteType extends AbstractType
             ->add('difficulty', ChoiceType::class, [
                 'label' => 'Difficulté',
                 'choices' => $this->difficulty,
-            ])
-            ->add('save', SubmitType::class, [
-                'label' => 'Enregistrer',
-                'attr' => ['class' => "btn btn-primary"],
+                'label_attr' => ['class' => 'form-label poppins light'],
+            'attr' => [
+                'class' => 'form-control poppins',
+                'placeholder' => 'Ma Super Route',
+                'required' => true,
+            ],
+            ])->add('picture', FileType::class, [
+                'mapped' => false,
+                'label_attr' => ['class' => 'form-label poppins light'],
+                'label' => "Image de la voie",
+                'attr' => [
+                    'class' => 'form-control poppins',
+                ],
+                'constraints' => [
+                    new File([
+                        'mimeTypes' => [
+                            'image/*',
+                        ],
+                        'mimeTypesMessage' => 'Ce fichier n\'est pas une image',
+                    ])
+                ],
             ])
         ;
     }

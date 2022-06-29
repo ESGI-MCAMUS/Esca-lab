@@ -19,7 +19,7 @@
 <div class="container-fluid">
 	<div class="d-sm-flex align-items-center mb-4">
 		<h4 class="text-dark mb-0 poppins bold text-black" style="color: rgb(33,37,41);">
-            <a href="/franchise/all">Franchises</a> > <a href="/franchise/{{ franchise.id }}/gyms">{{ franchise.name }}</a> > {{ gym.name }} ({{ routes|length }})
+            <a href="{{ path('index') }}">Franchises</a> > <a href="{{ path('list_gyms_franchise', {id: franchise.id}) }}">{{ franchise.name }}</a> > {{ gym.name }} ({{ routes|length }})
         </h4>
 	</div>
     <br/>
@@ -30,8 +30,9 @@
                     <div class="card-body">
                         <div class="row align-items-center no-gutters">
                             <div class="col">
-                                <a href="/route/{{ route.id }}">
-                                    <img src="{{ asset('images/profiles/route_ex.jpg') }}"  class="img-fluid mx-auto d-block" style="object-fit: cover;height:400px;width:100%;"/>
+                                <a href="{{ path('route_display', {routeId: route.id}) }}">
+<img src="{{ asset('images/routes/'~route.picture) }}" class="img-fluid mx-auto d-block" style="object-fit: cover;height:400px;width:100%;"/>
+
                                 </a>
                             </div>
                         </div>

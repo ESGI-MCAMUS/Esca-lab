@@ -63,7 +63,7 @@
 							<td>
 								{% if is_granted('ROLE_ADMIN_SALLE') and "ROLE_ADMIN_FRANCHISE" not in app.user.roles and "ROLE_SUPER_ADMIN" not in app.user.roles %}
                                     <button class="btn btn-warning" type="button" title="Supprimer l'événement" onclick="location.replace('{{ path('gym_events_edit', {id: event.id}) }}')">
-										🚧
+										✏️
 									</button>
                                 {% endif %}
 								<button class="btn btn-danger" type="button" title="Supprimer l'événement" onclick="location.replace({% if is_granted('ROLE_SUPER_ADMIN') %}'/admin/evenements/suppression/{{event.id}}'{% else %}'/gym/evenements/suppression/{{event.id}}'{% endif %})">

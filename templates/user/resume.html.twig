@@ -3,6 +3,23 @@
 {% block title %}Résumé ◈ Esca'Lab
 {% endblock %}
 
+{% block javascripts %}
+	<script>
+		const labels = {{ chartData|keys|json_encode|raw }};
+		const values = [];
+		{% for value in chartData %}
+		values.push({{ value|json_encode|raw }});
+		{% endfor %}
+	</script>
+	<script src="{{asset('js/user/user.js')}}"></script>
+	<script src="{{asset('bootstrap/js/bootstrap.min.js')}}"></script>
+	<script src="{{asset('js/chart.min.js')}}"></script>
+	<script src="{{asset('js/jquery.min.js')}}"></script>
+	<script src="{{asset('js/bs-init.js')}}"></script>
+	<script src="{{asset('js/theme.js')}}"></script>
+	<script src="{{asset('js/tiny-toast-1.1.0/tiny-toast.min.js')}}"></script>
+{% endblock %}
+
 {% block body %}
 	<div class="container-fluid">
 		<div class="d-sm-flex justify-content-between align-items-center mb-4">
@@ -74,6 +91,7 @@
 				</div>
 				<br>
 				{# Total Number of finished route #}
+				{% if is_granted('ROLE_USER') and "ROLE_OUVREUR" not in app.user.roles %}
 				<div class="card shadow border-start-primary py-2">
 					<div class="card-body">
 						<div class="row align-items-center no-gutters">
@@ -86,7 +104,7 @@
 								<div class="row align-items-center no-gutters">
 									<div class="col md-6">
 										<div class="text-dark fw-bold h5 mb-0 poppins">
-											<span style="font-size: 30px;">85</span>
+											<span style="font-size: 30px;">{{ finishedWaysCount }}</span>
 										</div>
 									</div>
 									<div class="col md-6">
@@ -99,6 +117,7 @@
 						</div>
 					</div>
 				</div>
+				{% endif %}
 				<br>
 				{# Next event #}
 				<div class="card shadow border-start-primary py-2">

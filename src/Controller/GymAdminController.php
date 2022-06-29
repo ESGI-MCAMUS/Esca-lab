@@ -45,7 +45,7 @@ class GymAdminController extends AbstractController
     {
         if (($this->user->getGym() == null && ($this->isGranted('ROLE_ADMIN_SALLE') || $this->isGranted('ROLE_OUVREUR')))
             || ($this->user->getFranchise() == null && $this->isGranted('ROLE_ADMIN_FRANCHISE'))) {
-            switch ($this->user->getRole()) {
+            switch ($this->user->getRoles()[0]) {
                 case 'ROLE_ADMIN_SALLE':
                     return $this->redirectToRoute('gym_kpi');
                 case 'ROLE_OUVREUR':

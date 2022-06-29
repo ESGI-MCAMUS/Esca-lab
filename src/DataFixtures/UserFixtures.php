@@ -182,6 +182,7 @@ class UserFixtures extends Fixture {
       $route->setId($i + 1);
       $route->setOpened($generator->numberBetween(0, 1));
       $route->setGym($gym);
+      $route->setPicture("default.png");
       $route->setDifficulty($difficulty[$generator->numberBetween(0, 29)]);
       $em->persist($route);
     }

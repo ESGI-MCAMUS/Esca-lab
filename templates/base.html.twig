@@ -12,7 +12,7 @@
 		rel="icon" type="image/png" href="{{ asset('images/logo.png') }}"/>
 
 		{# Run `composer require symfony/webpack-encore-bundle`
-		           and uncomment the following Encore helpers to start using Symfony UX #}
+						           and uncomment the following Encore helpers to start using Symfony UX #}
 		{% block stylesheets %}
 			{# {{ encore_entry_link_tags('app') }} #}
 			<link rel="stylesheet" href="{{asset('bootstrap/home/css/bootstrap.min.css')}}">
@@ -56,32 +56,32 @@
 		{% block nav %}
 			<nav id="mainNav" class="navbar navbar-light navbar-expand-lg fixed-top">
 				<div class="container">
-					<a class="navbar-brand" href="/">Esca'Lab</a>
+					<a class="navbar-brand" href="{{ path('accueil') }}">Esca'Lab</a>
 					<button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
 						<i class="fa fa-bars"></i>
 					</button>
 					<div id="navbarResponsive" class="collapse navbar-collapse">
 						<ul class="navbar-nav ms-auto">
 							<li class="nav-item">
-								<a class="nav-link" href="/">Accueil</a>
+								<a class="nav-link" href="{{ path('accueil') }}">Accueil</a>
 							</li>
 							{% if app.user.id is defined and app.user.id != 0 %}
 								<li class="nav-item" style="display: inline-block">
-									<a class="nav-link" href="/user">Mon compte</a>
+									<a class="nav-link" href="{{ path('user') }}">Mon compte</a>
 								</li>
 								<li class="nav-item">
-									<a class="nav-link" href="/logout">Se déconnecter</a>
+									<a class="nav-link" href="{{ path('app_logout') }}">Se déconnecter</a>
 								</li>
 								<li class="nav-item">
 									<img class="border rounded-circle img-profile" width="30px" height="30px" style="" src="{{asset('images/profiles/') ~ app.user.picture}}">
 								</li>
 							{% else %}
 								<li class="nav-item">
-									<a class="nav-link" href="/connexion">Se connecter</a>
+									<a class="nav-link" href="{{ path('login') }}">Se connecter</a>
 								</li>
 								<div class="d-none d-sm-block topbar-divider"></div>
 								<li class="nav-item">
-									<a class="nav-link" href="/inscription">S&#39;inscrire</a>
+									<a class="nav-link" href="{{ path('register') }}">S&#39;inscrire</a>
 								</li>
 							{% endif %}
 						</ul>

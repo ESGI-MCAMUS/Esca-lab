@@ -1,76 +1,38 @@
 {% block component %}
     <div class="container-fluid">
 		<div class="d-sm-flex align-items-center mb-4">
-			<h4 class="text-dark mb-0 poppins bold text-black" style="color: rgb(33,37,41);">
-				Evenements ({{ events|length }})
+			<h4 id="target-current-events" class="text-dark mb-0 poppins bold text-black collapse-event" style="color: rgb(33,37,41);">
+				Evenements en cours <span><i class="bi bi-caret-down-fill"></i></span>
 			</h4>
 		</div>
-        <div class="row justify-content-around align-items-center">
+        <div id="current-events" class="row align-items-center">
             {% for event in events %}
-                {% if date(event.eventDate) < date() %}
-                    <div id="card-event-{{ event.id }}" class="col-md-6 col-xl-4 mb-4">
-                        <div class="card shadow border-start-primary py-2">
-                            <div class="card-body">
-                                <div class="row align-items-center no-gutters">
-                                    <div class="col me-2">
-                                        <div class="text-dark fw-bold h5 mb-0"><span>{{ event.title }}</span></div>
-                                    </div>
-                                </div>
-                                <div class="row align-items-center no-gutters">
-                                    <div class="col me-2">
-                                        <div class="mb-1">
-                                            <span><i class="bi bi-calendar"></i></span>
-                                            <span class="text-uppercase text-success fw-bold text-s">{{ event.eventDate|date('d-m-Y H:i') }}</span>
-                                        </div>
-                                    </div>
-                                    <div class="col-auto">
-                                        <div class="col-auto">
-                                            <span class=""><i class="bi bi-bi bi-clock"></i></span>
-                                            <span class="text-uppercase fw-bold text-s">{{ event.getEventLength()|date("%H h %i") }}</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row align-items-center no-gutters">
-                                    <div class="col me-2">
-                                        <div class="mb-0">
-                                            {{ event.description }}
-                                        </div>
-                                    </div>
-                                </div>
-                                <br/>
-                                <div class="row align-items-center no-gutters">
-                                    <div class="col me-2">
-                                        <div class="text-dark fw-bold h6 mb-0"><span><i class="bi bi-house"></i></span> <a href='gym/{{ event.gym.id }}'>Accéder à la salle {{ event.gym.name }}</a></div>
-                                    </div>
-                                </div>
-                                <br/>
-                                <div class="row align-items-center no-gutters">
-                                    <div class="col me-2">
-                                        <div class="text-dark fw-bold h6 mb-0"><span><i class="bi bi-people-fill"></i></span> <span id="event-participant-{{ event.id }}">{{ event.participants|length }}</span> personnes participent</div>
-                                    </div>
-                                </div>
-                                {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
-                                    <br/>
-                                    <div class="row justify-content-md-center no-gutters mt-2">
-                                        <div class="col-md-auto">
-                                            {% if app.user in event.participants %}
-                                                <button id="bouton-event-{{ event.id }}" type="button" class="btn btn-outline-warning btn-sm btn-update-event event-remove" data-b-event="{{ event.id }}">
-                                                    <span id="spinner-{{ event.id }}" class="spinner-border spinner-border-sm text-warning" role="status" aria-hidden="true" hidden></span>
-                                                    Je ne participe plus
-                                                </button>
-                                            {% else %}
-                                                <button id="bouton-event-{{ event.id }}" type="button" class="btn btn-outline-success btn-sm btn-update-event event-add" data-b-event="{{ event.id }}">
-                                                    <span id="spinner-{{ event.id }}" class="spinner-border spinner-border-sm text-success" role="status" aria-hidden="true" hidden></span>
-                                                    Je participe
-                                                </button>
-                                            {% endif %}
-                                        </div>
-                                    </div>
-                                {% endif %}
-                            </div>
-                        </div>
-                    </div>
-                {% else %}
+                {% if date(event.eventDate) < date() and date(event.endDate) > date() %}
+                    {% include 'event/event-card.html.twig' %}
+                {% endif %}
+            {% endfor %}
+        </div>
+        <div class="d-sm-flex align-items-center mb-4">
+			<h4 id="target-oncoming-events" class="text-dark mb-0 poppins bold text-black collapse-event" style="color: rgb(33,37,41);">
+				Evenements à venir <span><i class="bi bi-caret-down-fill"></i></span>
+			</h4>
+		</div>
+        <div id="oncoming-events" class="row align-items-center">
+            {% for event in events %}
+                {% if date(event.eventDate) > date() %}
+                    {% include 'event/event-card.html.twig' %}
+                {% endif %}
+            {% endfor %}
+        </div>
+        <div class="d-sm-flex align-items-center mb-4">
+			<h4 id="target-finished-events" class="text-dark mb-0 poppins bold text-black collapse-event" style="color: rgb(33,37,41);">
+				Evenements terminés <span><i class="bi bi-caret-right-fill"></i></span>
+			</h4>
+		</div>
+        <div id="finished-events" class="row align-items-center" hidden>
+            {% for event in events %}
+                {% if date(event.endDate) <= date() %}
+                    {% include 'event/event-card.html.twig' %}
                 {% endif %}
             {% endfor %}
         </div>

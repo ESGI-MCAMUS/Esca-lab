@@ -75,6 +75,7 @@ class RouteController extends AbstractController
       );
 
       if ($route->getGym()) {
+        $route->setCreatedAt(new \DateTime());
         $em->persist($form->getData());
         $em->flush();
 

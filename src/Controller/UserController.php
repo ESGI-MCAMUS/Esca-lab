@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Gym;
+use App\Entity\RouteUser;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use App\Form\AddFriendType;
 use Doctrine\ORM\EntityManagerInterface;
@@ -69,6 +70,8 @@ class UserController extends AbstractController {
             return $this->redirectToRoute('user');
         }
 
+        $finishedWaysCount = 0;
+        $chartData = [];
 
         if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on')
             $url = "https://";
@@ -92,10 +95,25 @@ class UserController extends AbstractController {
             ->build();
         if ($this->isGranted('ROLE_OUVREUR')) {
             $this->setInformations();
+        } else {
+            $finishedWays = $this->user->getRoutes()->getValues();
+
+            foreach ($finishedWays as $finishedWay) {
+                if (array_key_exists($finishedWay->getDifficulty(), $chartData)) {
+                    $chartData[$finishedWay->getDifficulty()]++;
+                } else {
+                    $chartData[$finishedWay->getDifficulty()] = 1;
+                }
+            }
+            ksort($chartData);
+            $finishedWaysCount = sizeof($finishedWays);
         }
+
         return $this->renderForm('user/resume.html.twig', [
             'qrcode' => $result->getDataUri(),
             'form' => $form,
+            'finishedWaysCount' => $finishedWaysCount,
+            'chartData' => $chartData,
         ]);
     }
 
@@ -233,6 +251,7 @@ class UserController extends AbstractController {
 
     private function setInformations() {
         $waysCount = 0;
+
         if ($this->isGranted("ROLE_SUPER_ADMIN")) {
             $waysCount = count($this->getDoctrine()->getManager()->getRepository(\App\Entity\Route::class)->findAll());
         } elseif ($this->isGranted("ROLE_ADMIN_FRANCHISE") && $this->user->getFranchise() !== null) {

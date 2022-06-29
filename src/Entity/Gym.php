@@ -74,10 +74,16 @@ class Gym {
    */
   private $picture;
 
+  /**
+   * @ORM\OneToMany(targetEntity=Payments::class, mappedBy="gym")
+   */
+  private $payments;
+
   public function __construct() {
     $this->routes = new ArrayCollection();
     $this->openers = new ArrayCollection();
     $this->events = new ArrayCollection();
+    $this->payments = new ArrayCollection();
   }
 
   public function getId(): ?int {
@@ -248,5 +254,35 @@ class Gym {
     $this->picture = $picture;
 
     return $this;
+  }
+
+  /**
+   * @return Collection<int, Payments>
+   */
+  public function getPayments(): Collection
+  {
+      return $this->payments;
+  }
+
+  public function addPayment(Payments $payment): self
+  {
+      if (!$this->payments->contains($payment)) {
+          $this->payments[] = $payment;
+          $payment->setGym($this);
+      }
+
+      return $this;
+  }
+
+  public function removePayment(Payments $payment): self
+  {
+      if ($this->payments->removeElement($payment)) {
+          // set the owning side to null (unless already changed)
+          if ($payment->getGym() === $this) {
+              $payment->setGym(null);
+          }
+      }
+
+      return $this;
   }
 }

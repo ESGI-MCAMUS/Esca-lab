@@ -67,6 +67,25 @@ class UserFixtures extends Fixture {
     $adminAccount->setRoles(['ROLE_SUPER_ADMIN']);
     $manager->persist($adminAccount);
 
+//    //Admin part
+//    $adminAccount = new User();
+//    $adminAccount->setEmail('thomas.geoffron.sio@gmail.com');
+//    $adminAccount->setFirstname('Thomas');
+//    $adminAccount->setLastname('GEOFFRON');
+//    $adminAccount->setUsername('Arkeonn');
+//    $adminAccount->setPassword(
+//      '$2y$13$6lBervVYeDGuuwi5VeSv3e.H0YlWo03yNhWOgPWIA8BIHkKIC/InC'
+//    );
+//    $adminAccount->setBirthdate(
+//      $generator->dateTimeBetween('-22 years', '-21 years')
+//    );
+//    $adminAccount->setCreatedAt(new \DateTime());
+//    $adminAccount->setOtp(12345);
+//    $adminAccount->setIsActivated(true);
+//    $adminAccount->setPicture('mistergooddeal.jpg');
+//    $adminAccount->setRoles(['ROLE_SUPER_ADMIN']);
+//    $manager->persist($adminAccount);
+
     $this->generateUser(
       $manager,
       $generator,

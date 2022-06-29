@@ -16,70 +16,9 @@
 {% endset %}
 
 {% block body %}
-	<div class="container-fluid">
-		<div class="d-sm-flex align-items-center mb-4">
-			<h4 class="text-dark mb-0 poppins bold text-black" style="color: rgb(33,37,41);">
-				Evenements ({{ events|length }})
-			</h4>
-		</div>
-        <div class="row justify-content-around align-items-center">
-            {% for event in events %}
-                <div class="col-md-6 col-xl-4 mb-4">
-                    <div class="card shadow border-start-primary py-2">
-                        <div class="card-body">
-                            <div class="row align-items-center no-gutters">
-                                <div class="col me-2">
-                                    <div class="text-uppercase text-success fw-bold text-s mb-1"><span>{{ event.eventDate|date('d-m-Y H:i') }}</span></div>
-                                </div>
-                                <div class="col-auto"><i class="bi bi-calendar"></i></div>
-                            </div>
-                            <div class="row align-items-center no-gutters">
-                                <div class="col me-2">
-                                    <div class="text-dark fw-bold h5 mb-0"><span>Entrainement à {{ event.gym.name }}</span></div>
-                                </div>
-                            </div>
-                            <br/>
-                            <div class="row align-items-center no-gutters">
-                                <div class="col me-2">
-                                    <div class="text-dark fw-bold h6 mb-0"><span><i class="bi bi-house"></i></span> <a href='gym/{{ event.gym.id }}'>Accéder à la salle</a></div>
-                                </div>
-                            </div>
-                            <br/>
-                            <div class="row align-items-center no-gutters">
-                                <div class="col me-2">
-                                    <div class="text-dark fw-bold h6 mb-0"><span><i class="bi bi-people-fill"></i></span> <span id="event-participant-{{ event.id }}">{{ event.participants|length }}</span> personnes participent</div>
-                                </div>
-                            </div>
-                            <div class="row align-items-center no-gutters">
-                                <div class="col me-2">
-                                    <div class="text-gray fw-bold h5 mb-0"><span>Durée</span></div>
-                                </div>
-                                <div class="col-auto">{{ event.getEventLength()|date("%H h %i") }}</div>
-                            </div>
-                            <div class="row justify-content-md-center no-gutters mt-2">
-                                <div class="col-md-auto">
-                                    {% if app.user in event.participants %}
-                                        <button id="bouton-event-{{ event.id }}" type="button" class="btn btn-outline-warning btn-sm btn-update-event event-remove" data-b-event="{{ event.id }}">
-											<span id="spinner-{{ event.id }}" class="spinner-border spinner-border-sm text-warning" role="status" aria-hidden="true" hidden></span>
-                                            Je ne participe plus
-                                        </button>
-                                    {% else %}
-                                        <button id="bouton-event-{{ event.id }}" type="button" class="btn btn-outline-success btn-sm btn-update-event event-add" data-b-event="{{ event.id }}">
-											<span id="spinner-{{ event.id }}" class="spinner-border spinner-border-sm text-success" role="status" aria-hidden="true" hidden></span>
-                                            Je participe
-                                        </button>
-                                    {% endif %}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            {% endfor %}
-        </div>
-	</div>
-</div>
+	
+    {% include 'event/component.html.twig' %}
 
-<input type="text" id="url_root" value="{{ app.request.getSchemeAndHttpHost() }}" hidden></input>
-<input type="text" id="templateSpan" data-t-span="{{ templateSpan|escape }}" hidden>
-
+    <input type="text" id="url_root" value="{{ app.request.getSchemeAndHttpHost() }}" hidden></input>
+    <input type="text" id="templateSpan" data-t-span="{{ templateSpan|escape }}" hidden>
 {% endblock %}

@@ -108,8 +108,10 @@ class UserController extends AbstractController {
 
     #[Route('/user/events', name: 'eventsUser')]
     public function eventsUser(): Response {
+
         return $this->render('user/events.html.twig', [
             'controller_name' => 'UserController',
+            'events' => $this->user->getEvents()
         ]);
     }
 

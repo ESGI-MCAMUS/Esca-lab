@@ -29,8 +29,23 @@ class FranchiseAdminController extends AbstractController {
   #[Route('/franchise/kpi', name: 'franchise_kpi')]
   public function index(): Response {
     $this->setInformations();
+    
+    $gymsPerMonth = [];
+    $gyms = $this->user->getFranchise()->getGyms();
+
+    for ($i= 6; $i >= 0; $i--) {
+        $gymsPerMonth[date('F', strtotime("-$i month"))] = 0;
+    }
+
+    foreach ($gyms as $gym) {
+        if (array_key_exists($gym->getCreatedAt()->format('F'), $gymsPerMonth)) {
+            $gymsPerMonth[$gym->getCreatedAt()->format('F')]++;
+        }
+    }
+    
     return $this->render('franchise/index.html.twig', [
       'month' => date_format(new DateTime(), 'n'),
+      'gyms_per_month' => $gymsPerMonth
     ]);
   }
 

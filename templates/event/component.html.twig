@@ -1,0 +1,40 @@
+{% block component %}
+    <div class="container-fluid mt-4">
+		<div class="d-sm-flex align-items-center mb-4">
+			<h4 id="target-current-events" class="text-dark mb-0 poppins bold text-black collapse-event" style="color: rgb(33,37,41);">
+				Evenements en cours <span><i class="bi bi-caret-down-fill"></i></span>
+			</h4>
+		</div>
+        <div id="current-events" class="row align-items-center">
+            {% for event in events %}
+                {% if date(event.eventDate) < date() and date(event.endDate) > date() %}
+                    {% include 'event/event-card.html.twig' %}
+                {% endif %}
+            {% endfor %}
+        </div>
+        <div class="d-sm-flex align-items-center mb-4">
+			<h4 id="target-oncoming-events" class="text-dark mb-0 poppins bold text-black collapse-event" style="color: rgb(33,37,41);">
+				Evenements à venir <span><i class="bi bi-caret-down-fill"></i></span>
+			</h4>
+		</div>
+        <div id="oncoming-events" class="row align-items-center">
+            {% for event in events %}
+                {% if date(event.eventDate) > date() %}
+                    {% include 'event/event-card.html.twig' %}
+                {% endif %}
+            {% endfor %}
+        </div>
+        <div class="d-sm-flex align-items-center mb-4">
+			<h4 id="target-finished-events" class="text-dark mb-0 poppins bold text-black collapse-event" style="color: rgb(33,37,41);">
+				Evenements terminés <span><i class="bi bi-caret-right-fill"></i></span>
+			</h4>
+		</div>
+        <div id="finished-events" class="row align-items-center" hidden>
+            {% for event in events %}
+                {% if date(event.endDate) <= date() %}
+                    {% include 'event/event-card.html.twig' %}
+                {% endif %}
+            {% endfor %}
+        </div>
+	</div>
+{% endblock %}

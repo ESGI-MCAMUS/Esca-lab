@@ -93,8 +93,22 @@ class UserController extends AbstractController {
             ->margin(10)
             ->roundBlockSizeMode(new RoundBlockSizeModeMargin())
             ->build();
-        if ($this->isGranted('ROLE_OUVREUR')) {
+        if ($this->isGranted('ROLE_ADMIN_SALLE')) {
             $this->setInformations();
+        } elseif ($this->isGranted('ROLE_OUVREUR')) {
+            $this->setInformations();
+
+            $finishedWays = $this->user->getRoutes()->getValues();
+
+            foreach ($finishedWays as $finishedWay) {
+                if (array_key_exists($finishedWay->getDifficulty(), $chartData)) {
+                    $chartData[$finishedWay->getDifficulty()]++;
+                } else {
+                    $chartData[$finishedWay->getDifficulty()] = 1;
+                }
+            }
+            ksort($chartData);
+            $finishedWaysCount = sizeof($finishedWays);
         } else {
             $finishedWays = $this->user->getRoutes()->getValues();
 

@@ -91,7 +91,7 @@
 				</div>
 				<br>
 				{# Total Number of finished route #}
-				{% if is_granted('ROLE_USER') and "ROLE_OUVREUR" not in app.user.roles %}
+				{% if is_granted('ROLE_USER') and "ROLE_ADMIN_SALLE" not in app.user.roles %}
 				<div class="card shadow border-start-primary py-2">
 					<div class="card-body">
 						<div class="row align-items-center no-gutters">

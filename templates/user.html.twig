@@ -73,7 +73,7 @@
 								<span style="padding-left: 5px;">Évènements</span>
 							</a>
 						</li>
-						{% if is_granted('ROLE_OUVREUR') %}
+						{% if is_granted('ROLE_OUVREUR') and app.user.gym != null %}
 							<li class="nav-item">
 								<a class="nav-link poppins regular" {% if is_granted('ROLE_SUPER_ADMIN') %} href="{{ path('admin_voies') }}" {% elseif is_granted("ROLE_ADMIN_FRANCHISE") %} href="{{ path('gym_routes_franchise') }}" {% else %} href="{{ path('gym_routes') }}" {% endif %} style="padding: 10px;color: rgb(33,37,41);">
 									<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewbox="0 0 16 16" class="bi bi-bricks">

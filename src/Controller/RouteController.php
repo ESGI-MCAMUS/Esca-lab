@@ -356,13 +356,6 @@ class RouteController extends AbstractController
 
     $entityManager->flush();
 
-    // if ($resolvedRoute->getId() !== null) {
-    //   $this->user->addRoute($resolvedRoute);
-    //   $entityManager->flush();
-    // } else {
-    //   $success = false;
-    // }
-
     return new JsonResponse(['success' => $success]);
   }
 }

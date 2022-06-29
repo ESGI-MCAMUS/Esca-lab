@@ -149,4 +149,10 @@ class Event
 
     return $this;
   }
+
+  public function getEventLength() {
+    $date_diff = date_diff($this->getEndDate(), $this->getEventDate());
+    
+    return $date_diff;
+  }
 }

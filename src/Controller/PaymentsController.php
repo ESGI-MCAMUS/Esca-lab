@@ -20,7 +20,7 @@ class PaymentsController extends AbstractController {
     $this->user = $security->getUser();
   }
 
-  #[IsGranted("ROLE_ADMIN_FRANCHISE")]
+  #[IsGranted("ROLE_ADMIN_SALLE")]
   #[Route('/franchise/paiements', name: 'app_payments')]
   public function showPayments(Request $request): Response {
     $this->setInformations();
@@ -43,14 +43,25 @@ class PaymentsController extends AbstractController {
       $repo = $this->getDoctrine()
         ->getManager()
         ->getRepository(Payments::class);
-      $payments = $repo->findBy(
-        [
-          'franchise' => $this->user->getFranchise()->getId(),
-        ],
-        [
-          'updated_at' => 'DESC',
-        ]
-      );
+      if ($this->isGranted("ROLE_ADMIN_FRANCHISE")) {
+          $payments = $repo->findBy(
+              [
+                  'franchise' => $this->user->getFranchise()->getId(),
+              ],
+              [
+                  'updated_at' => 'DESC',
+              ]
+          );
+      } else {
+            $payments = $repo->findBy(
+                [
+                    'gym' => $this->user->getGym()->getId(),
+                ],
+                [
+                    'updated_at' => 'DESC',
+                ]
+            );
+      }
       return $this->renderForm('payments/index.html.twig', [
         'payments' => $payments,
         'form' => $form,
@@ -58,7 +69,7 @@ class PaymentsController extends AbstractController {
     }
   }
 
-  #[IsGranted("ROLE_ADMIN_FRANCHISE")]
+  #[IsGranted("ROLE_ADMIN_SALLE")]
   #[Route('/franchise/checkout/{id}', name: 'app_init_payment')]
   public function initPayment($id) {
     \Stripe\Stripe::setApiKey($_SERVER['STRIPE_API_KEY']);
@@ -109,7 +120,7 @@ class PaymentsController extends AbstractController {
     return $this->redirect($checkout_session->url, 303);
   }
 
-  #[IsGranted("ROLE_ADMIN_FRANCHISE")]
+  #[IsGranted("ROLE_ADMIN_SALLE")]
   #[Route('/franchise/checkout/success/{id}/{token}', name: 'app_success_payment')]
   public function successPayment($id, $token) {
     $repo = $this->getDoctrine()
@@ -144,7 +155,7 @@ class PaymentsController extends AbstractController {
     return $this->redirectToRoute('app_payments');
   }
 
-  #[IsGranted("ROLE_ADMIN_FRANCHISE")]
+  #[IsGranted("ROLE_ADMIN_SALLE")]
   #[Route('/franchise/checkout/failed/{id}/{token}', name: 'app_failed_payment')]
   public function failedPayment($id, $token) {
     $repo = $this->getDoctrine()
@@ -185,27 +196,48 @@ class PaymentsController extends AbstractController {
     $repo = $this->getDoctrine()
       ->getManager()
       ->getRepository(User::class);
-    $employeesCount = count(
-      $repo->findBy([
-        'franchise' => $this->user->getFranchise()->getId(),
-      ])
-    );
-    $gymsCount = count($this->user->getFranchise()->getGyms());
 
-    // Payments
     $payment_repo = $this->getDoctrine()
-      ->getManager()
-      ->getRepository(Payments::class);
-    $payments = $payment_repo->findBy([
-      'franchise' => $this->user->getFranchise()->getId(),
-    ]);
+        ->getManager()
+        ->getRepository(Payments::class);
+
+    $gymsCount = 0;
+    $waysCount = 0;
+
+    if ($this->isGranted("ROLE_ADMIN_FRANCHISE")) {
+        $employeesCount = count(
+            $repo->findBy([
+                'franchise' => $this->user->getFranchise()->getId(),
+            ])
+        );
+        $gymsCount = count($this->user->getFranchise()->getGyms());
+
+        // Payments
+        $payments = $payment_repo->findBy([
+            'franchise' => $this->user->getFranchise()->getId(),
+        ]);
+    } else {
+        $employeesCount = count(
+            $repo->findBy([
+                'gym' => $this->user->getGym()->getId(),
+            ])
+        );
+
+        $waysCount = count($this->user->getGym()->getRoutes());
+
+        // Payments
+        $payments = $payment_repo->findBy([
+            'gym' => $this->user->getGym()->getId(),
+        ]);
+    }
+
     $total_payments = 0;
     foreach ($payments as $payment) {
       $payment->getStatus() !== "success" ? $total_payments++ : $total_payments;
     }
     $this->get('session')->set('employees_count', $employeesCount);
     $this->get('session')->set('gyms_count', $gymsCount);
-    $this->get('session')->set('ways_count', 0);
+    $this->get('session')->set('ways_count', $waysCount);
     $this->get('session')->set('payments', $total_payments);
   }
 

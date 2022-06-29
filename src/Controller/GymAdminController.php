@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Event;
 use App\Entity\Gym;
+use App\Entity\Payments;
 use App\Entity\User;
 use App\Form\EmployeeType;
 use App\Form\EventType;
@@ -365,11 +366,18 @@ class GymAdminController extends AbstractController
         $employeesCount = 0;
         $waysCount = 0;
         $openedWays = 0;
+        $total_payments = 0;
+        $monthlyPayments = 0;
 
         if ($this->user->getGym() != null) {
             $repo = $this->getDoctrine()
                 ->getManager()
                 ->getRepository(User::class);
+
+            $payment_repo = $this->getDoctrine()
+                ->getManager()
+                ->getRepository(Payments::class);
+
             $employeesCount = count(
                 $repo->findBy([
                     'gym' => $this->user->getGym()->getId(),
@@ -377,14 +385,26 @@ class GymAdminController extends AbstractController
             );
             $ways = $this->user->getGym()->getRoutes();
 
+            $payments = $payment_repo->findBy([
+                'gym' => $this->user->getGym()->getId(),
+            ]);
+
+            foreach ($payments as $payment) {
+                $payment->getStatus() !== "success" ? $total_payments++ : $total_payments;
+                if ($payment->getUpdatedAt()->format('Y-m') == date('Y-m')) {
+                    $monthlyPayments++;
+                }
+            }
+
             $waysCount = count($ways);
             $openedWays = count($ways->filter(function ($element) {
                 return $element->getOpened() > 0;
             }));
         }
-
         $this->get('session')->set('employees_count', $employeesCount);
         $this->get('session')->set('ways_count', $waysCount);
         $this->get('session')->set('opened_ways', $openedWays);
+        $this->get('session')->set('payments', $total_payments);
+        $this->get('session')->set('monthly_payments', $monthlyPayments);
     }
 }

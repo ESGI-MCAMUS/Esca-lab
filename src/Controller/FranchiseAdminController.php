@@ -261,8 +261,12 @@ class FranchiseAdminController extends AbstractController {
         'franchise' => $this->user->getFranchise()->getId(),
       ]);
       $total_payments = 0;
+      $monthlyPayments = 0;
       foreach ($payments as $payment) {
         $payment->getStatus() !== "success" ? $total_payments++ : $total_payments;
+        if ($payment->getUpdatedAt()->format('Y-m') == date('Y-m')) {
+          $monthlyPayments++;
+        }
       }
     }
 
@@ -271,5 +275,6 @@ class FranchiseAdminController extends AbstractController {
     $this->get('session')->set('ways_count', $waysCount);
     $this->get('session')->set('opened_ways', $openedWays);
     $this->get('session')->set('payments', $total_payments);
+    $this->get('session')->set('monthly_payments', $monthlyPayments);
   }
 }

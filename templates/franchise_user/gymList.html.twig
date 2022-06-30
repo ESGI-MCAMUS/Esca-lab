@@ -8,10 +8,22 @@
 {% block javascripts %}
 	<script src="{{ asset('js/jquery.min.js') }}"></script>
 	<script src="{{ asset('js/user/friends.js') }}"></script>
+	<script src="{{ asset('js/user/add-to-favorites.js') }}"></script>
 	<script src="{{ asset('js/tiny-toast-1.1.0/tiny-toast.min.js') }}"></script>
 {% endblock %}
 
 {% block body %}
+	<style>
+		.btn-update-favorite {
+			color: goldenrod;
+			font-size: 20px;
+			cursor: pointer;
+			visibility: hidden;
+		}
+		.col:hover .btn-update-favorite, .btn-update-favorite.bi-star-fill {
+			visibility: visible;
+		}
+	</style>
 	<div class="container-fluid">
 		<div class="d-sm-flex align-items-center mb-4">
 			<h4 class="text-dark mb-0 poppins bold text-black" style="color: rgb(33,37,41);">
@@ -28,13 +40,18 @@
 					<div class="card shadow border-start-warning py-2">
 						<div class="card-body">
 							<div class="row align-items-center no-gutters">
-								<div class="col"></div>
-								<div class="col">
+								<div class="col position-relative text-center">
+									{% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+										{% if gym.id in favorite_gyms %}
+											<i id="btn-gym-{{ gym.id }}" class="position-absolute end-0 me-3 btn-update-favorite removeFromFavorites bi bi-star-fill" style="color: goldenrod" data-b-route="{{ gym.id }}"></i>
+										{% else %}
+											<i id="btn-gym-{{ gym.id }}" class="position-absolute end-0 me-3 btn-update-favorite addToFavorites bi bi-star" style="color: goldenrod" data-b-route="{{ gym.id }}"></i>
+										{% endif %}
+									{% endif %}
 									<a href="{{ path('gym', {id: gym.id}) }}">
-										<img src="{{ asset('images/gyms/') ~ gym.picture }}" style="object-fit: cover !important" class="img-tn rounded"/>
+										<img src="{{ asset('images/gyms/') ~ gym.picture }}" style="object-fit: cover !important" class="img-tn rounded img-fluid"/>
 									</a>
 								</div>
-								<div class="col"></div>
 							</div>
 							<hr class="bg-danger border-2 border-top border-secondary">
 							<div class="row">

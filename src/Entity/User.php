@@ -128,6 +128,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $reactions;
 
+    /**
+     * @ORM\OneToMany(targetEntity=FavoriteGym::class, mappedBy="userId", orphanRemoval=true)
+     */
+    private $favoriteGyms;
+
     public function __construct()
     {
         $this->gyms = new ArrayCollection();
@@ -137,6 +142,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->routes = new ArrayCollection();
         $this->messages = new ArrayCollection();
         $this->reactions = new ArrayCollection();
+        $this->favoriteGyms = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -531,6 +537,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($reaction->getUserId() === $this) {
                 $reaction->setUserId(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, FavoriteGym>
+     */
+    public function getFavoriteGyms(): Collection
+    {
+        return $this->favoriteGyms;
+    }
+
+    public function addFavoriteGym(FavoriteGym $favoriteGym): self
+    {
+        if (!$this->favoriteGyms->contains($favoriteGym)) {
+            $this->favoriteGyms[] = $favoriteGym;
+            $favoriteGym->setUserId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFavoriteGym(FavoriteGym $favoriteGym): self
+    {
+        if ($this->favoriteGyms->removeElement($favoriteGym)) {
+            // set the owning side to null (unless already changed)
+            if ($favoriteGym->getUserId() === $this) {
+                $favoriteGym->setUserId(null);
             }
         }
 

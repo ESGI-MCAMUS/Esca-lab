@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Gym;
 use App\Entity\RouteUser;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use App\Form\AddFriendType;
 use Doctrine\ORM\EntityManagerInterface;
@@ -28,7 +29,7 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
 
-
+#[IsGranted("ROLE_USER")]
 class UserController extends AbstractController {
 
     private $user;
@@ -153,6 +154,24 @@ class UserController extends AbstractController {
 
         return $this->render('user/friends.html.twig', [
             'controller_name' => 'UserController', 'friends' => $friends
+        ]);
+    }
+
+    #[Route('/user/routes', name: 'finishedRoutes')]
+    public function finishedRoutes(): Response {
+        $routes = $this->user->getRoutes();
+
+        return $this->render('user/finishedRoutes.html.twig', [
+            'routes' => $routes
+        ]);
+    }
+
+    #[Route('/user/gyms', name: 'favoriteGyms')]
+    public function favoriteGyms(): Response {
+        $favoriteGyms = $this->user->getFavoriteGyms();
+
+        return $this->render('user/favoriteGyms.html.twig', [
+            'gyms' => $favoriteGyms
         ]);
     }
 

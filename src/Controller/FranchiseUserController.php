@@ -45,10 +45,12 @@ class FranchiseUserController extends AbstractController
         $franchise = $entityManager->getRepository(Franchise::class)->find($id);
 
         $array_gyms = $franchise->getGyms();
-
         $favorite_gyms = [];
-        foreach ($this->user->getFavoriteGyms() as $favorite_gym) {
-            $favorite_gyms[] = $favorite_gym->getGymId()->getId();
+
+        if ($this->isGranted('ROLE_USER')) {
+            foreach ($this->user->getFavoriteGyms() as $favorite_gym) {
+                $favorite_gyms[] = $favorite_gym->getGymId()->getId();
+            }
         }
 
         return $this->render('franchise_user/gymList.html.twig', [

@@ -41,10 +41,12 @@
 						<div class="card-body">
 							<div class="row align-items-center no-gutters">
 								<div class="col position-relative text-center">
-									{% if gym.id in favorite_gyms %}
-										<i id="btn-gym-{{ gym.id }}" class="position-absolute end-0 me-3 btn-update-favorite removeFromFavorites bi bi-star-fill" style="color: goldenrod" data-b-route="{{ gym.id }}"></i>
-									{% else %}
-										<i id="btn-gym-{{ gym.id }}" class="position-absolute end-0 me-3 btn-update-favorite addToFavorites bi bi-star" style="color: goldenrod" data-b-route="{{ gym.id }}"></i>
+									{% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+										{% if gym.id in favorite_gyms %}
+											<i id="btn-gym-{{ gym.id }}" class="position-absolute end-0 me-3 btn-update-favorite removeFromFavorites bi bi-star-fill" style="color: goldenrod" data-b-route="{{ gym.id }}"></i>
+										{% else %}
+											<i id="btn-gym-{{ gym.id }}" class="position-absolute end-0 me-3 btn-update-favorite addToFavorites bi bi-star" style="color: goldenrod" data-b-route="{{ gym.id }}"></i>
+										{% endif %}
 									{% endif %}
 									<a href="{{ path('gym', {id: gym.id}) }}">
 										<img src="{{ asset('images/gyms/') ~ gym.picture }}" style="object-fit: cover !important" class="img-tn rounded img-fluid"/>

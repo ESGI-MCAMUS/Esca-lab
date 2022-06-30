@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -49,6 +50,7 @@ class GymUserController extends AbstractController
         ]);
     }
 
+    #[IsGranted('IS_AUTHENTICATED_REMEMBERED')]
     #[Route('/gym/favorite/add/{id}', name: 'add_favorite_gym')]
     public function addFavoriteGym($id, ManagerRegistry $doctrine)
     {
@@ -69,6 +71,7 @@ class GymUserController extends AbstractController
         return new JsonResponse(['success' => $success]);
     }
 
+    #[IsGranted('IS_AUTHENTICATED_REMEMBERED')]
     #[Route('/gym/favorite/remove/{id}', name: 'remove_favorite_gym')]
     public function removeFavoriteGym($id, ManagerRegistry $doctrine)
     {

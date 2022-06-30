@@ -84,11 +84,17 @@ class Gym {
    */
   private $created_at;
 
+  /**
+   * @ORM\OneToMany(targetEntity=FavoriteGym::class, mappedBy="gymId", orphanRemoval=true)
+   */
+  private $favoriteGyms;
+
   public function __construct() {
     $this->routes = new ArrayCollection();
     $this->openers = new ArrayCollection();
     $this->events = new ArrayCollection();
     $this->payments = new ArrayCollection();
+    $this->favoriteGyms = new ArrayCollection();
   }
 
   public function getId(): ?int {
@@ -299,6 +305,36 @@ class Gym {
   public function setCreatedAt(\DateTimeInterface $created_at): self
   {
       $this->created_at = $created_at;
+
+      return $this;
+  }
+
+  /**
+   * @return Collection<int, FavoriteGym>
+   */
+  public function getFavoriteGyms(): Collection
+  {
+      return $this->favoriteGyms;
+  }
+
+  public function addFavoriteGym(FavoriteGym $favoriteGym): self
+  {
+      if (!$this->favoriteGyms->contains($favoriteGym)) {
+          $this->favoriteGyms[] = $favoriteGym;
+          $favoriteGym->setGymId($this);
+      }
+
+      return $this;
+  }
+
+  public function removeFavoriteGym(FavoriteGym $favoriteGym): self
+  {
+      if ($this->favoriteGyms->removeElement($favoriteGym)) {
+          // set the owning side to null (unless already changed)
+          if ($favoriteGym->getGymId() === $this) {
+              $favoriteGym->setGymId(null);
+          }
+      }
 
       return $this;
   }

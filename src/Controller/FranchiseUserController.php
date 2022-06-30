@@ -46,9 +46,15 @@ class FranchiseUserController extends AbstractController
 
         $array_gyms = $franchise->getGyms();
 
+        $favorite_gyms = [];
+        foreach ($this->user->getFavoriteGyms() as $favorite_gym) {
+            $favorite_gyms[] = $favorite_gym->getGymId()->getId();
+        }
+
         return $this->render('franchise_user/gymList.html.twig', [
             'franchise_name' => $franchise->getName(),
             'gyms'    => $array_gyms,
+            'favorite_gyms' => $favorite_gyms,
         ]);
     }
 }

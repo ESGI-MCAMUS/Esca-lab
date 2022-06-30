@@ -1,5 +1,4 @@
-{% extends 'accueil/index.html.twig' %}
-{# {% extends 'base.html.twig' %} #}
+{% extends 'user.html.twig' %}
 
 {% block title %}
 	Franchises ◈ Esca'Lab
@@ -20,43 +19,30 @@
 			cursor: pointer;
 			visibility: hidden;
 		}
-		.col:hover .btn-update-favorite, .btn-update-favorite.bi-star-fill {
+		.col:hover .btn-update-favorite {
 			visibility: visible;
 		}
 	</style>
 	<div class="container-fluid">
-		<div class="d-sm-flex align-items-center mb-4">
-			<h4 class="text-dark mb-0 poppins bold text-black" style="color: rgb(33,37,41);">
-				<a href="{{ path('index') }}">Franchises</a>
-				>
-				{{ franchise_name }}
-				({{ gyms|length }})
-			</h4>
-		</div>
-		<br/>
 		<div class="row">
 			{% for gym in gyms %}
-				<div id="carte-user-{{ gym.id }}" class="col-md-6 col-xl-3 mb-4">
+				<div id="carte-user-{{ gym.gymId.id }}" class="col-md-6 col-xl-3 mb-4">
 					<div class="card shadow border-start-warning py-2">
 						<div class="card-body">
 							<div class="row align-items-center no-gutters">
-								<div class="col position-relative text-center">
-									{% if gym.id in favorite_gyms %}
-										<i id="btn-gym-{{ gym.id }}" class="position-absolute end-0 me-3 btn-update-favorite removeFromFavorites bi bi-star-fill" style="color: goldenrod" data-b-route="{{ gym.id }}"></i>
-									{% else %}
-										<i id="btn-gym-{{ gym.id }}" class="position-absolute end-0 me-3 btn-update-favorite addToFavorites bi bi-star" style="color: goldenrod" data-b-route="{{ gym.id }}"></i>
-									{% endif %}
+								<div class="col text-center">
+									<i id="btn-gym-{{ gym.gymId.id }}" class="float-end me-3 btn-update-favorite removeFromFavorites bi bi-star-fill" data-b-route="{{ gym.gymId.id }}"></i>
 									<a href="{{ path('gym', {id: gym.id}) }}">
-										<img src="{{ asset('images/gyms/') ~ gym.picture }}" style="object-fit: cover !important" class="img-tn rounded img-fluid"/>
+										<img src="{{ asset('images/gyms/') ~ gym.gymId.picture }}" style="object-fit: cover !important" class="img-tn rounded img-fluid"/>
 									</a>
 								</div>
 							</div>
 							<hr class="bg-danger border-2 border-top border-secondary">
 							<div class="row">
 								<div class="col" style="text-align: center;">
-									<a href="{{ path('gym', {id: gym.id}) }}" style="text-decoration: none;color: black;">
+									<a href="{{ path('gym', {id: gym.gymId.id}) }}" style="text-decoration: none;color: black;">
 										<h3>
-											<strong>{{ gym.name }}</strong>
+											<strong>{{ gym.gymId.name }}</strong>
 										</h3>
 									</a>
 								</div>

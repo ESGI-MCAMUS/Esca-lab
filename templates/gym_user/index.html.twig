@@ -58,12 +58,12 @@
                                 <div class="col mt-2" style="text-align: center;">
                                     {% if route.opened == 1 %}
                                         {% if route.id not in resolved %}
-                                            <button id="btn-update-route" type="button" class="btn btn-info btn-add" data-b-route="{{ route.id }}">
+                                            <button id="btn-route-{{ route.id }}" type="button" class="btn btn-info btn-add btn-update-route" data-b-route="{{ route.id }}">
                                                 <span id="spinner-{{ route.id }}" class="spinner-border spinner-border-sm text-dark" role="status" aria-hidden="true" hidden></span>
                                                 Je l'ai faite !
                                             </button>
                                         {% else %}
-                                            <button id="btn-update-route" type="button" class="btn btn-warning btn-remove" data-b-route="{{ route.id }}">
+                                            <button id="btn-route-{{ route.id }}" type="button" class="btn btn-warning btn-remove btn-update-route" data-b-route="{{ route.id }}">
                                                 <span id="spinner-{{ route.id }}" class="spinner-border spinner-border-sm text-dark" role="status" aria-hidden="true" hidden></span>
                                                 Je me suis trompé
                                             </button>

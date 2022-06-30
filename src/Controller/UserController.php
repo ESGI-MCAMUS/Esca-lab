@@ -156,6 +156,15 @@ class UserController extends AbstractController {
         ]);
     }
 
+    #[Route('/user/routes', name: 'finishedRoutes')]
+    public function finishedRoutes(): Response {
+        $routes = $this->user->getRoutes();
+
+        return $this->render('user/finishedRoutes.html.twig', [
+            'routes' => $routes
+        ]);
+    }
+
     /**
      * Permet d'appeler la page ou se trouve le formulaire de recherche
      * des amis

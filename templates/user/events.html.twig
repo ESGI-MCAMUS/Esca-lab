@@ -8,6 +8,7 @@
 	<script src="{{ asset('js/jquery.min.js') }}"></script>
 	<script src="{{ asset('js/tiny-toast-1.1.0/tiny-toast.min.js') }}"></script>
 	<script src="{{ asset('js/events/update-event-user.js') }}"></script>
+	<script src="{{ asset('js/events/events.js') }}"></script>
 	<script src="{{ asset('js/events/collapse-event.js') }}"></script>
 
 {% endblock %}
@@ -21,19 +22,21 @@
     <div class="container-fluid">
         <nav>
             <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Mes Evenements</button>
-                <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Gérer mes événements</button>
+                <button class="nav-link" id="nav-list-tab" data-bs-toggle="tab" data-bs-target="#nav-list" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Mes Evenements</button>
+                <button class="nav-link active" id="nav-custom-tab" data-bs-toggle="tab" data-bs-target="#nav-custom" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Gérer mes événements</button>
             </div>
         </nav>
         <div class="tab-content" id="nav-tabContent">
-            <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+            <div class="tab-pane fade" id="nav-list" role="tabpanel" aria-labelledby="nav-list-tab">
                 {% include 'event/component.html.twig' %}
             </div>
-            <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
-                <p> Contenu à venir</p>
+            <div class="tab-pane fade show active" id="nav-custom" role="tabpanel" aria-labelledby="nav-custom-tab">
+                {% include 'event/my-events.html.twig' %}
             </div>
         </div>
     </div>
+
+    <input type="text" id="url_root" value="{{ hidden_uri }}" hidden></input>
 
     <input type="text" id="url_root" value="{{ app.request.getSchemeAndHttpHost() }}" hidden></input>
     <input type="text" id="templateSpan" data-t-span="{{ templateSpan|escape }}" hidden>

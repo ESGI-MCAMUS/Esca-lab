@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Gym;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use App\Form\AddFriendType;
+use App\Form\AddEventType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -13,6 +14,7 @@ use Symfony\Component\Security\Core\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 use App\Entity\User;
+use App\Entity\Event;
 use App\Form\UpdateProfilePictureType;
 use App\Repository\UserRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -107,11 +109,45 @@ class UserController extends AbstractController {
     }
 
     #[Route('/user/events', name: 'eventsUser')]
-    public function eventsUser(): Response {
+    public function eventsUser(ManagerRegistry $doctrine, EntityManagerInterface $em, Request $request, UserRepository $userRepository): Response {
 
-        return $this->render('user/events.html.twig', [
-            'controller_name' => 'UserController',
-            'events' => $this->user->getEvents()
+        $gyms = $this->getDoctrine()->getManager()->getRepository(\App\Entity\Gym::class)->findAll();
+
+        $form = $this->createForm(AddEventType::class, ['gyms' => $gyms]);
+        $form->handleRequest($request);
+
+        $liste_user = [];
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            // dd($form);
+            // dd($form->get('gymId')->getData());
+
+            $entityManager = $this->getDoctrine()->getManager();
+
+            $gym_event = $entityManager->getRepository(Gym::class)->find($form->get('gymId')->getData());
+
+            $new_event = new Event();
+            $new_event->setTitle($form->get('title')->getData());
+            $new_event->setDescription($form->get('description')->getData());
+            $new_event->setEventDate($form->get('eventDate')->getData());
+            $new_event->setEndDate($form->get('endDate')->getData());
+            $new_event->setEndDate($form->get('endDate')->getData());
+            $new_event->setGym($gym_event);
+            $new_event->setCreator($this->user);
+
+            $entityManager->persist($new_event);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('eventsUser');
+        }
+        // dd($routes);
+
+        return $this->renderForm('user/events.html.twig', [
+            'events'        => $this->user->getEvents(),
+            'form_add'      => $form,
+            'hidden_uri'    => $request->getUri(),
+            'routes'        => $gyms,
+            'user_events'   => $this->user->getCreatedEvents(),
         ]);
     }
 

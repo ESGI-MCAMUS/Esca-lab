@@ -50,6 +50,12 @@ class Event
    */
   private $participants;
 
+  /**
+   * @ORM\ManyToOne(targetEntity=User::class, inversedBy="created_events")
+   * @ORM\JoinColumn(nullable=false)
+   */
+  private $creator;
+
   public function __construct()
   {
     $this->participants = new ArrayCollection();
@@ -154,5 +160,17 @@ class Event
     $date_diff = date_diff($this->getEndDate(), $this->getEventDate());
     
     return $date_diff;
+  }
+
+  public function getCreator(): ?User
+  {
+      return $this->creator;
+  }
+
+  public function setCreator(?User $creator): self
+  {
+      $this->creator = $creator;
+
+      return $this;
   }
 }

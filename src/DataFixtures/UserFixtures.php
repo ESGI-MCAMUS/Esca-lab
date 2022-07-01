@@ -162,7 +162,7 @@ class UserFixtures extends Fixture {
       $gym->setFranchise($franchise);
       $gym->setPicture("default.png");
       $em->persist($gym);
-      $this->generateEvents($em, $gym);
+      // $this->generateEvents($em, $gym);
       $this->generateRoute($em, $gym);
     }
     $em->flush();
@@ -202,6 +202,7 @@ class UserFixtures extends Fixture {
       $event->setEventDate(new \DateTime());
       $event->setEndDate($generator->dateTimeBetween('+1 hours', '+6 hours'));
       $event->setGym($gym);
+      $event->setCreator();
       $em->persist($event);
     }
     $em->flush();

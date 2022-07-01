@@ -1,0 +1,31 @@
+<div class="container-fluid mt-4">
+    <div class="row">
+        <div class="mb-12">
+            <div class="card">
+                <div class="card-header">
+                    Creer un nouvel evenement
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        {{ form_start(form_add) }}
+
+                        {{ form_end(form_add) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br/>
+    <div class="row">
+        <div class="d-sm-flex align-items-center mb-4">
+			<h4 id="target-created-events" class="text-dark mb-0 poppins bold text-black collapse-event" style="color: rgb(33,37,41);">
+				Evenements crees
+			</h4>
+		</div>
+        <div id="created-events" class="row align-items-center">
+            {% for event in user_events %}
+                {% include 'event/event-card.html.twig' %}
+            {% endfor %}
+        </div>
+    </div>
+</div>

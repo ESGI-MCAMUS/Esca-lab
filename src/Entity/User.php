@@ -128,6 +128,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $reactions;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Event::class, mappedBy="creator")
+     */
+    private $created_events;
+
     public function __construct()
     {
         $this->gyms = new ArrayCollection();
@@ -137,6 +142,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->routes = new ArrayCollection();
         $this->messages = new ArrayCollection();
         $this->reactions = new ArrayCollection();
+        $this->created_events = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -531,6 +537,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($reaction->getUserId() === $this) {
                 $reaction->setUserId(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Event>
+     */
+    public function getCreatedEvents(): Collection
+    {
+        return $this->created_events;
+    }
+
+    public function addCreatedEvent(Event $createdEvent): self
+    {
+        if (!$this->created_events->contains($createdEvent)) {
+            $this->created_events[] = $createdEvent;
+            $createdEvent->setCreator($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCreatedEvent(Event $createdEvent): self
+    {
+        if ($this->created_events->removeElement($createdEvent)) {
+            // set the owning side to null (unless already changed)
+            if ($createdEvent->getCreator() === $this) {
+                $createdEvent->setCreator(null);
             }
         }
 

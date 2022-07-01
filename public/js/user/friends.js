@@ -1,5 +1,4 @@
 $( document ).ready(function() {
-    console.log( "ready!" );
 
     $('.btn-remove-friend').on('click', (e) => {
         console.log('On va retirer l\'ami : ' + e.target.dataset.dId);

@@ -29,8 +29,23 @@ class FranchiseAdminController extends AbstractController {
   #[Route('/franchise/kpi', name: 'franchise_kpi')]
   public function index(): Response {
     $this->setInformations();
+    
+    $gymsPerMonth = [];
+    $gyms = $this->user->getFranchise()->getGyms();
+
+    for ($i= 6; $i >= 0; $i--) {
+        $gymsPerMonth[date('F', strtotime("-$i month"))] = 0;
+    }
+
+    foreach ($gyms as $gym) {
+        if (array_key_exists($gym->getCreatedAt()->format('F'), $gymsPerMonth)) {
+            $gymsPerMonth[$gym->getCreatedAt()->format('F')]++;
+        }
+    }
+    
     return $this->render('franchise/index.html.twig', [
       'month' => date_format(new DateTime(), 'n'),
+      'gyms_per_month' => $gymsPerMonth
     ]);
   }
 
@@ -261,8 +276,12 @@ class FranchiseAdminController extends AbstractController {
         'franchise' => $this->user->getFranchise()->getId(),
       ]);
       $total_payments = 0;
+      $monthlyPayments = 0;
       foreach ($payments as $payment) {
         $payment->getStatus() !== "success" ? $total_payments++ : $total_payments;
+        if ($payment->getUpdatedAt()->format('Y-m') == date('Y-m')) {
+          $monthlyPayments++;
+        }
       }
     }
 
@@ -271,5 +290,6 @@ class FranchiseAdminController extends AbstractController {
     $this->get('session')->set('ways_count', $waysCount);
     $this->get('session')->set('opened_ways', $openedWays);
     $this->get('session')->set('payments', $total_payments);
+    $this->get('session')->set('monthly_payments', $monthlyPayments);
   }
 }

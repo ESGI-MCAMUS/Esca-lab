@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\Gym;
+use App\Entity\RouteUser;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use App\Form\AddFriendType;
 use App\Form\AddEventType;
@@ -29,7 +31,7 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
 
-
+#[IsGranted("ROLE_USER")]
 class UserController extends AbstractController {
 
     private $user;
@@ -71,6 +73,8 @@ class UserController extends AbstractController {
             return $this->redirectToRoute('user');
         }
 
+        $finishedWaysCount = 0;
+        $chartData = [];
 
         if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on')
             $url = "https://";
@@ -92,12 +96,41 @@ class UserController extends AbstractController {
             ->margin(10)
             ->roundBlockSizeMode(new RoundBlockSizeModeMargin())
             ->build();
-        if ($this->isGranted('ROLE_OUVREUR')) {
+        if ($this->isGranted('ROLE_ADMIN_SALLE')) {
             $this->setInformations();
+        } elseif ($this->isGranted('ROLE_OUVREUR')) {
+            $this->setInformations();
+
+            $finishedWays = $this->user->getRoutes()->getValues();
+
+            foreach ($finishedWays as $finishedWay) {
+                if (array_key_exists($finishedWay->getDifficulty(), $chartData)) {
+                    $chartData[$finishedWay->getDifficulty()]++;
+                } else {
+                    $chartData[$finishedWay->getDifficulty()] = 1;
+                }
+            }
+            ksort($chartData);
+            $finishedWaysCount = sizeof($finishedWays);
+        } else {
+            $finishedWays = $this->user->getRoutes()->getValues();
+
+            foreach ($finishedWays as $finishedWay) {
+                if (array_key_exists($finishedWay->getDifficulty(), $chartData)) {
+                    $chartData[$finishedWay->getDifficulty()]++;
+                } else {
+                    $chartData[$finishedWay->getDifficulty()] = 1;
+                }
+            }
+            ksort($chartData);
+            $finishedWaysCount = sizeof($finishedWays);
         }
+
         return $this->renderForm('user/resume.html.twig', [
             'qrcode' => $result->getDataUri(),
             'form' => $form,
+            'finishedWaysCount' => $finishedWaysCount,
+            'chartData' => $chartData,
         ]);
     }
 
@@ -157,6 +190,24 @@ class UserController extends AbstractController {
 
         return $this->render('user/friends.html.twig', [
             'controller_name' => 'UserController', 'friends' => $friends
+        ]);
+    }
+
+    #[Route('/user/routes', name: 'finishedRoutes')]
+    public function finishedRoutes(): Response {
+        $routes = $this->user->getRoutes();
+
+        return $this->render('user/finishedRoutes.html.twig', [
+            'routes' => $routes
+        ]);
+    }
+
+    #[Route('/user/gyms', name: 'favoriteGyms')]
+    public function favoriteGyms(): Response {
+        $favoriteGyms = $this->user->getFavoriteGyms();
+
+        return $this->render('user/favoriteGyms.html.twig', [
+            'gyms' => $favoriteGyms
         ]);
     }
 
@@ -269,6 +320,7 @@ class UserController extends AbstractController {
 
     private function setInformations() {
         $waysCount = 0;
+
         if ($this->isGranted("ROLE_SUPER_ADMIN")) {
             $waysCount = count($this->getDoctrine()->getManager()->getRepository(\App\Entity\Route::class)->findAll());
         } elseif ($this->isGranted("ROLE_ADMIN_FRANCHISE") && $this->user->getFranchise() !== null) {

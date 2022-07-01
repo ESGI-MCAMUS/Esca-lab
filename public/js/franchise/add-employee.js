@@ -1,5 +1,4 @@
 $( document ).ready(function() {
-    console.log( "ready!" );
 
     $('.btn-add-employee').on('click', (e) => {
         console.log('On va ajouter l\'employé(e) : ' + e.target.dataset.dId);

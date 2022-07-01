@@ -52,6 +52,7 @@ class GymController extends AbstractController {
       }
 
       $gym->setFranchise($this->user->getFranchise());
+      $gym->setCreatedAt(new \DateTime());
 
       $em->persist($form->getData());
       $em->flush();

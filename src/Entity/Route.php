@@ -59,6 +59,11 @@ class Route
    */
   private $picture;
 
+  /**
+   * @ORM\Column(type="datetime", options={"default": "CURRENT_TIMESTAMP"})
+   */
+  private $created_at;
+
   public function __construct()
   {
     $this->opener = new ArrayCollection();
@@ -221,6 +226,18 @@ class Route
   public function setPicture(string $picture): self
   {
       $this->picture = $picture;
+
+      return $this;
+  }
+
+  public function getCreatedAt(): ?\DateTimeInterface
+  {
+      return $this->created_at;
+  }
+
+  public function setCreatedAt(\DateTimeInterface $created_at): self
+  {
+      $this->created_at = $created_at;
 
       return $this;
   }

@@ -27,11 +27,12 @@
 		{% endblock %}
 
 		{% block javascripts %}
-			{# {{ encore_entry_script_tags('app') }} #}
+			<script src="{{ asset('js/jquery.min.js') }}"></script>
 			<script src="{{ asset('bootstrap/js/bootstrap.min.js') }}"></script>
 			<script src="{{ asset('js/chart.min.js') }}"></script>
 			<script src="{{ asset('js/bs-init.js') }}"></script>
 			<script src="{{ asset('js/theme.js') }}"></script>
+			<script src="{{ asset('js/lineChart.js') }}"></script>
 		{% endblock %}
 	</head>
 

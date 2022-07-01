@@ -75,12 +75,18 @@ class RouteController extends AbstractController
       );
 
       if ($route->getGym()) {
+        $route->setCreatedAt(new \DateTime());
         $em->persist($form->getData());
         $em->flush();
 
         // Create a payment for the gym
         $payment = new Payments();
-        $payment->setFranchise($route->getGym()->getFranchise());
+        if ($this->isGranted("ROLE_ADMIN_FRANCHISE")) {
+          $payment->setFranchise($this->user->getFranchise());
+        } else {
+          $payment->setFranchise($this->user->getGym()->getFranchise());
+          $payment->setGym($this->user->getGym());
+        }
         $payment->setType('route');
         $payment->setAmount(100);
         $payment->setStatus('pending');

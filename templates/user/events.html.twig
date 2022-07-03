@@ -7,7 +7,7 @@
 {% block javascripts %}
 	<script src="{{ asset('js/jquery.min.js') }}"></script>
 	<script src="{{ asset('js/tiny-toast-1.1.0/tiny-toast.min.js') }}"></script>
-	<script src="{{ asset('js/events/update-event-user.js') }}"></script>
+	<script src="{{ asset('js/events/event-user-management.js') }}"></script>
 	<script src="{{ asset('js/events/events.js') }}"></script>
 	<script src="{{ asset('js/events/collapse-event.js') }}"></script>
 
@@ -36,7 +36,7 @@
         </div>
     </div>
 
-    <input type="text" id="url_root" value="{{ hidden_uri }}" hidden></input>
+    {# <input type="text" id="url_root" value="{{ hidden_uri }}" hidden></input> #}
 
     <input type="text" id="url_root" value="{{ app.request.getSchemeAndHttpHost() }}" hidden></input>
     <input type="text" id="templateSpan" data-t-span="{{ templateSpan|escape }}" hidden>

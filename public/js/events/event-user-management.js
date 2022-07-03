@@ -1,17 +1,14 @@
 $( document ).ready(function() {
-    $('.btn-update-event').on('click', (e) => {
+    $('.btn-participation-event').on('click', (e) => {
         const shortId = e.target.dataset.bEvent;
         const status = e.target.classList.contains('event-add');
-        const url_route = status ? '/event/resolved/' : '/event/unresolved/'
+        const url_route = status ? '/event/resolved/' : '/event/unresolved/';
         document.getElementById(e.target.id).classList.add('disabled');
         document.getElementById('spinner-' + shortId).hidden = false;
 
         $.ajax({
             method: "POST",
             url: document.getElementById('url_root').value + url_route + shortId,
-            data: {
-                // ... 
-            }
         })
         .done(function(data) {
             console.log(data);
@@ -44,6 +41,23 @@ $( document ).ready(function() {
             $(`#bouton-event-${shortId}`).prepend(template.replace(re, function(matched){
                 return crValues[matched];
             }));
+        });
+    });
+
+    $('.btn-delete-event').on('click', (e) => {
+        const shortId = e.target.dataset.bEvent;
+        const url_route = `/user/event/delete/${shortId}`;
+        document.getElementById(e.target.id).classList.add('disabled');
+        document.getElementById('spinner-delete-' + shortId).hidden = false;
+
+        $.ajax({
+            method: "POST",
+            url: document.getElementById('url_root').value + url_route,
+        })
+        .done(function(data) {
+            console.log(data);
+
+            $(`#card-event-${shortId}`).remove();
         });
     });
 });

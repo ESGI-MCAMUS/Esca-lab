@@ -184,6 +184,23 @@ class UserController extends AbstractController {
         ]);
     }
 
+    #[IsGranted('ROLE_USER')]
+    #[Route('/user/event/delete/{eventId}', name: 'event_delete', defaults: ["eventId" => null], methods: ['POST'])]
+    public function resolved(ManagerRegistry $doctrine, $eventId): Response
+    {
+        $success = true;
+
+        $entityManager = $doctrine->getManager();
+        $eventToDelete = $entityManager
+            ->getRepository(Event::class)
+            ->find($eventId);
+
+        $entityManager->remove($eventToDelete);
+        $entityManager->flush();
+
+        return new JsonResponse(['success' => $success]);
+    }
+
     #[Route('/user/friends', name: 'friendsUser')]
     public function friendsUser(): Response {
         $friends = $this->user->getFriends();

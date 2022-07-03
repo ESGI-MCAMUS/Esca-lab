@@ -3,7 +3,7 @@
         <div class="card-body">
             <div class="row align-items-center no-gutters">
                 <div class="col me-2">
-                    <div class="text-dark fw-bold h5 mb-1"><span>{{ event.title|capitalize }} a {{ event.gym.name }}</span></div>
+                    <div class="text-dark fw-bold h5 mb-1"><span>{{ event.title|capitalize }} à {{ event.gym.name }}</span></div>
                     </div>
                 </div>
                 <div class="row align-items-center no-gutters">
@@ -62,6 +62,23 @@
                                 </div>
                             </div>
                         {% endif %}
+                    {% else %}
+                        <br/>
+                        <div class="row justify-content-md-center no-gutters mt-2">
+                            <div class="col-md-auto">
+                                {% if date(event.endDate) <= date() %}
+                                    <button id="bouton-event-{{ event.id }}" type="button" class="btn btn-outline-warning btn-sm btn-update-event event-remove" data-b-event="{{ event.id }}">
+                                        <span id="spinner-{{ event.id }}" class="spinner-border spinner-border-sm text-warning" role="status" aria-hidden="true" hidden></span>
+                                        Modifier
+                                    </button>
+                                {% else %}
+                                    <button id="bouton-event-{{ event.id }}" type="button" class="btn btn-outline-success btn-sm btn-delete-event event-add" data-b-event="{{ event.id }}">
+                                        <span id="spinner-{{ event.id }}" class="spinner-border spinner-border-sm text-success" role="status" aria-hidden="true" hidden></span>
+                                        Supprimer
+                                    </button>
+                                {% endif %}
+                            </div>
+                        </div>
                     {% endif %}
                 {% endif %}
             </div>

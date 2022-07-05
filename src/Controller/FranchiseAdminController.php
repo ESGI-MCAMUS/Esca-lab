@@ -251,6 +251,7 @@ class FranchiseAdminController extends AbstractController {
     $waysCount = 0;
     $openedWays = 0;
     $total_payments = 0;
+    $monthlyPayments = 0;
 
     if ($this->user->getFranchise() !== null) {
       $employeesCount = count(

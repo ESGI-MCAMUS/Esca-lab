@@ -11,7 +11,7 @@
                 <div class="row align-items-center no-gutters">
                     <div class="col me-2">
                         <span><i class="bi bi-calendar"></i></span>
-                        <span class="text-uppercase text-success fw-bold text-s" id="event-{{ event.id }}-dateStart" data-e-start="{{ event.eventDate|date('Y-m-dTH:i') }}">{{ event.eventDate|date('d-m-Y H:i') }}</span>
+                        <span class="text-uppercase text-success fw-bold text-s" id="event-{{ event.id }}-dateStart" data-e-date-start="{{ event.eventDate|date('Y-m-dTH:i') }}" data-e-date-end="{{ event.endDate|date('Y-m-dTH:i') }}">{{ event.eventDate|date('d-m-Y H:i') }}</span>
                     </div>
                     <div class="col-auto">
                         <div class="col-auto">
@@ -30,7 +30,7 @@
                 <br/>
                 <div class="row align-items-center no-gutters">
                     <div class="col me-2">
-                        <div class="text-dark fw-bold h6 mb-0"><span><i class="bi bi-house"></i></span> <a href='gym/{{ event.gym.id }}'>Accéder à la salle {{ event.gym.name }}</a></div>
+                        <div class="text-dark fw-bold h6 mb-0"><span><i class="bi bi-house"></i></span> <a id='event-href-{{ event.id }}' href='gym/{{ event.gym.id }}'>Accéder à la salle <span id="event-{{ event.id }}-gym-href-span">{{ event.gym.name }}</span></a></div>
                     </div>
                 </div>
                 <br/>

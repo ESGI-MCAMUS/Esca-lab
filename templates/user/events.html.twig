@@ -47,10 +47,10 @@
                     <div class="container-fluid">
                         <div class="row">
                             <div class="col-md-4">
-                                <label for="select-type-title">Choisir un nouveau titre :</label>
+                                <label for="select-type-title">Nouveau titre :</label>
                             </div>
                             <div class="col-md-8 ms-auto">
-                                <select id="select-type-title" class="form-select form-select-sm" aria-label="Default select example">
+                                <select id="select-type-title" class="form-select" aria-label="Default select example">
                                     <option selected>Type</option>
                                     <option value="competition">Compétition</option>
                                     <option value="entrainement">Entraînement</option>
@@ -62,10 +62,10 @@
                         <br />
                         <div class="row">
                             <div class="col-md-4">
-                                <label for="select-type-gym">Choisir une nouvelle gym :</label>
+                                <label for="select-type-gym">Nouvelle gym :</label>
                             </div>
                             <div class="col-md-8 ms-auto">
-                                <select id="select-type-gym" class="form-select form-select-sm" aria-label="Default select example">
+                                <select id="select-type-gym" class="form-select" aria-label="Default select example">
                                     <option selected>Gym</option>
                                     {% for gym in gyms %}
                                         <option value="{{ gym.id }}">{{ gym.name }}</option>
@@ -76,30 +76,40 @@
                         <br />
                         <div class="row">
                             <div class="col-md-4">
-                                <label for="select-start-event-gym">Choisir une nouvelle date :</label>
+                                <label for="select-start-event-gym">Nouvelle date :</label>
                             </div>
                             <div class="col-md-8 ms-auto">
-                                <input type="datetime-local" id="select-start-event-gym"
-                                    name="meeting-time" value=""
-                                    min="">
+                                <input type="datetime-local" id="select-start-event-gym" class="form-control"
+                                    value="" min="">
                             </div>
                         </div>
                         <br />
                         <div class="row">
                             <div class="col-md-4">
-                                <label for="select-end-event-gym">Choisir une nouvelle fin :</label>
+                                <label for="select-end-event-gym">Nouvelle fin :</label>
                             </div>
                             <div class="col-md-8 ms-auto">
-                                <input type="datetime-local" id="select-end-event-gym"
-                                    name="meeting-time" value=""
-                                    min="">
+                                <input type="datetime-local" id="select-end-event-gym" class="form-control"
+                                    value="" min="">
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label for="select-description-event">Nouvelle description :</label>
+                            </div>
+                            <div class="col-md-8 ms-auto">
+                                <input type="text" id="select-description-event" class="form-control">
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Mettre à jour l'évènement</button>
+                    <button id="final-update-event" type="button" class="btn btn-warning" data-e-id="-1">
+                        <span id="spinner-update-event" class="spinner-border spinner-border-sm text-dark" role="status" aria-hidden="true" hidden></span>
+                        Mettre à jour l'évènement
+                    </button>
                 </div>
             </div>
         </div>

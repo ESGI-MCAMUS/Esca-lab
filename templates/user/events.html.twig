@@ -1,0 +1,123 @@
+{% extends 'user.html.twig' %}
+
+{% block title %}
+	Esca'Lab - Evenements Personnels
+{% endblock %}
+
+{% block javascripts %}
+	<script src="{{ asset('js/jquery.min.js') }}"></script>
+	<script src="{{ asset('js/tiny-toast-1.1.0/tiny-toast.min.js') }}"></script>
+	<script src="{{ asset('js/events/event-user-management.js') }}"></script>
+	<script src="{{ asset('js/events/events.js') }}"></script>
+	<script src="{{ asset('js/events/collapse-event.js') }}"></script>
+
+{% endblock %}
+
+{% set templateSpan %}
+<span id="spinner-__id__" class="spinner-border spinner-border-sm text-__spinnerColor__" role="status" aria-hidden="true" hidden></span>
+{% endset %}
+
+{% block body %}
+	
+    <div class="container-fluid">
+        <nav>
+            <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                <button class="nav-link" id="nav-list-tab" data-bs-toggle="tab" data-bs-target="#nav-list" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Mes Evenements</button>
+                <button class="nav-link active" id="nav-custom-tab" data-bs-toggle="tab" data-bs-target="#nav-custom" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Gérer mes événements</button>
+            </div>
+        </nav>
+        <div class="tab-content" id="nav-tabContent">
+            <div class="tab-pane fade" id="nav-list" role="tabpanel" aria-labelledby="nav-list-tab">
+                {% include 'event/component.html.twig' %}
+            </div>
+            <div class="tab-pane fade show active" id="nav-custom" role="tabpanel" aria-labelledby="nav-custom-tab">
+                {% include 'event/my-events.html.twig' %}
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-update-event" class="modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered  modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label for="select-type-title">Nouveau titre :</label>
+                            </div>
+                            <div class="col-md-8 ms-auto">
+                                <select id="select-type-title" class="form-select" aria-label="Default select example">
+                                    <option selected>Type</option>
+                                    <option value="competition">Compétition</option>
+                                    <option value="entrainement">Entraînement</option>
+                                    <option value="renforcement">Renforcement</option>
+                                    <option value="yoga">Yoga</option>
+                                </select>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label for="select-type-gym">Nouvelle gym :</label>
+                            </div>
+                            <div class="col-md-8 ms-auto">
+                                <select id="select-type-gym" class="form-select" aria-label="Default select example">
+                                    <option selected>Gym</option>
+                                    {% for gym in gyms %}
+                                        <option value="{{ gym.id }}">{{ gym.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label for="select-start-event-gym">Nouvelle date :</label>
+                            </div>
+                            <div class="col-md-8 ms-auto">
+                                <input type="datetime-local" id="select-start-event-gym" class="form-control"
+                                    value="" min="">
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label for="select-end-event-gym">Nouvelle fin :</label>
+                            </div>
+                            <div class="col-md-8 ms-auto">
+                                <input type="datetime-local" id="select-end-event-gym" class="form-control"
+                                    value="" min="">
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label for="select-description-event">Nouvelle description :</label>
+                            </div>
+                            <div class="col-md-8 ms-auto">
+                                <input type="text" id="select-description-event" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button id="final-update-event" type="button" class="btn btn-warning" data-e-id="-1">
+                        <span id="spinner-update-event" class="spinner-border spinner-border-sm text-dark" role="status" aria-hidden="true" hidden></span>
+                        Mettre à jour l'évènement
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    {# <input type="text" id="url_root" value="{{ hidden_uri }}" hidden></input> #}
+
+    <input type="text" id="url_root" value="{{ app.request.getSchemeAndHttpHost() }}" hidden></input>
+    <input type="text" id="templateSpan" data-t-span="{{ templateSpan|escape }}" hidden>
+{% endblock %}

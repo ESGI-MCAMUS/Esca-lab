@@ -1,0 +1,152 @@
+{% extends 'admin-user.html.twig' %}
+
+{% block title %}
+Paiements ◈ Esca'Lab
+{% endblock %}
+
+{% block body %}
+<div class="container-fluid">
+    <h3 class="text-dark mb-4 poppins">Paiements</h3>
+    {% for message in app.flashes('success') %}
+    <div class="alert alert-success"
+      role="alert">
+        {{ message | raw }}
+    </div>
+    {% endfor %}
+    {% for message in app.flashes('failed') %}
+    <div class="alert alert-danger"
+      role="alert">
+        {{ message | raw }}
+    </div>
+    {% endfor %}
+    {% for message in app.flashes('failed_token') %}
+    <div class="alert alert-warning"
+      role="alert">
+        {{ message | raw }}
+    </div>
+    {% endfor %}
+    <div class="card shadow">
+        <div class="card-header py-3">
+            <p class="text-primary m-0 fw-bold poppins">Gestion des paiements</p>
+        </div>
+
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6 text-nowrap">
+                </div>
+                <div class="col-md-6">
+                    <div id="dataTable_filter"
+                      class="text-md-end dataTables_filter">
+                        {{ form_start(form) }}
+                        <div class="input-group">
+                            {{ form_widget(form.search)}}
+                            <div class="input-group-append">
+                                <button class="btn btn-primary"
+                                  type="submit"
+                                  title="Rechercher une transaction">
+                                    <svg class="bi bi-search"
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      width="1em"
+                                      height="1em"
+                                      fill="currentColor"
+                                      viewbox="0 0 16 16">
+                                        <path
+                                          d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z">
+                                        </path>
+                                    </svg>
+                                </button>
+                                <button type="button"
+                                  class="btn btn-danger"
+                                  onclick="location.replace('/admin/medias');"
+                                  title="Réinitialiser la recherche">
+                                    <svg class="bi bi-arrow-clockwise"
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      width="1em"
+                                      height="1em"
+                                      fill="currentColor"
+                                      viewbox="0 0 16 16">
+                                        <path fill-rule="evenodd"
+                                          d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"></path>
+                                        <path
+                                          d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z">
+                                        </path>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                        {{ form_end(form) }}
+                    </div>
+                </div>
+            </div>
+            <div id="dataTable"
+              class="table-responsive table mt-2"
+              role="grid"
+              aria-describedby="dataTable_info">
+                <table id="dataTable"
+                  class="table my-0">
+                    <thead>
+                        <tr class="poppins">
+                            <th>Id</th>
+                            <th>Type</th>
+                            <th>Date</th>
+                            <th>Montant</th>
+                            <th>Statut</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for payment in payments %}
+                        <tr class="poppins">
+                            <td>{{ payment.id }}</td>
+                            <td>Paiement d'une {{('gym' in payment.type) ? 'salle' : 'voie' }}</td>
+                            <td>{{payment.updatedAt|date('d/m/Y h:i')}}</td>
+                            <td>{{payment.amount / 100}}€</td>
+                            <td>{{('pending' in payment.status) ? "En attente de paiement" : ('failed' in
+                                payment.status) ? 'Paiement refusé' : 'Payé'}}</td>
+                            {# <td>{{payment.createdAt|date('d/m/Y h:i')}}</td> #}
+                            <td>
+                                {% if payment.status is same as('pending') or payment.status is same as('failed') %}
+                                <button class="btn btn-{{('pending' in payment.status) ? 'success' : 'danger'}}"
+                                  type="button"
+                                  title="Payer"
+                                  onclick="location.replace('/franchise/checkout/{{payment.id}}')">
+                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                      width="16"
+                                      height="16"
+                                      fill="#fff"
+                                      class="bi bi-cart-check"
+                                      viewBox="0 0 16 16">
+                                        <path
+                                          d="M11.354 6.354a.5.5 0 0 0-.708-.708L8 8.293 6.854 7.146a.5.5 0 1 0-.708.708l1.5 1.5a.5.5 0 0 0 .708 0l3-3z" />
+                                        <path
+                                          d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1H.5zm3.915 10L3.102 4h10.796l-1.313 7h-8.17zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0z" />
+                                    </svg>
+                                </button>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="row">
+                <div class="col-md-6 align-self-center">
+                    <p id="dataTable_info"
+                      class="dataTables_info poppins"
+                      role="status"
+                      aria-live="polite">{{payments|length}}
+                        paiement{% if payments|length > 1 %}s{% endif %}</p>
+                    </p>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="{{asset('js/adminCheckboxRole.js')}}"></script>
+
+
+
+
+{% endblock %}

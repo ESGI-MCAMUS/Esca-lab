@@ -1,0 +1,18 @@
+{% extends 'admin-user.html.twig' %}
+
+{% block title %}Nouvel évènement ◈ Esca'Lab
+{% endblock %}
+
+{% block body %}
+    <div class="container-fluid">
+        {{ form_start(form_add) }}
+
+
+        {{ form_end(form_add) }}
+    </div>
+    <script src="{{asset('bootstrap/js/bootstrap.min.js')}}"></script>
+    <script src="{{asset('js/chart.min.js')}}"></script>
+    <script src="{{asset('js/bs-init.js')}}"></script>
+    <script src="{{asset('js/theme.js')}}"></script>
+
+{% endblock %}

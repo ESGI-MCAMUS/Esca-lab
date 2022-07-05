@@ -1,0 +1,153 @@
+{% extends is_granted('ROLE_ADMIN_SALLE') ? (is_granted('ROLE_SUPER_ADMIN') ? 'admin.html.twig' : 'admin-user.html.twig') : 'user.html.twig' %}
+
+{% block title %}Résumé ◈ Esca'Lab
+{% endblock %}
+
+{% block javascripts %}
+	<script>
+		const labels = {{ chartData|keys|json_encode|raw }};
+		const values = [];
+		{% for value in chartData %}
+		values.push({{ value|json_encode|raw }});
+		{% endfor %}
+	</script>
+	<script src="{{asset('js/user/user.js')}}"></script>
+	<script src="{{asset('bootstrap/js/bootstrap.min.js')}}"></script>
+	<script src="{{asset('js/chart.min.js')}}"></script>
+	<script src="{{asset('js/jquery.min.js')}}"></script>
+	<script src="{{asset('js/bs-init.js')}}"></script>
+	<script src="{{asset('js/theme.js')}}"></script>
+	<script src="{{asset('js/tiny-toast-1.1.0/tiny-toast.min.js')}}"></script>
+{% endblock %}
+
+{% block body %}
+	<div class="container-fluid">
+		<div class="d-sm-flex justify-content-between align-items-center mb-4">
+			<h3 class="text-dark mb-0 poppins bold text-black" style="color: rgb(33,37,41);">Résumé</h3>
+		</div>
+		<div class="row">
+			<div class="col-lg-7 col-xl-8">
+				<div class="card shadow mb-4">
+					<div class="card-header d-flex justify-content-between align-items-center">
+						<h6 class="text-primary fw-bold m-0 text-black poppins">Voies réalisées en fonction de la difficulté</h6>
+					</div>
+					<div class="card-body">
+						<div class="chart-container">
+							<canvas id="routesResume"></canvas>
+						</div>
+					</div>
+				</div>
+				{# Photo de profil #}
+				<div class="card shadow border-start-primary py-2">
+					<div class="card-body">
+						<div class="row align-items-center no-gutters">
+							<div class="col md-4">
+								<div class="text-uppercase text-primary fw-bold text-xs mb-1">
+									<span style="font-size: 15px;" class="text-primary poppins">Photo de profil</span>
+								</div>
+							</div>
+							<div class="col md-4">
+								<div class="text-uppercase text-primary fw-bold text-xs mb-1">
+									<img class="border rounded-circle img-profile" src="{{ asset('images/profiles/') ~ app.user.picture }}" width="100px" height="100px"/>
+								</div>
+							</div>
+							<div class="col md-4">
+								<div class="row align-items-center no-gutters">
+									<div class="col md-6">
+
+										{{ form_start(form) }}
+
+										{{ form_row(form.profile_picture) }}
+										<br>
+										<button type="submit" class="btn btn-primary btn-sm fluid">Modifier</button>
+
+										{{ form_end(form) }}
+
+
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<br>
+
+			</div>
+			<div
+				class="col-lg-5 col-xl-4">
+				{# QRCode #}
+				<div class="card shadow border-start-primary py-2">
+					<div class="card-body">
+						<div class="row align-items-center no-gutters">
+							<div class="col md-6">
+								<div class="text-uppercase text-primary fw-bold text-xs mb-1">
+									<span style="font-size: 15px;" class="text-primary poppins">QR Code ami</span>
+								</div>
+							</div>
+							<div class="col md-6">
+								<div class="row align-items-center no-gutters">
+									<div class="col md-6">
+										<img src="{{ qrcode }}"/>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<br>
+				{# Total Number of finished route #}
+				{% if is_granted('ROLE_USER') and "ROLE_ADMIN_SALLE" not in app.user.roles %}
+				<div class="card shadow border-start-primary py-2">
+					<div class="card-body">
+						<div class="row align-items-center no-gutters">
+							<div class="col md-6">
+								<div class="text-uppercase text-primary fw-bold text-xs mb-1">
+									<span style="font-size: 15px;" class="text-primary poppins">Nombre de voies reussites</span>
+								</div>
+							</div>
+							<div class="col md-6">
+								<div class="row align-items-center no-gutters">
+									<div class="col md-6">
+										<div class="text-dark fw-bold h5 mb-0 poppins">
+											<span style="font-size: 30px;">{{ finishedWaysCount }}</span>
+										</div>
+									</div>
+									<div class="col md-6">
+										<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" viewbox="0 0 16 16" class="bi bi-bricks fa-2x" style="color: var(--bs-blue);">
+											<path d="M0 .5A.5.5 0 0 1 .5 0h15a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-.5.5H14v2h1.5a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-.5.5H14v2h1.5a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-.5.5H.5a.5.5 0 0 1-.5-.5v-3a.5.5 0 0 1 .5-.5H2v-2H.5a.5.5 0 0 1-.5-.5v-3A.5.5 0 0 1 .5 6H2V4H.5a.5.5 0 0 1-.5-.5v-3zM3 4v2h4.5V4H3zm5.5 0v2H13V4H8.5zM3 10v2h4.5v-2H3zm5.5 0v2H13v-2H8.5zM1 1v2h3.5V1H1zm4.5 0v2h5V1h-5zm6 0v2H15V1h-3.5zM1 7v2h3.5V7H1zm4.5 0v2h5V7h-5zm6 0v2H15V7h-3.5zM1 13v2h3.5v-2H1zm4.5 0v2h5v-2h-5zm6 0v2H15v-2h-3.5z"></path>
+										</svg>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				{% endif %}
+				<br>
+				{# Next event #}
+				<div class="card shadow border-start-primary py-2">
+					<div class="card-body">
+						<div class="row align-items-center no-gutters">
+							<div class="col md-6">
+								<div class="text-uppercase text-primary fw-bold text-xs mb-1">
+									<span style="font-size: 15px;" class="text-primary poppins">Prochain evenement</span>
+								</div>
+							</div>
+							<div class="col md-6">
+								<div class="row align-items-center no-gutters">
+									<div class="col md-6">
+										<div class="text-dark fw-bold h5 mb-0 poppins">
+											<span style="font-size: 30px;">21/02/2022</span>
+										</div>
+									</div>
+									<div class="col md-6">
+										<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" viewbox="0 0 16 16" class="bi bi-bricks fa-2x" style="color: var(--bs-blue);">
+											<path d="M0 .5A.5.5 0 0 1 .5 0h15a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-.5.5H14v2h1.5a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-.5.5H14v2h1.5a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-.5.5H.5a.5.5 0 0 1-.5-.5v-3a.5.5 0 0 1 .5-.5H2v-2H.5a.5.5 0 0 1-.5-.5v-3A.5.5 0 0 1 .5 6H2V4H.5a.5.5 0 0 1-.5-.5v-3zM3 4v2h4.5V4H3zm5.5 0v2H13V4H8.5zM3 10v2h4.5v-2H3zm5.5 0v2H13v-2H8.5zM1 1v2h3.5V1H1zm4.5 0v2h5V1h-5zm6 0v2H15V1h-3.5zM1 7v2h3.5V7H1zm4.5 0v2h5V7h-5zm6 0v2H15V7h-3.5zM1 13v2h3.5v-2H1zm4.5 0v2h5v-2h-5zm6 0v2H15v-2h-3.5z"></path>
+										</svg>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			{% endblock %}

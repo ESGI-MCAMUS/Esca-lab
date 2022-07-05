@@ -8,3 +8,7 @@ composer.phar
 .env
 
 .env.test
+
+.vscode/sftp.json
+
+.idea/

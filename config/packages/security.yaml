@@ -1,4 +1,12 @@
 security:
+    role_hierarchy:
+        ROLE_OUVREUR: ROLE_USER
+        ROLE_ADMIN_SALLE: ROLE_OUVREUR
+        ROLE_ADMIN_FRANCHISE: ROLE_ADMIN_SALLE
+        ROLE_SUPER_ADMIN: ROLE_ADMIN_FRANCHISE
+
+
+
     # https://symfony.com/doc/current/security/authenticator_manager.html
     enable_authenticator_manager: true
     # https://symfony.com/doc/current/security.html#c-hashing-passwords
@@ -7,6 +15,7 @@ security:
         App\Entity\User:
             algorithm: auto
 
+
     # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
     providers:
         # used to reload user from session & other features (e.g. switch_user)
@@ -14,6 +23,7 @@ security:
             entity:
                 class: App\Entity\User
                 property: email
+        # used to reload user from session & other features (e.g. switch_user)
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
@@ -21,6 +31,13 @@ security:
         main:
             lazy: true
             provider: app_user_provider
+            custom_authenticator:
+                - App\Security\AppAuthentificatorAuthenticator
+            logout:
+                path: app_logout
+                target: login
+                # where to redirect after logout
+                # target: app_any_route
 
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#firewalls-authentication
@@ -31,5 +48,6 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-        # - { path: ^/admin, roles: ROLE_ADMIN }
+        - { path: ^/admin, roles: [ROLE_SUPER_ADMIN, ROLE_ADMIN_FRANCHISE, ROLE_ADMIN_SALLE, ROLE_OUVREUR] }
+        - { path: ^/admin/utilisateurs, roles: ROLE_SUPER_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }

@@ -1,0 +1,85 @@
+{# {% extends 'accueil/index.html.twig' %} #}
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Franchises ◈ Esca'Lab
+{% endblock %}
+
+{% block javascripts %}
+	<script src="{{ asset('js/jquery.min.js') }}"></script>
+	<script src="{{ asset('js/route/update-route-status.js') }}"></script>
+    <script src="{{ asset('js/tiny-toast-1.1.0/tiny-toast.min.js') }}"></script>
+{% endblock %}
+
+{% set templateSpan %}
+<span id="spinner-__id__" class="spinner-border spinner-border-sm text-dark" role="status" aria-hidden="true" hidden></span>
+{% endset %}
+
+{% block body %}
+<div class="container-fluid">
+	<div class="d-sm-flex align-items-center mb-4">
+		<h4 class="text-dark mb-0 poppins bold text-black" style="color: rgb(33,37,41);">
+            <a href="{{ path('index') }}">Franchises</a> > <a href="{{ path('list_gyms_franchise', {id: franchise.id}) }}">{{ franchise.name }}</a> > {{ gym.name }} ({{ routes|length }})
+        </h4>
+	</div>
+    <br/>
+	<div class="row">
+        {% for route in routes %}
+            <div id="carte-user-{{ route.id }}" class="col-md-6 col-xl-3 mb-4">
+                <div class="card shadow border-start-warning py-2">
+                    <div class="card-body">
+                        <div class="row align-items-center no-gutters">
+                            <div class="col">
+                                <a href="{{ path('route_display', {routeId: route.id}) }}">
+<img src="{{ asset('images/routes/'~route.picture) }}" class="img-fluid mx-auto d-block" style="object-fit: cover;height:400px;width:100%;"/>
+
+                                </a>
+                            </div>
+                        </div>
+                        <hr class="bg-danger border-2 border-top border-secondary">
+                        <div class="row">
+                            <div class="col ms-3" style="text-align: left;">
+                                <p>Statut :
+                                    {% if route.opened == 1 %}
+                                        <span class="badge rounded-pill bg-success">Ouverte</span>
+                                    {% else %}
+                                        <span class="badge rounded-pill bg-danger">Fermée</span>
+                                    {% endif %}
+                                </p>
+                            </div>
+                            <div class="col me-3" style="text-align: right;">
+                                <p>
+                                    Difficultée : <strong>{{ route.difficulty }}</strong>
+                                </p>
+                            </div>
+                        </div>
+                        {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+                            <div class="row">
+                                <div class="col mt-2" style="text-align: center;">
+                                    {% if route.opened == 1 %}
+                                        {% if route.id not in resolved %}
+                                            <button id="btn-route-{{ route.id }}" type="button" class="btn btn-info btn-add btn-update-route" data-b-route="{{ route.id }}">
+                                                <span id="spinner-{{ route.id }}" class="spinner-border spinner-border-sm text-dark" role="status" aria-hidden="true" hidden></span>
+                                                Je l'ai faite !
+                                            </button>
+                                        {% else %}
+                                            <button id="btn-route-{{ route.id }}" type="button" class="btn btn-warning btn-remove btn-update-route" data-b-route="{{ route.id }}">
+                                                <span id="spinner-{{ route.id }}" class="spinner-border spinner-border-sm text-dark" role="status" aria-hidden="true" hidden></span>
+                                                Je me suis trompé
+                                            </button>
+                                        {% endif %}
+                                    {% else %}
+                                        <button type="button" class="btn btn-secondary disabled">Trop tard</button>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+<input type="text" id="url_root" value="{{ app.request.getSchemeAndHttpHost() }}" hidden></input>
+<input type="text" id="templateSpan" data-t-span="{{ templateSpan|escape }}" hidden>
+{% endblock %}

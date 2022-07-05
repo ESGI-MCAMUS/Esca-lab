@@ -1,0 +1,45 @@
+{% extends 'admin.html.twig' %}
+{% block title %}Médias ◈ Esca'Lab
+{% endblock %}
+
+
+{% block body %}
+	<div class="container-fluid">
+		<h3 class="text-dark mb-4 bold poppins">Franchises</h3>
+		<div class="card shadow">
+			<div class="card-header py-3">
+				<p class="text-primary m-0 fw-bold poppins">Ajouter des franchises</p>
+			</div>
+			<div class="card-body">
+				<div class="row">
+					<div class="col-md-12">
+						{{ form_start(form) }}
+						<div class="row">
+							<div class="col">
+								<div class="mb-6">
+									{{ form_row(form.admin) }}
+								</div>
+							</div>
+							<div class="col">
+								<div class="mb-6">
+									{{ form_row(form.name) }}
+								</div>
+							</div>
+						</div>
+						<br>
+						{{ form_row(form.picture) }}
+
+						<br>
+						<button type="submit" class="btn btn-primary btn-block">Ajouter la franchise</button>
+
+						{{ form_end(form) }}
+					</div>
+				</div>
+			</div>
+		</div>
+		<br><br>
+
+		<script src="{{asset('js/adminCheckboxRole.js')}}"></script>
+
+
+	{% endblock %}

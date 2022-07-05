@@ -1,0 +1,24 @@
+{% extends 'admin-user.html.twig' %}
+
+{% block title %}
+	Nouvelle salle ◈ Esca'Lab
+{% endblock %}
+
+{% block body %}
+	<h3 class="text-dark mb-0 poppins bold text-black">
+		Salles
+	</h3>
+	<br>
+	<div class="card shadow">
+		<div class="card-header py-3">
+			<p class="text-primary m-0 fw-bold poppins">Modification d'une salle</p>
+		</div>
+
+		<div class="card-body">
+			{{ form_start(form_edit) }}
+
+			{{ form_end(form_edit) }}</div>
+
+	</div>
+{% endblock %}
+

@@ -1,0 +1,87 @@
+<div id="card-event-{{ event.id }}" class="col-md-6 col-xl-4 mb-4">
+    <div class="card shadow border-start-primary py-2">
+        <div class="card-body" style="min-height:30vh;">
+            <div class="row align-items-center no-gutters">
+                <div class="col me-2">
+                    <div class="text-dark fw-bold h5 mb-1">
+                        <span id="event-{{ event.id }}-type" data-e-title="{{ event.title }}">{{ event.title|capitalize }}</span> à <span id="event-{{ event.id }}-gym" data-e-gym="{{ event.gym.id }}">{{ event.gym.name }}</spam>
+                    </div>
+                    </div>
+                </div>
+                <div class="row align-items-center no-gutters">
+                    <div class="col me-2">
+                        <span><i class="bi bi-calendar"></i></span>
+                        <span class="text-uppercase text-success fw-bold text-s" id="event-{{ event.id }}-dateStart" data-e-date-start="{{ event.eventDate|date('Y-m-dTH:i') }}" data-e-date-end="{{ event.endDate|date('Y-m-dTH:i') }}">{{ event.eventDate|date('d-m-Y H:i') }}</span>
+                    </div>
+                    <div class="col-auto">
+                        <div class="col-auto">
+                            <span class=""><i class="bi bi-bi bi-clock"></i></span>
+                            <span class="text-uppercase fw-bold text-s" id="event-{{ event.id }}-dateEnd">{{ event.getEventLength()|date("%d j %H h %i") }}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row align-items-center no-gutters">
+                    <div class="col me-2">
+                        <div class="mb-0" id="event-{{ event.id }}-description">
+                            {{ event.description }}
+                        </div>
+                    </div>
+                </div>
+                <br/>
+                <div class="row align-items-center no-gutters">
+                    <div class="col me-2">
+                        <div class="text-dark fw-bold h6 mb-0"><span><i class="bi bi-house"></i></span> <a id='event-href-{{ event.id }}' href='gym/{{ event.gym.id }}'>Accéder à la salle <span id="event-{{ event.id }}-gym-href-span">{{ event.gym.name }}</span></a></div>
+                    </div>
+                </div>
+                <br/>
+                <div class="row align-items-center no-gutters">
+                    <div class="col me-2">
+                        <div class="text-dark fw-bold h6 mb-0"><span><i class="bi bi-people-fill"></i></span> <span id="event-participant-{{ event.id }}">{{ event.participants|length }}</span> personnes participent</div>
+                    </div>
+                    <div class="col me-2">
+                        <div class="text-dark fw-bold h6 mb-0">
+                            <p class="text-end mb-0">Par <img class="border rounded-circle img-profile" style="" src="{{asset('images/profiles/') ~ event.creator.picture}}" width="30px" height="30px"> {{ event.creator.username }}</p>
+                        </div>
+                    </div>
+                </div>
+                {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+                    {% if app.user.id != event.creator.id %}
+                        {% if app.user.id != event.creator.id and date(event.endDate) > date() %}
+                            <br/>
+                            <div class="row justify-content-md-center no-gutters mt-2">
+                                <div class="col-md-auto">
+                                    {% if app.user in event.participants %}
+                                        <button id="bouton-event-{{ event.id }}" type="button" class="btn btn-outline-warning btn-sm btn-participation-event event-remove" data-b-event="{{ event.id }}">
+                                            <span id="spinner-{{ event.id }}" class="spinner-border spinner-border-sm text-warning" role="status" aria-hidden="true" hidden></span>
+                                            Je ne participe plus
+                                        </button>
+                                    {% else %}
+                                        <button id="bouton-event-{{ event.id }}" type="button" class="btn btn-outline-success btn-sm btn-participation-event event-add" data-b-event="{{ event.id }}">
+                                            <span id="spinner-{{ event.id }}" class="spinner-border spinner-border-sm text-success" role="status" aria-hidden="true" hidden></span>
+                                            Je participe
+                                        </button>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% else %}
+                        <br/>
+                        <div class="row justify-content-md-center no-gutters mt-2">
+                            <div class="col-md-auto">
+                                {% if date(event.endDate) >= date() %}
+                                    <button id="bouton-event-{{ event.id }}" type="button" class="btn btn-outline-warning btn-sm btn-update-event" data-b-event="{{ event.id }}">
+                                        <span id="spinner-{{ event.id }}" class="spinner-border spinner-border-sm text-warning" role="status" aria-hidden="true" hidden></span>
+                                        Modifier
+                                    </button>
+                                    <button id="bouton-event-delete-{{ event.id }}" type="button" class="btn btn-danger btn-sm btn-delete-event" data-b-event="{{ event.id }}">
+                                        <span id="spinner-delete-{{ event.id }}" class="spinner-border spinner-border-sm text-light" role="status" aria-hidden="true" hidden></span>
+                                        Supprimer
+                                    </button>
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endif %}
+            </div>
+        </div>
+    </div>

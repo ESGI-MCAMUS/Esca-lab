@@ -1,0 +1,87 @@
+@import url("https://fonts.googleapis.com/css2?family=Lobster&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+
+.lobster {
+  font-family: "Lobster", cursive !important;
+}
+
+.poppins {
+  font-family: 'Poppins', sans-serif;
+}
+
+.poppins.thin {
+  font-weight: 100;
+}
+
+.poppins.extra-light {
+  font-weight: 200;
+}
+
+.poppins.light {
+  font-weight: 300;
+}
+
+.poppins.medium {
+  font-weight: 500;
+}
+
+.poppins.semi-bold {
+  font-weight: 600;
+}
+
+.poppins.bold {
+  font-weight: 700;
+}
+
+.poppins.extra-bold {
+  font-weight: 800;
+}
+
+.poppins.black {
+  font-weight: 900;
+}
+
+.poppins.tiny {
+  font-size: 0.75rem !important;
+}
+
+.custom-container {
+  padding: 15px;
+  background-color: white;
+  -webkit-box-shadow: 0px 0px 25px 0px rgba(0,0,0,0.15);
+  -moz-box-shadow: 0px 0px 25px 0px rgba(0,0,0,0.15);
+  box-shadow: 0px 0px 25px 0px rgba(0,0,0,0.15);
+  border-radius: 20px;
+}
+
+button.rounded {
+  border-radius: 50px !important;
+}
+
+.gradient-light-grey-light-blue {
+  background-image: linear-gradient(to right top, #f8f8f8, #eff0fa, #e0eafd, #cce5ff, #b3e1ff);
+}
+
+.divider-admin {
+  flex-shrink: 0;
+  width: 0rem;
+  height: 100vh;
+}
+.main-admin {
+  display: flex;
+  flex-wrap: nowrap;
+  height: 100vh;
+  height: -webkit-fill-available;
+  max-height: 100vh;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+.blue-svg {
+  filter: invert(50%) sepia(7%) saturate(6921%) hue-rotate(194deg) brightness(88%) contrast(98%);
+}
+
+.img-tn {
+  height: 200px !important;
+  width:  200px !important;
+}

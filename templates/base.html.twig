@@ -106,27 +106,16 @@
 		{% endblock %}
 		{% block body %}{% endblock %}
 		{% block footer %}
-			<footer class="mt-5">
-				<div class="container">
-					<div class="row">
-						<div class="col-md-10 col-lg-8 mx-auto" style="text-align: center;">
-							<ul class="list-inline text-center">
-								<li class="list-inline-item">
-									<span class="">
-										<i class="bi bi-twitter"></i>
-									</span>
-								</li>
-								<li class="list-inline-item">
-									<span class="fa-stack fa-lg">
-										<i class="bi bi-facebook"></i>
-									</span>
-								</li>
-							</ul>
-							<p class="text-muted copyright">Copyright © Esca'Lab 2022</p>
-						</div>
-					</div>
-				</div>
-			</footer>
+			
+		<footer class="py-3 my-4">
+			<ul class="nav justify-content-center border-bottom pb-3 mb-3">
+				<li class="nav-item"><a href="/" class="nav-link px-2 text-muted">Home</a></li>
+				<li class="nav-item"><a href="{{ path('list_all_events') }}" class="nav-link px-2 text-muted">Evenements</a></li>
+				<li class="nav-item"><a href="{{ asset('files/cgu.pdf') }}" class="nav-link px-2 text-muted">CGU</a></li>
+			</ul>
+			<p class="text-center text-muted">© 2021-2022 Esca'Lab</p>
+		</footer>
+
 		{% endblock %}
 		<script src="{{asset('bootstrap/home/js/bootstrap.min.js')}}"></script>
 	</body>

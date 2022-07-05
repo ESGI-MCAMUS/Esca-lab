@@ -17,14 +17,30 @@
     </div>
     <br/>
     <div class="row">
-        <div class="d-sm-flex align-items-center mb-4">
+        <div class="d-sm-flex align-items-center mb-4" style="cursor: default;">
 			<h4 id="target-created-events" class="text-dark mb-0 poppins bold text-black collapse-event" style="color: rgb(33,37,41);">
-				Evenements crees
+				Evenements créés et à venir
 			</h4>
 		</div>
         <div id="created-events" class="row align-items-center">
             {% for event in user_events %}
-                {% include 'event/event-card.html.twig' %}
+                {% if date(event.endDate) > date() %}
+                    {% include 'event/event-card.html.twig' %}
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+    <div class="row">
+        <div class="d-sm-flex align-items-center mb-4" style="cursor: default;">
+			<h4 id="target-finished-events-created" class="text-dark mb-0 poppins bold text-black collapse-event" style="color: rgb(33,37,41);">
+				Evenements créés et terminé <span><i class="bi bi-caret-right-fill"></i></span>
+			</h4>
+		</div>
+        <div id="finished-events-created" class="row align-items-center" hidden>
+            {% for event in user_events %}
+                {% if date(event.endDate) <= date() %}
+                    {% include 'event/event-card.html.twig' %}
+                {% endif %}
             {% endfor %}
         </div>
     </div>

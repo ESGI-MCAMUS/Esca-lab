@@ -183,7 +183,7 @@ class UserFixtures extends Fixture {
       $gym->setPicture("default.png");
       $gym->setCreatedAt($generator->dateTimeBetween('-1 years', 'now'));
       $em->persist($gym);
-      // $this->generateEvents($em, $gym);
+      $this->generateEvents($em, $gym);
       $this->generateRoute($em, $gym);
     }
     $em->flush();
@@ -217,14 +217,27 @@ class UserFixtures extends Fixture {
     for ($i = 0; $i < $generator->numberBetween(1, 10); $i++) {
       $event = new Event();
       $event->setId($i + 1);
-      $event->setTitle("Event title");
+
+      $types = [
+        'competition',
+        'renforcement',
+        'entrainement',
+        'yoga'
+      ];
+
+      $event->setTitle($types[rand(0, sizeof($types) - 1)]);
       $event->setDescription(
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque vitae mauris odio. Sed nec enim vitae nisl commodo semper vitae eu risus. Fusce at ligula dictum"
       );
       $event->setEventDate(new \DateTime());
       $event->setEndDate($generator->dateTimeBetween('+1 hours', '+6 hours'));
       $event->setGym($gym);
-      $event->setCreator();
+
+      $creator = $em
+            ->getRepository(User::class)
+            ->find(rand(1, 101)); 
+
+      $event->setCreator($creator);
       $em->persist($event);
     }
     $em->flush();

@@ -36,6 +36,76 @@
         </div>
     </div>
 
+    <div id="modal-update-event" class="modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered  modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label for="select-type-title">Choisir un nouveau titre :</label>
+                            </div>
+                            <div class="col-md-8 ms-auto">
+                                <select id="select-type-title" class="form-select form-select-sm" aria-label="Default select example">
+                                    <option selected>Type</option>
+                                    <option value="competition">Compétition</option>
+                                    <option value="entrainement">Entraînement</option>
+                                    <option value="renforcement">Renforcement</option>
+                                    <option value="yoga">Yoga</option>
+                                </select>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label for="select-type-gym">Choisir une nouvelle gym :</label>
+                            </div>
+                            <div class="col-md-8 ms-auto">
+                                <select id="select-type-gym" class="form-select form-select-sm" aria-label="Default select example">
+                                    <option selected>Gym</option>
+                                    {% for gym in gyms %}
+                                        <option value="{{ gym.id }}">{{ gym.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label for="select-start-event-gym">Choisir une nouvelle date :</label>
+                            </div>
+                            <div class="col-md-8 ms-auto">
+                                <input type="datetime-local" id="select-start-event-gym"
+                                    name="meeting-time" value=""
+                                    min="">
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label for="select-end-event-gym">Choisir une nouvelle fin :</label>
+                            </div>
+                            <div class="col-md-8 ms-auto">
+                                <input type="datetime-local" id="select-end-event-gym"
+                                    name="meeting-time" value=""
+                                    min="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Mettre à jour l'évènement</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
     {# <input type="text" id="url_root" value="{{ hidden_uri }}" hidden></input> #}
 
     <input type="text" id="url_root" value="{{ app.request.getSchemeAndHttpHost() }}" hidden></input>

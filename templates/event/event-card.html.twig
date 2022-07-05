@@ -3,24 +3,26 @@
         <div class="card-body" style="min-height:30vh;">
             <div class="row align-items-center no-gutters">
                 <div class="col me-2">
-                    <div class="text-dark fw-bold h5 mb-1"><span>{{ event.title|capitalize }} à {{ event.gym.name }}</span></div>
+                    <div class="text-dark fw-bold h5 mb-1">
+                        <span id="event-{{ event.id }}-type" data-e-title="{{ event.title }}">{{ event.title|capitalize }}</span> à <span id="event-{{ event.id }}-gym" data-e-gym="{{ event.gym.id }}">{{ event.gym.name }}</spam>
+                    </div>
                     </div>
                 </div>
                 <div class="row align-items-center no-gutters">
                     <div class="col me-2">
                         <span><i class="bi bi-calendar"></i></span>
-                        <span class="text-uppercase text-success fw-bold text-s">{{ event.eventDate|date('d-m-Y H:i') }}</span>
+                        <span class="text-uppercase text-success fw-bold text-s" id="event-{{ event.id }}-dateStart" data-e-start="{{ event.eventDate|date('Y-m-dTH:i') }}">{{ event.eventDate|date('d-m-Y H:i') }}</span>
                     </div>
                     <div class="col-auto">
                         <div class="col-auto">
                             <span class=""><i class="bi bi-bi bi-clock"></i></span>
-                            <span class="text-uppercase fw-bold text-s">{{ event.getEventLength()|date("%H h %i") }}</span>
+                            <span class="text-uppercase fw-bold text-s" id="event-{{ event.id }}-dateEnd">{{ event.getEventLength()|date("%d j %H h %i") }}</span>
                         </div>
                     </div>
                 </div>
                 <div class="row align-items-center no-gutters">
                     <div class="col me-2">
-                        <div class="mb-0">
+                        <div class="mb-0" id="event-{{ event.id }}-description">
                             {{ event.description }}
                         </div>
                     </div>

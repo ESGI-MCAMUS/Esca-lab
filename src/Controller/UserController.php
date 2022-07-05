@@ -179,7 +179,7 @@ class UserController extends AbstractController {
             'events'        => $this->user->getEvents(),
             'form_add'      => $form,
             'hidden_uri'    => $request->getUri(),
-            'routes'        => $gyms,
+            'gyms'          => $gyms,
             'user_events'   => $this->user->getCreatedEvents(),
         ]);
     }

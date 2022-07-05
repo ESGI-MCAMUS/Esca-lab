@@ -1,4 +1,7 @@
 $( document ).ready(function() {
+
+    const modalUpdateEvent = new bootstrap.Modal(document.getElementById('modal-update-event'), {});
+
     $('.btn-participation-event').on('click', (e) => {
         const shortId = e.target.dataset.bEvent;
         const status = e.target.classList.contains('event-add');
@@ -42,6 +45,24 @@ $( document ).ready(function() {
                 return crValues[matched];
             }));
         });
+    });
+
+    $('.btn-update-event').on('click', (e) => {
+        const shortId = e.target.dataset.bEvent;
+        
+        document.getElementsByClassName('modal-title')[0].textContent = 
+            'Modification ' + 
+            document.getElementById(`event-${shortId}-type`).textContent +
+            ' à ' +
+            document.getElementById(`event-${shortId}-gym`).textContent;
+
+
+        document.getElementById('select-type-title').value = document.getElementById(`event-${shortId}-type`).dataset.eTitle;
+        document.getElementById('select-type-gym').value = document.getElementById(`event-${shortId}-gym`).dataset.eGym;
+
+        modalUpdateEvent.show();
+
+        console.log(e);
     });
 
     $('.btn-delete-event').on('click', (e) => {

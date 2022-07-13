@@ -64,6 +64,11 @@ class Route
    */
   private $created_at;
 
+  /**
+   * @ORM\Column(type="datetime", nullable=true)
+   */
+  private $closed_at;
+
   public function __construct()
   {
     $this->opener = new ArrayCollection();
@@ -238,6 +243,18 @@ class Route
   public function setCreatedAt(\DateTimeInterface $created_at): self
   {
       $this->created_at = $created_at;
+
+      return $this;
+  }
+
+  public function getClosedAt(): ?\DateTimeInterface
+  {
+      return $this->closed_at;
+  }
+
+  public function setClosedAt(?\DateTimeInterface $closed_at): self
+  {
+      $this->closed_at = $closed_at;
 
       return $this;
   }

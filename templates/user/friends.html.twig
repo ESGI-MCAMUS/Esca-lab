@@ -5,56 +5,59 @@
 
 {% block javascripts %}
 	<script src="{{ asset('js/jquery.min.js') }}"></script>
-    <script src="{{ asset('js/user/friends.js') }}"></script>
-    <script src="{{ asset('js/tiny-toast-1.1.0/tiny-toast.min.js') }}"></script>
+	<script src="{{ asset('js/user/friends.js') }}"></script>
+	<script src="{{ asset('js/tiny-toast-1.1.0/tiny-toast.min.js') }}"></script>
 {% endblock %}
 
 {% block body %}
-<div class="container-fluid">
-	<div class="d-sm-flex align-items-center mb-4">
-		<h3 class="text-dark mb-0 poppins bold text-black" style="color: rgb(33,37,41);">Amis ({{ friends|length }})</h3>
-        <a class="btn btn-info" href="{{ path('addFriendsUser') }}" role="button" target="_blank" rel="noreferrer noopener">Trouver des amis</a>
+	<div class="container-fluid">
+		<div class="d-sm-flex align-items-center mb-4">
+			<h3 class="text-dark mb-0 poppins bold text-black" style="color: rgb(33,37,41);">Amis ({{ friends|length }})</h3>
+			<a class="btn btn-info" href="{{ path('addFriendsUser') }}" role="button" rel="noreferrer noopener">Trouver des amis</a>
+		</div>
+		<br/>
+		<div class="row">
+			{% if friends|length == 0 %}
+				<div class="alert alert-info alert-dismissible fade show" role="alert">
+					<span>
+						<strong>Vous n'avez pas encore ajouté d'amis.
+						</strong>
+						Retrouvez vos amis en les cherchant dans la barre de recherche !
+					</span>
+					<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+			{% else %}
+				{% for friend in friends %}
+					<div id="carte-user-{{ friend.id }}" class="col-md-6 col-xl-3 mb-4">
+						<div class="card shadow border-start-warning py-2">
+							<div class="card-body">
+								<div class="row align-items-center no-gutters">
+									<div class="col"></div>
+									<div class="col"><img src="{{ asset('images/profiles/'~friend.picture|e) }}" class="img-tn rounded"/></div>
+									<div class="col"></div>
+								</div>
+								<hr class="bg-danger border-2 border-top border-secondary">
+								<div class="row">
+									<div class="col" style="text-align: center;">
+										<strong>{{ friend.firstname }}
+											{{ friend.lastname }}</strong>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col" style="text-align: center;">{{ friend.username }}</div>
+								</div>
+								<div class="row">
+									<div class="col" style="text-align: center;">
+										<button type="button" class="btn btn-warning btn-remove-friend" data-d-id="{{ friend.id }}">Retirer</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				{% endfor %}
+			{% endif %}
+		</div>
 	</div>
-    <br/>
-	<div class="row">
-        {% if friends|length == 0 %}
-            <div class="alert alert-info alert-dismissible fade show" role="alert">
-                <span>
-                    <strong>Vous n'avez pas encore ajouté d'amis. </strong>
-                    Retrouvez vos amis en les cherchant dans la barre de recherche !
-                </span>
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-        {% else %}
-            {% for friend in friends %}
-                <div id="carte-user-{{ friend.id }}" class="col-md-6 col-xl-3 mb-4">
-                        <div class="card shadow border-start-warning py-2">
-                        <div class="card-body">
-                            <div class="row align-items-center no-gutters">
-                                <div class="col"></div>
-                                <div class="col"><img src="{{ asset('images/profiles/'~friend.picture|e) }}"  class="img-tn rounded" /></div>
-                                <div class="col"></div>
-                            </div>
-                            <hr class="bg-danger border-2 border-top border-secondary">
-                            <div class="row">
-                                <div class="col" style="text-align: center;"><strong>{{ friend.firstname }} {{ friend.lastname }}</strong></div>
-                            </div>
-                            <div class="row">
-                                <div class="col" style="text-align: center;">{{ friend.username }}</div>
-                            </div>
-                            <div class="row">
-                                <div class="col" style="text-align: center;">
-                                    <button type="button" class="btn btn-warning btn-remove-friend" data-d-id="{{ friend.id }}">Retirer</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            {% endfor %}
-        {% endif %}
-    </div>
-</div>
-<input type="text" id="url_root" value="{{ app.request.getSchemeAndHttpHost() }}" hidden></input>
-{% endblock %}
+	<input type="text" id="url_root" value="{{ app.request.getSchemeAndHttpHost() }}" hidden></input>{% endblock %}

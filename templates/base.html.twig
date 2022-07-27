@@ -12,7 +12,7 @@
 		rel="icon" type="image/png" href="{{ asset('images/logo.png') }}"/>
 
 		{# Run `composer require symfony/webpack-encore-bundle`
-						           and uncomment the following Encore helpers to start using Symfony UX #}
+										           and uncomment the following Encore helpers to start using Symfony UX #}
 		{% block stylesheets %}
 			{# {{ encore_entry_link_tags('app') }} #}
 			<link rel="stylesheet" href="{{asset('bootstrap/home/css/bootstrap.min.css')}}">
@@ -64,25 +64,25 @@
 					<div id="navbarResponsive" class="collapse navbar-collapse">
 						<ul class="navbar-nav ms-auto">
 							<li class="nav-item">
-								<a class="nav-link" href="{{ path('accueil') }}">Accueil</a>
+								<a class="nav-link poppins" href="{{ path('accueil') }}">Accueil</a>
 							</li>
 							{% if app.user.id is defined and app.user.id != 0 %}
 								<li class="nav-item" style="display: inline-block">
-									<a class="nav-link" href="{{ path('user') }}">Mon compte</a>
+									<a class="nav-link poppins" href="{{ path('user') }}">Mon compte</a>
 								</li>
 								<li class="nav-item">
-									<a class="nav-link" href="{{ path('app_logout') }}">Se déconnecter</a>
+									<a class="nav-link poppins" href="{{ path('app_logout') }}">Se déconnecter</a>
 								</li>
 								<li class="nav-item">
 									<img class="border rounded-circle img-profile" width="30px" height="30px" style="" src="{{asset('images/profiles/') ~ app.user.picture}}">
 								</li>
 							{% else %}
 								<li class="nav-item">
-									<a class="nav-link" href="{{ path('login') }}">Se connecter</a>
+									<a class="nav-link poppins" href="{{ path('login') }}">Se connecter</a>
 								</li>
 								<div class="d-none d-sm-block topbar-divider"></div>
 								<li class="nav-item">
-									<a class="nav-link" href="{{ path('register') }}">S&#39;inscrire</a>
+									<a class="nav-link poppins" href="{{ path('register') }}">S&#39;inscrire</a>
 								</li>
 							{% endif %}
 						</ul>
@@ -106,15 +106,21 @@
 		{% endblock %}
 		{% block body %}{% endblock %}
 		{% block footer %}
-			
-		<footer class="py-3 my-4">
-			<ul class="nav justify-content-center border-bottom pb-3 mb-3">
-				<li class="nav-item"><a href="/" class="nav-link px-2 text-muted">Home</a></li>
-				<li class="nav-item"><a href="{{ path('list_all_events') }}" class="nav-link px-2 text-muted">Evenements</a></li>
-				<li class="nav-item"><a href="{{ asset('files/cgu.pdf') }}" class="nav-link px-2 text-muted">CGU</a></li>
-			</ul>
-			<p class="text-center text-muted">© 2021-2022 Esca'Lab</p>
-		</footer>
+
+			<footer class="py-3 my-4">
+				<ul class="nav justify-content-center border-bottom pb-3 mb-3">
+					<li class="nav-item">
+						<a href="/" class="nav-link poppins px-2 text-muted">Accueil</a>
+					</li>
+					<li class="nav-item">
+						<a href="{{ path('list_all_events') }}" class="nav-link poppins px-2 text-muted">Evenements</a>
+					</li>
+					<li class="nav-item">
+						<a href="{{ asset('files/cgu.pdf') }}" class="nav-link poppins px-2 text-muted">CGU</a>
+					</li>
+				</ul>
+				<p class="text-center text-muted">© 2021-2022 Esca'Lab</p>
+			</footer>
 
 		{% endblock %}
 		<script src="{{asset('bootstrap/home/js/bootstrap.min.js')}}"></script>

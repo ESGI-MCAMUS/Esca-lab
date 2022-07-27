@@ -201,11 +201,16 @@ class UserFixtures extends Fixture {
     for ($i = 0; $i < $generator->numberBetween(3, 10); $i++) {
       $route = new Route();
       $route->setId($i + 1);
-      $route->setOpened($generator->numberBetween(0, 1));
+      $is_opened = $generator->numberBetween(0, 1);
+      $route->setOpened($is_opened);
       $route->setGym($gym);
       $route->setPicture("default.png");
       $route->setDifficulty($difficulty[$generator->numberBetween(0, 29)]);
-      $route->setCreatedAt($generator->dateTimeBetween('-1 years', 'now'));
+      $dateCreated = $generator->dateTimeBetween('-1 years', 'now');
+      $route->setCreatedAt($dateCreated);
+      if($is_opened === 0) {
+        $route->setClosedAt($generator->dateTimeBetween($dateCreated, 'now'));
+      }
       $em->persist($route);
     }
     $em->flush();

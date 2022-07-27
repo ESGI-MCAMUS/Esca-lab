@@ -114,7 +114,7 @@
 					<div class="card-body">
 						<div class="row align-items-center no-gutters">
 							<div class="col">
-                                <img src="{{ asset('images/routes/'~route.picture) }}" class="mx-auto d-block" style="height: 60vh;"/>
+								<img src="{{ asset('images/routes/'~route.picture) }}" class="mx-auto d-block" style="height: 60vh;"/>
 							</div>
 						</div>
 						<hr class="bg-danger border-2 border-top border-secondary">
@@ -189,11 +189,13 @@
 							<div class="col">
 								<div class="row">
 									<div class="col">
-										<p class="lead" style="text-align: left;">Ouverte le : {{ route.createdAt|date("m/d/Y") }}</p>
+										<p class="lead" style="text-align: left;">Ouverte le :
+											{{ route.createdAt|date("m/d/Y") }}</p>
 									</div>
 									{% if route.opened == 0 %}
 										<div class="col">
-											<p class="lead" style="text-align: right;">Fermée le : {{ route.closedAt|date("m/d/Y") }}</p>
+											<p class="lead" style="text-align: right;">Fermée le :
+												{{ route.closedAt|date("m/d/Y") }}</p>
 										</div>
 									{% endif %}
 								</div>
@@ -207,12 +209,5 @@
 	</div>
 </div>
 
-<input type="text" id="url_root" value="{{ app.request.getSchemeAndHttpHost() }}" hidden></input>
-<input type="text" id="templateSpan" data-t-span="{{ templateSpan|escape }}" hidden>
-
-{% if app.user.id is defined and app.user.id != 0 %}
-	<input type="text" id="templateMessage" data-t-span="{{ templateMessage|escape }}" hidden>
-{% endif %}
-
-<link rel="stylesheet" href="{{asset('bootstrap/home/css/bootstrap.min.css')}}">
-{% endblock %}
+<input type="text" id="url_root" value="{{ app.request.getSchemeAndHttpHost() }}" hidden></input><input type="text" id="templateSpan" data-t-span="{{ templateSpan|escape }}" hidden>{% if app.user.id is defined and app.user.id != 0 %}
+<input type="text" id="templateMessage" data-t-span="{{ templateMessage|escape }}" hidden>{% endif %}<link rel="stylesheet" href="{{asset('bootstrap/home/css/bootstrap.min.css')}}">{% endblock %}

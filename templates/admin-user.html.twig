@@ -14,7 +14,7 @@
 
 
 		{# Run `composer require symfony/webpack-encore-bundle`
-		  and uncomment the following Encore helpers to start using Symfony UX #}
+				  and uncomment the following Encore helpers to start using Symfony UX #}
 		{% block stylesheets %}
 			{# {{ encore_entry_link_tags('app') }} #}
 
@@ -58,7 +58,7 @@
 								<span style="padding-left: 5px;">KPIs</span>
 							</a>
 						</li>
-                        {% if is_granted('ROLE_ADMIN_FRANCHISE') and app.user.franchise != null %}
+						{% if is_granted('ROLE_ADMIN_FRANCHISE') and app.user.franchise != null %}
 							<li class="nav-item">
 								<a class="nav-link poppins regular" href="{{ path('franchise_gyms') }}" style="padding: 10px;color: rgb(33,37,41);">
 									<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewbox="0 0 16 16" class="bi bi-building">
@@ -73,20 +73,20 @@
 								</a>
 							</li>
 						{% endif %}
-                        {% if app.user.gym != null or app.user.franchise != null %}
-						<li class="nav-item">
-							<a class="nav-link poppins regular" href="{{ "ROLE_ADMIN_FRANCHISE" in app.user.roles ? path('franchise_employees') : path('gym_employees') }}" style="height: auto;padding: 10px;color: rgb(33,37,41);">
-								<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewbox="0 0 16 16" class="bi bi-people">
-									<path d="M15 14s1 0 1-1-1-4-5-4-5 3-5 4 1 1 1 1h8zm-7.978-1A.261.261 0 0 1 7 12.996c.001-.264.167-1.03.76-1.72C8.312 10.629 9.282 10 11 10c1.717 0 2.687.63 3.24 1.276.593.69.758 1.457.76 1.72l-.008.002a.274.274 0 0 1-.014.002H7.022zM11 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm3-2a3 3 0 1 1-6 0 3 3 0 0 1 6 0zM6.936 9.28a5.88 5.88 0 0 0-1.23-.247A7.35 7.35 0 0 0 5 9c-4 0-5 3-5 4 0 .667.333 1 1 1h4.216A2.238 2.238 0 0 1 5 13c0-1.01.377-2.042 1.09-2.904.243-.294.526-.569.846-.816zM4.92 10A5.493 5.493 0 0 0 4 13H1c0-.26.164-1.03.76-1.724.545-.636 1.492-1.256 3.16-1.275zM1.5 5.5a3 3 0 1 1 6 0 3 3 0 0 1-6 0zm3-2a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"></path>
-								</svg>
-								<span style="padding-left: 5px;">
-									Employés<span class="badge bg-primary poppins" style="margin-left: 5px;">{{
+						{% if app.user.gym != null or app.user.franchise != null %}
+							<li class="nav-item">
+								<a class="nav-link poppins regular" href="{{ "ROLE_ADMIN_FRANCHISE" in app.user.roles ? path('franchise_employees') : path('gym_employees') }}" style="height: auto;padding: 10px;color: rgb(33,37,41);">
+									<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewbox="0 0 16 16" class="bi bi-people">
+										<path d="M15 14s1 0 1-1-1-4-5-4-5 3-5 4 1 1 1 1h8zm-7.978-1A.261.261 0 0 1 7 12.996c.001-.264.167-1.03.76-1.72C8.312 10.629 9.282 10 11 10c1.717 0 2.687.63 3.24 1.276.593.69.758 1.457.76 1.72l-.008.002a.274.274 0 0 1-.014.002H7.022zM11 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm3-2a3 3 0 1 1-6 0 3 3 0 0 1 6 0zM6.936 9.28a5.88 5.88 0 0 0-1.23-.247A7.35 7.35 0 0 0 5 9c-4 0-5 3-5 4 0 .667.333 1 1 1h4.216A2.238 2.238 0 0 1 5 13c0-1.01.377-2.042 1.09-2.904.243-.294.526-.569.846-.816zM4.92 10A5.493 5.493 0 0 0 4 13H1c0-.26.164-1.03.76-1.724.545-.636 1.492-1.256 3.16-1.275zM1.5 5.5a3 3 0 1 1 6 0 3 3 0 0 1-6 0zm3-2a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"></path>
+									</svg>
+									<span style="padding-left: 5px;">
+										Employés<span class="badge bg-primary poppins" style="margin-left: 5px;">{{
                       app.session.get('employees_count')
                     }}</span>
-								</span>
-							</a>
-						</li>
-                        {% endif %}
+									</span>
+								</a>
+							</li>
+						{% endif %}
 						{% if is_granted('ROLE_ADMIN_SALLE') and "ROLE_ADMIN_FRANCHISE" not in app.user.roles and app.user.gym != null %}
 							<li class="nav-item">
 								<a class="nav-link poppins regular" href="{{ path('gym_routes') }}" style="padding: 10px;color: rgb(33,37,41);">
@@ -121,7 +121,7 @@
 							</a>
 						</li>
 					</ul>
-                  {% if
+					{% if
                     (is_granted('ROLE_ADMIN_FRANCHISE') and app.user.franchise != null)
                     or (is_granted('ROLE_ADMIN_SALLE') and app.user.gym != null)
                     or is_granted('ROLE_SUPER_ADMIN') %}
@@ -170,69 +170,6 @@
 										</form>
 									</div>
 								</li>
-								<li class="nav-item dropdown no-arrow mx-1">
-									<div class="nav-item dropdown no-arrow">
-										<a class="dropdown-toggle nav-link" aria-expanded="false" data-bs-toggle="dropdown" href="#">
-											<span class="badge bg-danger badge-counter">3+</span>
-											<i class="bi bi-bell-fill fa-fw"></i>
-										</a>
-										<div class="dropdown-menu dropdown-menu-end dropdown-list animated--grow-in">
-											<h6 class="dropdown-header poppins">
-												Mes notifications
-											</h6>
-											<a class="dropdown-item d-flex align-items-center" href="#">
-												<div class="me-3">
-													<div class="bg-primary icon-circle">
-														<i class="fas fa-file-alt text-white"></i>
-													</div>
-												</div>
-												<div>
-													<span class="small text-gray-500">
-														December 12, 2019
-													</span>
-													<p>
-														A new monthly report is ready to download!
-													</p>
-												</div>
-											</a>
-											<a class="dropdown-item d-flex align-items-center" href="#">
-												<div class="me-3">
-													<div class="bg-success icon-circle">
-														<i class="fas fa-donate text-white"></i>
-													</div>
-												</div>
-												<div>
-													<span class="small text-gray-500">
-														December 7, 2019
-													</span>
-													<p>
-														$290.29 has been deposited into your account!
-													</p>
-												</div>
-											</a>
-											<a class="dropdown-item d-flex align-items-center" href="#">
-												<div class="me-3">
-													<div class="bg-warning icon-circle">
-														<i class="fas fa-exclamation-triangle text-white"></i>
-													</div>
-												</div>
-												<div>
-													<span class="small text-gray-500">
-														December 2, 2019
-													</span>
-													<p>
-														Spending Alert: We've noticed unusually high
-														                            spending for your account.
-													</p>
-												</div>
-											</a>
-											<a class="dropdown-item text-center small text-gray-500" href="#">
-												Show All Alerts
-											</a>
-										</div>
-									</div>
-								</li>
-								<div class="d-none d-sm-block topbar-divider"></div>
 								<li class="nav-item dropdown no-arrow">
 									<div class="nav-item dropdown no-arrow">
 										<a class="dropdown-toggle nav-link poppins" aria-expanded="false" data-bs-toggle="dropdown" href="#">

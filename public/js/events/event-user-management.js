@@ -1,6 +1,10 @@
 $( document ).ready(function() {
 
-    const modalUpdateEvent = new bootstrap.Modal(document.getElementById('modal-update-event'), {});
+    try {
+        const modalUpdateEvent = new bootstrap.Modal(document.getElementById('modal-update-event'), {});
+    } catch(e) {
+        console.log('pas de panneaux');
+    };
 
     $('.btn-participation-event').on('click', (e) => {
         const shortId = e.target.dataset.bEvent;
